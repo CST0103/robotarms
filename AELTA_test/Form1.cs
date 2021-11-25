@@ -112,7 +112,7 @@ public struct CHGDESIPANDPORT
 }
 #endregion
 
-namespace AELTA_test
+namespace ControlUI
 {
     public partial class Form1 : Form
     {
@@ -121,19 +121,18 @@ namespace AELTA_test
         private SocketClientObject TCPClientObject;
 
         //Declare and Initialize the IP Adress
-        static IPAddress ipAd = IPAddress.Parse("127.0.0.1");
+        static IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+        static IPAddress ipAd = host.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
 
         //Declare and Initilize the Port Number;
-        static int PortNumber = 10001;
+        static int PortNumber = 1001;
         string[] data = new string[10];
         double[] dataint = new double[] { 0,0,0,0,0,0};
 
         /* Initializes the Listener */
-        TcpListener ServerListener = new TcpListener(ipAd, PortNumber);
+        TCP_Listener FirstListener = new TCP_Listener(ipAd.ToString(), PortNumber);
+        TCP_Listener SecondListener = new TCP_Listener(ipAd.ToString(), PortNumber + 1);
         TcpClient clientSocket = default(TcpClient);
-
-        double verifyNum = 0;
-        string BufferStr = null;
 
         #endregion
         
@@ -146,72 +145,75 @@ namespace AELTA_test
         {
             CB_Customized.SelectedIndex = 0;
 
-            Thread ThreadingServer = new Thread(StartServer);
-            ThreadingServer.Start();
-
+            Thread FirstArmSever = new Thread(FirstSever);
+            Thread SecondArmSever = new Thread(SecondSever); 
+            FirstArmSever.Start();
+            SecondArmSever.Start();
         }
-
+                    
+        private string[] SplitPoint(string msg)
+        {
+            string[] parts = msg.Split('$');
+            return parts; 
+        }
         #region --通訊--
-        private void StartServer()
+        private void FirstSever()
         {
             Action<String> ModifyText = SockMsg;
             Action<double, double, double, double, double, double> Tolist = CoordinateConversion;
+            string Declare;
+            bool _open_flag = FirstListener.Start();
+            Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
+            Invoke(ModifyText, Declare);
 
-            ServerListener.Start();
-            Invoke(ModifyText, "Server waiting connections!");
-            clientSocket = ServerListener.AcceptTcpClient();
-            Invoke(ModifyText, "Server ready!");
-
+            bool _connect_flag = FirstListener.Connect();
+            Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
+            Invoke(ModifyText, Declare);
             while (true)
             {
-                try
+                string reciveData = FirstListener.Recive();
+                string[] Point = reciveData.Split('$');
+                Invoke(Tolist,
+                    Convert.ToDouble(Point[1]),
+                    Convert.ToDouble(Point[2]),
+                    Convert.ToDouble(Point[3]),
+                    Convert.ToDouble(Point[4]),
+                    Convert.ToDouble(Point[5]),
+                    Convert.ToDouble(Point[6]));
+                foreach(string s in Point) 
                 {
-                    NetworkStream networkStream = clientSocket.GetStream();
-                    byte[] bytesFrom = new byte[128];
-                    int byteRead = networkStream.Read(bytesFrom, 0, 128);
-
-                    string msg = Encoding.Unicode.GetString(bytesFrom, 0, byteRead);
-
-
-                    string[] cutmasg = msg.Split('$');
-
-                    //if(cutmasg.Length != 9)
-                    //{
-                    //    int indexStr = msg.IndexOf('@');
-                    //    int indexEnd = msg.IndexOf('#');
-
-                    //    if(indexStr != 0)
-                    //    {
-                            
-                    //    }
-
-                    //}
-
-                    Invoke(ModifyText, "cut " + cutmasg);
-                    
-                    try
-                    {
-                        for (int k = 0; k < 6; k++) 
-                        {
-                            dataint[k] = Convert.ToDouble(cutmasg[k + 1]);
-                            Invoke(ModifyText, "dataint " + cutmasg[k + 1]);
-                        }
-                        Invoke(Tolist, dataint[0], dataint[1], dataint[2], dataint[3], dataint[4], dataint[5]);
-                    }
-                    catch {
-
-                        Invoke(ModifyText, "error 1 ");
-                    }
-
+                    Invoke(ModifyText, s);
                 }
-                catch
+            }
+
+        }
+        private void SecondSever()
+        {
+            Action<String> ModifyText = SockMsg;
+            Action<double, double, double, double, double, double> Tolist = CoordinateConversion;
+            string Declare;
+            bool _open_flag = SecondListener.Start();
+            Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
+            Invoke(ModifyText, Declare);
+
+            bool _connect_flag = SecondListener.Connect();
+            Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
+            Invoke(ModifyText, Declare);
+            while (true)
+            {
+                string reciveData = SecondListener.Recive();
+                string[] Point = reciveData.Split('$');
+                Invoke(Tolist,
+                    Convert.ToDouble(Point[1]),
+                    Convert.ToDouble(Point[2]),
+                    Convert.ToDouble(Point[3]),
+                    Convert.ToDouble(Point[4]),
+                    Convert.ToDouble(Point[5]),
+                    Convert.ToDouble(Point[6]));
+                foreach(string s in Point) 
                 {
-                    Invoke(ModifyText, "error 2");
-                    ServerListener.Stop();
-                    ServerListener.Start();
-                    clientSocket = ServerListener.AcceptTcpClient();
+                    Invoke(ModifyText, s);
                 }
-
             }
         }
         protected void SockMsg<T>(T teste)

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AELTA_test.Properties
+namespace ControlUI.Properties
 {
 
 

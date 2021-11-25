@@ -1,4 +1,4 @@
-﻿namespace AELTA_test
+﻿namespace ControlUI
 {
     partial class Form1
     {
