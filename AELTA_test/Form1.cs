@@ -119,6 +119,7 @@ namespace ControlUI
         #region 宣告
         private StringBuilder showRecvDataLog = new StringBuilder();
         private SocketClientObject TCPClientObject;
+        private static int x_bais, y_bais, z_bais;
 
         //Declare and Initialize the IP Adress
         static IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -127,15 +128,16 @@ namespace ControlUI
         //Declare and Initilize the Port Number;
         static int PortNumber = 1001;
         string[] data = new string[10];
-        double[] dataint = new double[] { 0,0,0,0,0,0};
+        double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
 
         /* Initializes the Listener */
         TCP_Listener FirstListener = new TCP_Listener(ipAd.ToString(), PortNumber);
+        //TCP_Listener FirstListener = new TCP_Listener("192.168.100.213", PortNumber);
         TCP_Listener SecondListener = new TCP_Listener(ipAd.ToString(), PortNumber + 1);
         TcpClient clientSocket = default(TcpClient);
 
         #endregion
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -146,15 +148,15 @@ namespace ControlUI
             CB_Customized.SelectedIndex = 0;
 
             Thread FirstArmSever = new Thread(FirstSever);
-            Thread SecondArmSever = new Thread(SecondSever); 
+            Thread SecondArmSever = new Thread(SecondSever);
             FirstArmSever.Start();
-            SecondArmSever.Start();
+            //SecondArmSever.Start();
         }
-                    
+
         private string[] SplitPoint(string msg)
         {
             string[] parts = msg.Split('$');
-            return parts; 
+            return parts;
         }
         #region --通訊--
         private void FirstSever()
@@ -169,24 +171,26 @@ namespace ControlUI
             bool _connect_flag = FirstListener.Connect();
             Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
             Invoke(ModifyText, Declare);
-            while (true)
+            try
             {
-                string reciveData = FirstListener.Recive();
-                string[] Point = reciveData.Split('$');
-                Invoke(Tolist,
-                    Convert.ToDouble(Point[1]),
-                    Convert.ToDouble(Point[2]),
-                    Convert.ToDouble(Point[3]),
-                    Convert.ToDouble(Point[4]),
-                    Convert.ToDouble(Point[5]),
-                    Convert.ToDouble(Point[6]));
-                foreach(string s in Point) 
+
+                while (true)
                 {
-                    Invoke(ModifyText, s);
+                    string reciveData = FirstListener.Recive();
+                    Invoke(ModifyText, reciveData);
+                    string[] Point = reciveData.Split('$');
+                    Invoke(Tolist,
+                        Convert.ToDouble(Point[1]),
+                        Convert.ToDouble(Point[2]),
+                        Convert.ToDouble(Point[3]),
+                        Convert.ToDouble(Point[4]),
+                        Convert.ToDouble(Point[5]),
+                        Convert.ToDouble(Point[6]));
                 }
             }
-
+            catch { }
         }
+    
         private void SecondSever()
         {
             Action<String> ModifyText = SockMsg;
@@ -218,7 +222,7 @@ namespace ControlUI
         }
         protected void SockMsg<T>(T teste)
         {
-            socketmsg.Text += Environment.NewLine + teste;
+            socketmsg.Text += Environment.NewLine + teste.ToString();
 
             socketmsg.SelectionStart = socketmsg.TextLength;
             socketmsg.ScrollToCaret();
@@ -279,15 +283,15 @@ namespace ControlUI
 
             int x, y, z;
 
-            x = Convert.ToInt32(d1) + 450;
-            y = Convert.ToInt32(d3) + (-122);
-            z = Convert.ToInt32(d2) + 300;
+            x = Convert.ToInt32(-d3) + 450;
+            y = Convert.ToInt32(-d1) + (-122);
+            z = Convert.ToInt32(-d2) + 300;
 
             d1 = x;
             d2 = y;
             d3 = z;
 
-            RotateBuffer_y = d4 * -1;
+            RotateBuffer_y = -d4;
             RotateBuffer_z = 90 - d5;
 
             if (d6 >= 0)
