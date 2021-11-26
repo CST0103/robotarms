@@ -100,6 +100,8 @@
             this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.reMove = new System.Windows.Forms.Button();
+            this.exportExcel = new System.Windows.Forms.Button();
+            this.ActionBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -769,11 +771,33 @@
             this.reMove.UseVisualStyleBackColor = true;
             this.reMove.Click += new System.EventHandler(this.armReMove);
             // 
+            // exportExcel
+            // 
+            this.exportExcel.Location = new System.Drawing.Point(1112, 165);
+            this.exportExcel.Name = "exportExcel";
+            this.exportExcel.Size = new System.Drawing.Size(75, 23);
+            this.exportExcel.TabIndex = 126;
+            this.exportExcel.Text = "ExportExcel";
+            this.exportExcel.UseVisualStyleBackColor = true;
+            this.exportExcel.Click += new System.EventHandler(this.exportExcel_Click);
+            // 
+            // ActionBtn
+            // 
+            this.ActionBtn.Location = new System.Drawing.Point(1112, 134);
+            this.ActionBtn.Name = "ActionBtn";
+            this.ActionBtn.Size = new System.Drawing.Size(75, 21);
+            this.ActionBtn.TabIndex = 127;
+            this.ActionBtn.Text = "ActionButton";
+            this.ActionBtn.UseVisualStyleBackColor = true;
+            this.ActionBtn.Click += new System.EventHandler(this.ActionBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1303, 639);
+            this.Controls.Add(this.ActionBtn);
+            this.Controls.Add(this.exportExcel);
             this.Controls.Add(this.reMove);
             this.Controls.Add(this.PointDataGrid);
             this.Controls.Add(this.groupBox2);
@@ -867,6 +891,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
         private System.Windows.Forms.Button reMove;
+        private System.Windows.Forms.Button exportExcel;
+        private System.Windows.Forms.Button ActionBtn;
     }
 }
 

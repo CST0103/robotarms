@@ -20,7 +20,9 @@ using System.Net;
 using System.Collections;
 
 
+using ClosedXML;
 using System.Net.Sockets;
+using ClosedXML.Excel;
 //using System.Windows;
 //using System.Windows.Controls;
 //using System.Windows.Input;
@@ -119,7 +121,6 @@ namespace ControlUI
         #region 宣告
         private StringBuilder showRecvDataLog = new StringBuilder();
         private SocketClientObject TCPClientObject;
-        private static int x_bais, y_bais, z_bais;
 
         //Declare and Initialize the IP Adress
         static IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -775,6 +776,31 @@ namespace ControlUI
             string test_string = @"1,Line(""CAP"",500,100,500,185,0,90," + string.Format("{0:000}", speed * sp_abs) + ",200,0,false)";
             TM_send(test_string);
         }
+
+        private void exportExcel_Click(object sender, EventArgs e)
+        {
+            //Creating DataTable
+            using (var workbook = new XLWorkbook())
+            {
+                var wb = workbook.Worksheets.Add("點位");
+                //MessageBox.Show(PointDataGrid[6,0].Value.ToString());
+                for (int x = 1; x < PointDataGrid.Rows.Count; x++)
+                {
+                    for (int i = 1; i < 7; i++)
+                    {
+                        wb.Cell(x,i).Value = PointDataGrid[i,x - 1].Value.ToString();
+                    }
+                }
+                //Exporting to Excel
+                string folderPath = @"E:\碩論\MasterCode\ControlUI\";
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                workbook.SaveAs(folderPath + "DataGridViewExport.xlsx");
+            }
+        }
+
         //Circle_絕對速度
         private void button38_Click(object sender, EventArgs e)
         {
@@ -793,5 +819,30 @@ namespace ControlUI
         #endregion
 
         #endregion
+
+        private void ActionBtn_Click(object sender, EventArgs e)
+        {
+            var workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
+            var ws = workbook.Worksheet(1);
+            int NumberOfLastRow = ws.LastRowUsed().RowNumber();
+            //List<double[]> data = new List<double[]>();
+            List<string[]> data = new List<string[]>();
+            var range = ws.RangeUsed();
+            for(int i = 1; i < range.RowCount() + 1; i++)
+            {
+            string[] point = new string[6];
+                for(int j = 1; j < range.ColumnCount() + 1; j++)
+                {
+                    point[j - 1] = (string)ws.Cell(i, j).Value.ToString();
+                }
+                //data.Add(Array.ConvertAll(point, double.Parse));
+                data.Add(point);
+            }
+            for(int k = 0; k < data.Count; k++)
+            {
+                armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5]);
+                Thread.Sleep(500);
+            }
+        }
     }
 }

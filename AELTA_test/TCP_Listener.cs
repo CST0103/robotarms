@@ -53,7 +53,7 @@ namespace ControlUI
                 string msg = Encoding.Unicode.GetString(bytesFrom, 0, byteRead);
                 return msg;
             }                    
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
