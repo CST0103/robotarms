@@ -151,14 +151,9 @@ namespace ControlUI
             Thread FirstArmSever = new Thread(FirstSever);
             Thread SecondArmSever = new Thread(SecondSever);
             FirstArmSever.Start();
-            //SecondArmSever.Start();
+            SecondArmSever.Start();
         }
 
-        private string[] SplitPoint(string msg)
-        {
-            string[] parts = msg.Split('$');
-            return parts;
-        }
         #region --通訊--
         private void FirstSever()
         {
@@ -207,6 +202,7 @@ namespace ControlUI
             while (true)
             {
                 string reciveData = SecondListener.Recive();
+                Invoke(ModifyText, reciveData);
                 string[] Point = reciveData.Split('$');
                 Invoke(Tolist,
                     Convert.ToDouble(Point[1]),
@@ -215,10 +211,6 @@ namespace ControlUI
                     Convert.ToDouble(Point[4]),
                     Convert.ToDouble(Point[5]),
                     Convert.ToDouble(Point[6]));
-                foreach(string s in Point) 
-                {
-                    Invoke(ModifyText, s);
-                }
             }
         }
         protected void SockMsg<T>(T teste)
@@ -270,13 +262,15 @@ namespace ControlUI
         int CoordinateConversionCount = 0;
         private void CoordinateConversion(double d1, double d2, double d3, double d4, double d5, double d6)
         {
+            double[] origin = new double[6] { 450, -122, 300, 180, 90, 0 };
+        
             Action<int, double, double, double, double, double, double> EDG = WriteDataGrid;
             Action<string, string, string, string, string, string> Toarm = armMove;
 
-            int xmax = 600
+            int xmax = 750 
                 , xmin = 70
-                , ymax = 600
-                , ymin = -600
+                , ymax = 700
+                , ymin = -700
                 , zmax = 400
                 , zmin = -45;
 
@@ -284,21 +278,17 @@ namespace ControlUI
 
             int x, y, z;
 
-            x = Convert.ToInt32(-d3) + 450;
-            y = Convert.ToInt32(-d1) + (-122);
-            z = Convert.ToInt32(-d2) + 300;
+            x = Convert.ToInt32(d1) + 450;
+            y = Convert.ToInt32(d2) + (-122);
+            z = Convert.ToInt32(d3) + 300;
 
             d1 = x;
             d2 = y;
             d3 = z;
 
-            RotateBuffer_y = -d4;
-            RotateBuffer_z = 90 - d5;
-
-            if (d6 >= 0)
-                RotateBuffer_x = -180 + d6;
-            else if (d6 < 0)
-                RotateBuffer_x = d6 + 180;
+            RotateBuffer_x = 180 - d4;
+            RotateBuffer_y = d5;
+            RotateBuffer_z = 90 - d6;
 
             d4 = RotateBuffer_x;
             d5 = RotateBuffer_y;

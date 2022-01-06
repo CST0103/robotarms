@@ -577,7 +577,7 @@
             // XEG32
             // 
             this.XEG32.BaudRate = 115200;
-            this.XEG32.PortName = "COM13";
+            this.XEG32.PortName = "COM3";
             // 
             // txtStatus
             // 
