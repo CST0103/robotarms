@@ -119,8 +119,12 @@ namespace ControlUI
     public partial class Form1 : Form
     {
         #region 宣告
+        //TM_1
         private StringBuilder showRecvDataLog = new StringBuilder();
         private SocketClientObject TCPClientObject;
+        //TM_2
+        private StringBuilder showRecvDataLog1 = new StringBuilder();
+        private SocketClientObject TCPClientObject1;
 
         //Declare and Initialize the IP Adress
         static IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
@@ -137,6 +141,8 @@ namespace ControlUI
         TCP_Listener SecondListener = new TCP_Listener(ipAd.ToString(), PortNumber + 1);
         TcpClient clientSocket = default(TcpClient);
 
+        private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
+        private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
         #endregion
 
         public Form1()
@@ -147,6 +153,7 @@ namespace ControlUI
         private void Form1_Load(object sender, EventArgs e)
         {
             CB_Customized.SelectedIndex = 0;
+            CB_Customized1.SelectedIndex = 0;
 
             Thread FirstArmSever = new Thread(FirstSever);
             Thread SecondArmSever = new Thread(SecondSever);
@@ -186,7 +193,7 @@ namespace ControlUI
             }
             catch { }
         }
-    
+
         private void SecondSever()
         {
             Action<String> ModifyText = SockMsg;
@@ -262,15 +269,15 @@ namespace ControlUI
         int CoordinateConversionCount = 0;
         private void CoordinateConversion(double d1, double d2, double d3, double d4, double d5, double d6)
         {
-            double[] origin = new double[6] { 450, -122, 300, 180, 90, 0 };
-        
+            double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
+
             Action<int, double, double, double, double, double, double> EDG = WriteDataGrid;
             Action<string, string, string, string, string, string> Toarm = armMove;
 
-            int xmax = 750 
+            int xmax = 750
                 , xmin = 70
-                , ymax = 700
-                , ymin = -700
+                , ymax = 550
+                , ymin = -550
                 , zmax = 400
                 , zmin = -45;
 
@@ -314,9 +321,9 @@ namespace ControlUI
             Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString());
             CoordinateConversionCount++;
         }
-        
 
-            #endregion
+
+        #endregion
 
         #region --點位表格--
 
@@ -342,8 +349,6 @@ namespace ControlUI
 
         }
 
-        #endregion
-
         private void armReMove(object sender, EventArgs e)
         {
             Action<string> ModifyText = SockMsg;
@@ -351,7 +356,7 @@ namespace ControlUI
 
             for (int i = 0; i < PointDataGrid.RowCount - 1; i++)
             {
-                
+
                 String rd1 = Convert.ToString(PointDataGrid[1, i].Value);
                 String rd2 = Convert.ToString(PointDataGrid[2, i].Value);
                 String rd3 = Convert.ToString(PointDataGrid[3, i].Value);
@@ -359,13 +364,15 @@ namespace ControlUI
                 String rd5 = Convert.ToString(PointDataGrid[5, i].Value);
                 String rd6 = Convert.ToString(PointDataGrid[6, i].Value);
 
-                Invoke(ModifyText, "ReMove" + rd1 +  "," + rd2 +  "," + rd3 +  "," + rd4 +  "," + rd5 +  "," + rd6);                
+                Invoke(ModifyText, "ReMove" + rd1 + "," + rd2 + "," + rd3 + "," + rd4 + "," + rd5 + "," + rd6);
                 Invoke(Toarm, rd1, rd2, rd3, rd4, rd5, rd6);
-            }     
+            }
         }
+        #endregion
+
 
         #region --TM_TCP--
-
+        #region --TM1--
 
         private void btn_ClearSendData_Click(object sender, EventArgs e)
         {
@@ -438,6 +445,27 @@ namespace ControlUI
                 this.TCPClientObject.WriteSyncData(bytes);
             }
         }
+        private void showConnectStatus(object sender, string resp)
+        {
+            AddConnectStatus(resp, LB_ConnectionStatus);
+        }
+
+        public void showReceiveData(object sender, string recv_data)
+        {
+            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
+            this.showRecvDataLog.AppendLine(str);
+            AddReceiveData(showRecvDataLog.ToString(), TB_RecvData);
+        }
+
+        private void TB_SendData_KeyDown(object sender, KeyEventArgs e)
+        {
+            int selectionStart = this.TB_SendData.SelectionStart;
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.TB_SendData.Text = this.TB_SendData.Text.Insert(selectionStart, Environment.NewLine);
+                this.TB_SendData.Select(selectionStart + 2, 0);
+            }
+        }
 
         private void CB_Listen_CheckedChanged(object sender, EventArgs e)
         {
@@ -450,6 +478,115 @@ namespace ControlUI
                 this.CB_Customized.Visible = false;
             }
         }
+
+        #endregion
+        #region --TM2--
+
+        private void btn_Connect1_Click(object sender, EventArgs e)
+        {
+            ThreadStart start = null;
+            try
+            {
+                string text = this.TB_IPAddress1.Text;
+                //169.254.119.180
+                string str2 = this.TB_Port1.Text;
+                int result = 0;
+                if (this.checkIPAddressValid(text) && (!string.IsNullOrEmpty(str2) && int.TryParse(str2, out result)))
+                {
+                    this.TCPClientObject1 = new SocketClientObject(text, result);
+                    if (this.TCPClientObject1 != null)
+                    {
+                        this.TCPClientObject1.ConnectStatusResponse += new SocketClientObject.TCPConnectStatusResponse(this.showConnectStatus1);
+                        if (start == null)
+                        {
+                            start = delegate
+                            {
+                                if (this.TCPClientObject1.Connect(0))
+                                {
+                                    TCPClientObject1.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData1);
+                                }
+                            };
+                        }
+                        new Thread(start) { IsBackground = true }.Start();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void btn_Disconnect1_Click(object sender, EventArgs e)
+        {
+
+            if ((this.TCPClientObject1 != null) && this.TCPClientObject1.Disconnect())
+            {
+                this.TCPClientObject1.ReceiveData -= new SocketClientObject.TCPReceiveData(this.showReceiveData1);
+                this.TCPClientObject1 = null;
+            }
+        }
+
+        private void btn_ClearSendData1_Click(object sender, EventArgs e)
+        {
+            this.TB_SendData1.Text = string.Empty;
+        }
+
+        private void btn_Send1_Click(object sender, EventArgs e)
+        {
+            string s = string.Empty;
+            if (this.CB_Listen.Checked == true)
+            {
+                s = SocketClientObject.DataToPacket(CB_Customized1.SelectedItem.ToString(), this.TB_SendData1.Text);
+            }
+            else
+            {
+                s = this.TB_SendData1.Text;
+            }
+            this.TB_Command1.Text = s;
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+            if (this.TCPClientObject1 != null)
+            {
+                this.TCPClientObject1.WriteSyncData(bytes);
+            }
+        }
+
+        private void btn_ClearRecvData1_Click(object sender, EventArgs e)
+        {
+            this.TB_RecvData1.Text = string.Empty;
+            this.showRecvDataLog1.Clear();
+        }
+
+        private void TB_SendData1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            int selectionStart = this.TB_SendData1.SelectionStart;
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.TB_SendData1.Text = this.TB_SendData1.Text.Insert(selectionStart, Environment.NewLine);
+                this.TB_SendData1.Select(selectionStart + 2, 0);
+            }
+        }
+
+        public void showReceiveData1(object sender, string recv_data)
+        {
+            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
+            this.showRecvDataLog1.AppendLine(str);
+            AddReceiveData(showRecvDataLog1.ToString(), TB_RecvData1);
+        }
+
+        private void CB_Listen1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.CB_Listen1.Checked == true)
+            {
+                this.CB_Customized1.Visible = true;
+            }
+            else
+            {
+                this.CB_Customized1.Visible = false;
+            }
+        }
+
+        #endregion
 
         private bool checkIPAddressValid(string sIP)
         {
@@ -465,13 +602,11 @@ namespace ControlUI
             return true;
         }
 
-
-        private void showConnectStatus(object sender, string resp)
+        private void showConnectStatus1(object sender, string resp)
         {
-            AddConnectStatus(resp, LB_ConnectionStatus);
+            AddConnectStatus(resp, LB_ConnectionStatus1);
         }
 
-        private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private void AddConnectStatus(string _connectstatus, Label _label)
         {
             if (this.InvokeRequired)
@@ -485,14 +620,7 @@ namespace ControlUI
             }
         }
 
-        public void showReceiveData(object sender, string recv_data)
-        {
-            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
-            this.showRecvDataLog.AppendLine(str);
-            AddReceiveData(showRecvDataLog.ToString(), TB_RecvData);
-        }
 
-        private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
         private void AddReceiveData(string _receivedata, TextBox _textbox)
         {
             if (this.InvokeRequired)
@@ -505,18 +633,6 @@ namespace ControlUI
                 _textbox.AppendText(_receivedata);
             }
         }
-
-        private void TB_SendData_KeyDown_1(object sender, KeyEventArgs e)
-        {
-
-            int selectionStart = this.TB_SendData.SelectionStart;
-            if (e.KeyCode == Keys.Enter)
-            {
-                this.TB_SendData.Text = this.TB_SendData.Text.Insert(selectionStart, Environment.NewLine);
-                this.TB_SendData.Select(selectionStart + 2, 0);
-            }
-        }
-
 
         #endregion
 
@@ -572,57 +688,6 @@ namespace ControlUI
             XEG32_Force_text.Text = "100";//力 70 %
             SendOpenClose(XEG32);
         }
-
-        private void XEG32_PL_Close_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "550";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-
-        private void XEG32_GJ_Close_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "2800";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-
-        private void XEG32_GB_Close_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "2200";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-         //1.2排
-        private void XEG32_LD_Close_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "2210";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-
-        //3.4排
-        private void XEG32_LD_3and4_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "2170";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-
-        //補麵糊
-        private void XEG32_LD_J_bt_Click(object sender, EventArgs e)
-        {
-            XEG32_PosStk_text.Text = "2250";//夾爪張開 20 mm
-            XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
-            SendOpenClose(XEG32);
-        }
-
         private void XEG32_Enable_bt_Click(object sender, EventArgs e)
         {
             SendOpenClose(XEG32);
@@ -739,7 +804,7 @@ namespace ControlUI
             {
                 sp_abs = Convert.ToDouble(TB_sp_abs.Text);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TB_Command.Text = ex.Message;
                 //TB_sp_abs.Text = "1";
@@ -750,7 +815,7 @@ namespace ControlUI
         private void btn_TMtest_Click(object sender, EventArgs e)
         {
             int speed = 100;
-            string test_string = @"1,PTP(""CPP"",519,-122,458,185,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+            string test_string = @"1,PTP(""CPP"", 450, -122, 300 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
             TM_send(test_string);
             XEG32_Open_bt.PerformClick();
         }
@@ -778,7 +843,7 @@ namespace ControlUI
                 {
                     for (int i = 1; i < 7; i++)
                     {
-                        wb.Cell(x,i).Value = PointDataGrid[i,x - 1].Value.ToString();
+                        wb.Cell(x, i).Value = PointDataGrid[i, x - 1].Value.ToString();
                     }
                 }
                 //Exporting to Excel
@@ -818,17 +883,17 @@ namespace ControlUI
             //List<double[]> data = new List<double[]>();
             List<string[]> data = new List<string[]>();
             var range = ws.RangeUsed();
-            for(int i = 1; i < range.RowCount() + 1; i++)
+            for (int i = 1; i < range.RowCount() + 1; i++)
             {
-            string[] point = new string[6];
-                for(int j = 1; j < range.ColumnCount() + 1; j++)
+                string[] point = new string[6];
+                for (int j = 1; j < range.ColumnCount() + 1; j++)
                 {
                     point[j - 1] = (string)ws.Cell(i, j).Value.ToString();
                 }
                 //data.Add(Array.ConvertAll(point, double.Parse));
                 data.Add(point);
             }
-            for(int k = 0; k < data.Count; k++)
+            for (int k = 0; k < data.Count; k++)
             {
                 armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5]);
                 Thread.Sleep(500);

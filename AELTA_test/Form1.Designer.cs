@@ -32,7 +32,7 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
-            this.lab_Status1 = new System.Windows.Forms.Label();
+            this.lab_Status = new System.Windows.Forms.Label();
             this.lab_Port = new System.Windows.Forms.Label();
             this.lab_IP = new System.Windows.Forms.Label();
             this.serialPort4 = new System.IO.Ports.SerialPort(this.components);
@@ -91,6 +91,9 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.ActionBtn = new System.Windows.Forms.Button();
+            this.exportExcel = new System.Windows.Forms.Button();
+            this.reMove = new System.Windows.Forms.Button();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
             this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -99,14 +102,43 @@
             this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reMove = new System.Windows.Forms.Button();
-            this.exportExcel = new System.Windows.Forms.Button();
-            this.ActionBtn = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CB_Customized1 = new System.Windows.Forms.ComboBox();
+            this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
+            this.TB_RecvData1 = new System.Windows.Forms.TextBox();
+            this.lab_ReData1 = new System.Windows.Forms.Label();
+            this.TB_Command1 = new System.Windows.Forms.TextBox();
+            this.btn_Send1 = new System.Windows.Forms.Button();
+            this.btn_ClearSendData1 = new System.Windows.Forms.Button();
+            this.CB_Listen1 = new System.Windows.Forms.CheckBox();
+            this.TB_SendData1 = new System.Windows.Forms.TextBox();
+            this.lab_Data1 = new System.Windows.Forms.Label();
+            this.btn_Disconnect1 = new System.Windows.Forms.Button();
+            this.btn_Connect1 = new System.Windows.Forms.Button();
+            this.TB_Port1 = new System.Windows.Forms.TextBox();
+            this.TB_IPAddress1 = new System.Windows.Forms.TextBox();
+            this.LB_ConnectionStatus1 = new System.Windows.Forms.Label();
+            this.lab_Status1 = new System.Windows.Forms.Label();
+            this.lab_Port1 = new System.Windows.Forms.Label();
+            this.lab_IP1 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.TB_sp_abs1 = new System.Windows.Forms.TextBox();
+            this.TB_sp_pc1 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -124,14 +156,14 @@
             this.serialPort3.BaudRate = 921600;
             this.serialPort3.PortName = "COM15";
             // 
-            // lab_Status1
+            // lab_Status
             // 
-            this.lab_Status1.AutoSize = true;
-            this.lab_Status1.Location = new System.Drawing.Point(5, 82);
-            this.lab_Status1.Name = "lab_Status1";
-            this.lab_Status1.Size = new System.Drawing.Size(92, 12);
-            this.lab_Status1.TabIndex = 24;
-            this.lab_Status1.Text = "Connection Status:";
+            this.lab_Status.AutoSize = true;
+            this.lab_Status.Location = new System.Drawing.Point(5, 82);
+            this.lab_Status.Name = "lab_Status";
+            this.lab_Status.Size = new System.Drawing.Size(92, 12);
+            this.lab_Status.TabIndex = 24;
+            this.lab_Status.Text = "Connection Status:";
             // 
             // lab_Port
             // 
@@ -154,7 +186,7 @@
             // serialPort4
             // 
             this.serialPort4.BaudRate = 57142;
-            this.serialPort4.PortName = "COM17";
+            this.serialPort4.PortName = "COM1700";
             // 
             // oo
             // 
@@ -187,7 +219,7 @@
             // 
             // btn_Connect
             // 
-            this.btn_Connect.Location = new System.Drawing.Point(258, 24);
+            this.btn_Connect.Location = new System.Drawing.Point(222, 21);
             this.btn_Connect.Name = "btn_Connect";
             this.btn_Connect.Size = new System.Drawing.Size(75, 21);
             this.btn_Connect.TabIndex = 60;
@@ -197,7 +229,7 @@
             // 
             // btn_Disconnect
             // 
-            this.btn_Disconnect.Location = new System.Drawing.Point(258, 48);
+            this.btn_Disconnect.Location = new System.Drawing.Point(222, 47);
             this.btn_Disconnect.Name = "btn_Disconnect";
             this.btn_Disconnect.Size = new System.Drawing.Size(75, 21);
             this.btn_Disconnect.TabIndex = 61;
@@ -219,17 +251,17 @@
             this.TB_SendData.Location = new System.Drawing.Point(5, 122);
             this.TB_SendData.Multiline = true;
             this.TB_SendData.Name = "TB_SendData";
-            this.TB_SendData.Size = new System.Drawing.Size(328, 53);
+            this.TB_SendData.Size = new System.Drawing.Size(292, 36);
             this.TB_SendData.TabIndex = 63;
             this.TB_SendData.Text = "1,PTP(\"CPP\",519,-122,458,185,0,90,100,200,0,false)";
-            this.TB_SendData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_SendData_KeyDown_1);
+            this.TB_SendData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_SendData_KeyDown);
             // 
             // CB_Listen
             // 
             this.CB_Listen.AutoSize = true;
             this.CB_Listen.Checked = true;
             this.CB_Listen.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CB_Listen.Location = new System.Drawing.Point(5, 184);
+            this.CB_Listen.Location = new System.Drawing.Point(5, 167);
             this.CB_Listen.Name = "CB_Listen";
             this.CB_Listen.Size = new System.Drawing.Size(52, 16);
             this.CB_Listen.TabIndex = 64;
@@ -239,7 +271,7 @@
             // 
             // btn_ClearSendData
             // 
-            this.btn_ClearSendData.Location = new System.Drawing.Point(177, 181);
+            this.btn_ClearSendData.Location = new System.Drawing.Point(141, 163);
             this.btn_ClearSendData.Name = "btn_ClearSendData";
             this.btn_ClearSendData.Size = new System.Drawing.Size(75, 21);
             this.btn_ClearSendData.TabIndex = 65;
@@ -249,7 +281,7 @@
             // 
             // btn_Send
             // 
-            this.btn_Send.Location = new System.Drawing.Point(258, 181);
+            this.btn_Send.Location = new System.Drawing.Point(222, 163);
             this.btn_Send.Name = "btn_Send";
             this.btn_Send.Size = new System.Drawing.Size(75, 21);
             this.btn_Send.TabIndex = 66;
@@ -259,16 +291,16 @@
             // 
             // TB_Command
             // 
-            this.TB_Command.Location = new System.Drawing.Point(5, 211);
+            this.TB_Command.Location = new System.Drawing.Point(5, 189);
             this.TB_Command.Multiline = true;
             this.TB_Command.Name = "TB_Command";
-            this.TB_Command.Size = new System.Drawing.Size(328, 40);
+            this.TB_Command.Size = new System.Drawing.Size(292, 31);
             this.TB_Command.TabIndex = 67;
             // 
             // lab_ReData
             // 
             this.lab_ReData.AutoSize = true;
-            this.lab_ReData.Location = new System.Drawing.Point(8, 254);
+            this.lab_ReData.Location = new System.Drawing.Point(4, 226);
             this.lab_ReData.Name = "lab_ReData";
             this.lab_ReData.Size = new System.Drawing.Size(53, 12);
             this.lab_ReData.TabIndex = 68;
@@ -276,15 +308,15 @@
             // 
             // TB_RecvData
             // 
-            this.TB_RecvData.Location = new System.Drawing.Point(5, 269);
+            this.TB_RecvData.Location = new System.Drawing.Point(5, 241);
             this.TB_RecvData.Multiline = true;
             this.TB_RecvData.Name = "TB_RecvData";
-            this.TB_RecvData.Size = new System.Drawing.Size(328, 52);
+            this.TB_RecvData.Size = new System.Drawing.Size(292, 29);
             this.TB_RecvData.TabIndex = 69;
             // 
             // btn_ClearRecvData
             // 
-            this.btn_ClearRecvData.Location = new System.Drawing.Point(258, 330);
+            this.btn_ClearRecvData.Location = new System.Drawing.Point(222, 276);
             this.btn_ClearRecvData.Name = "btn_ClearRecvData";
             this.btn_ClearRecvData.Size = new System.Drawing.Size(75, 21);
             this.btn_ClearRecvData.TabIndex = 70;
@@ -298,7 +330,7 @@
             this.CB_Customized.Items.AddRange(new object[] {
             "$TMSCT",
             "$TMSTA"});
-            this.CB_Customized.Location = new System.Drawing.Point(61, 181);
+            this.CB_Customized.Location = new System.Drawing.Point(61, 164);
             this.CB_Customized.Name = "CB_Customized";
             this.CB_Customized.Size = new System.Drawing.Size(67, 20);
             this.CB_Customized.TabIndex = 71;
@@ -330,12 +362,12 @@
             this.groupBox1.Controls.Add(this.TB_Port);
             this.groupBox1.Controls.Add(this.TB_IPAddress);
             this.groupBox1.Controls.Add(this.LB_ConnectionStatus);
-            this.groupBox1.Controls.Add(this.lab_Status1);
+            this.groupBox1.Controls.Add(this.lab_Status);
             this.groupBox1.Controls.Add(this.lab_Port);
             this.groupBox1.Controls.Add(this.lab_IP);
-            this.groupBox1.Location = new System.Drawing.Point(12, 13);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(339, 363);
+            this.groupBox1.Size = new System.Drawing.Size(307, 308);
             this.groupBox1.TabIndex = 73;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
@@ -369,7 +401,7 @@
             this.XGE32_groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.XGE32_groupBox.Name = "XGE32_groupBox";
             this.XGE32_groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 227);
+            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 216);
             this.XGE32_groupBox.TabIndex = 110;
             this.XGE32_groupBox.TabStop = false;
             this.XGE32_groupBox.Text = "XEG-32夾爪控制";
@@ -592,10 +624,10 @@
             this.txtStatus.Controls.Add(this.button38);
             this.txtStatus.Controls.Add(this.btn_TMtest);
             this.txtStatus.Controls.Add(this.button37);
-            this.txtStatus.Location = new System.Drawing.Point(357, 12);
+            this.txtStatus.Location = new System.Drawing.Point(325, 17);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtStatus.Size = new System.Drawing.Size(357, 364);
+            this.txtStatus.Size = new System.Drawing.Size(357, 309);
             this.txtStatus.TabIndex = 111;
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
@@ -686,21 +718,55 @@
             // 
             // socketmsg
             // 
-            this.socketmsg.Location = new System.Drawing.Point(6, 48);
+            this.socketmsg.Location = new System.Drawing.Point(6, 15);
             this.socketmsg.Name = "socketmsg";
-            this.socketmsg.Size = new System.Drawing.Size(366, 133);
+            this.socketmsg.Size = new System.Drawing.Size(434, 133);
             this.socketmsg.TabIndex = 113;
             this.socketmsg.Text = "";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ActionBtn);
             this.groupBox2.Controls.Add(this.socketmsg);
-            this.groupBox2.Location = new System.Drawing.Point(728, 17);
+            this.groupBox2.Controls.Add(this.exportExcel);
+            this.groupBox2.Controls.Add(this.reMove);
+            this.groupBox2.Controls.Add(this.PointDataGrid);
+            this.groupBox2.Location = new System.Drawing.Point(688, 17);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(378, 188);
+            this.groupBox2.Size = new System.Drawing.Size(531, 409);
             this.groupBox2.TabIndex = 115;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBox2.Text = "顯示介面";
+            // 
+            // ActionBtn
+            // 
+            this.ActionBtn.Location = new System.Drawing.Point(446, 45);
+            this.ActionBtn.Name = "ActionBtn";
+            this.ActionBtn.Size = new System.Drawing.Size(75, 21);
+            this.ActionBtn.TabIndex = 127;
+            this.ActionBtn.Text = "ActionButton";
+            this.ActionBtn.UseVisualStyleBackColor = true;
+            this.ActionBtn.Click += new System.EventHandler(this.ActionBtn_Click);
+            // 
+            // exportExcel
+            // 
+            this.exportExcel.Location = new System.Drawing.Point(446, 77);
+            this.exportExcel.Name = "exportExcel";
+            this.exportExcel.Size = new System.Drawing.Size(75, 23);
+            this.exportExcel.TabIndex = 126;
+            this.exportExcel.Text = "ExportExcel";
+            this.exportExcel.UseVisualStyleBackColor = true;
+            this.exportExcel.Click += new System.EventHandler(this.exportExcel_Click);
+            // 
+            // reMove
+            // 
+            this.reMove.Location = new System.Drawing.Point(446, 16);
+            this.reMove.Name = "reMove";
+            this.reMove.Size = new System.Drawing.Size(75, 23);
+            this.reMove.TabIndex = 115;
+            this.reMove.Text = "重新發送";
+            this.reMove.UseVisualStyleBackColor = true;
+            this.reMove.Click += new System.EventHandler(this.armReMove);
             // 
             // PointDataGrid
             // 
@@ -713,10 +779,10 @@
             this.Rx,
             this.Ry,
             this.Rz});
-            this.PointDataGrid.Location = new System.Drawing.Point(728, 211);
+            this.PointDataGrid.Location = new System.Drawing.Point(6, 167);
             this.PointDataGrid.Name = "PointDataGrid";
             this.PointDataGrid.RowTemplate.Height = 24;
-            this.PointDataGrid.Size = new System.Drawing.Size(527, 229);
+            this.PointDataGrid.Size = new System.Drawing.Size(515, 228);
             this.PointDataGrid.TabIndex = 125;
             // 
             // number
@@ -761,47 +827,326 @@
             this.Rz.Name = "Rz";
             this.Rz.Width = 70;
             // 
-            // reMove
+            // groupBox3
             // 
-            this.reMove.Location = new System.Drawing.Point(1112, 37);
-            this.reMove.Name = "reMove";
-            this.reMove.Size = new System.Drawing.Size(75, 23);
-            this.reMove.TabIndex = 115;
-            this.reMove.Text = "重新發送";
-            this.reMove.UseVisualStyleBackColor = true;
-            this.reMove.Click += new System.EventHandler(this.armReMove);
+            this.groupBox3.Controls.Add(this.CB_Customized1);
+            this.groupBox3.Controls.Add(this.btn_ClearRecvData1);
+            this.groupBox3.Controls.Add(this.TB_RecvData1);
+            this.groupBox3.Controls.Add(this.lab_ReData1);
+            this.groupBox3.Controls.Add(this.TB_Command1);
+            this.groupBox3.Controls.Add(this.btn_Send1);
+            this.groupBox3.Controls.Add(this.btn_ClearSendData1);
+            this.groupBox3.Controls.Add(this.CB_Listen1);
+            this.groupBox3.Controls.Add(this.TB_SendData1);
+            this.groupBox3.Controls.Add(this.lab_Data1);
+            this.groupBox3.Controls.Add(this.btn_Disconnect1);
+            this.groupBox3.Controls.Add(this.btn_Connect1);
+            this.groupBox3.Controls.Add(this.TB_Port1);
+            this.groupBox3.Controls.Add(this.TB_IPAddress1);
+            this.groupBox3.Controls.Add(this.LB_ConnectionStatus1);
+            this.groupBox3.Controls.Add(this.lab_Status1);
+            this.groupBox3.Controls.Add(this.lab_Port1);
+            this.groupBox3.Controls.Add(this.lab_IP1);
+            this.groupBox3.Location = new System.Drawing.Point(12, 326);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(307, 308);
+            this.groupBox3.TabIndex = 73;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "TM_TCP";
             // 
-            // exportExcel
+            // CB_Customized1
             // 
-            this.exportExcel.Location = new System.Drawing.Point(1112, 165);
-            this.exportExcel.Name = "exportExcel";
-            this.exportExcel.Size = new System.Drawing.Size(75, 23);
-            this.exportExcel.TabIndex = 126;
-            this.exportExcel.Text = "ExportExcel";
-            this.exportExcel.UseVisualStyleBackColor = true;
-            this.exportExcel.Click += new System.EventHandler(this.exportExcel_Click);
+            this.CB_Customized1.FormattingEnabled = true;
+            this.CB_Customized1.Items.AddRange(new object[] {
+            "$TMSCT",
+            "$TMSTA"});
+            this.CB_Customized1.Location = new System.Drawing.Point(61, 164);
+            this.CB_Customized1.Name = "CB_Customized1";
+            this.CB_Customized1.Size = new System.Drawing.Size(67, 20);
+            this.CB_Customized1.TabIndex = 71;
             // 
-            // ActionBtn
+            // btn_ClearRecvData1
             // 
-            this.ActionBtn.Location = new System.Drawing.Point(1112, 134);
-            this.ActionBtn.Name = "ActionBtn";
-            this.ActionBtn.Size = new System.Drawing.Size(75, 21);
-            this.ActionBtn.TabIndex = 127;
-            this.ActionBtn.Text = "ActionButton";
-            this.ActionBtn.UseVisualStyleBackColor = true;
-            this.ActionBtn.Click += new System.EventHandler(this.ActionBtn_Click);
+            this.btn_ClearRecvData1.Location = new System.Drawing.Point(222, 276);
+            this.btn_ClearRecvData1.Name = "btn_ClearRecvData1";
+            this.btn_ClearRecvData1.Size = new System.Drawing.Size(75, 21);
+            this.btn_ClearRecvData1.TabIndex = 70;
+            this.btn_ClearRecvData1.Text = "Clear";
+            this.btn_ClearRecvData1.UseVisualStyleBackColor = true;
+            this.btn_ClearRecvData1.Click += new System.EventHandler(this.btn_ClearRecvData1_Click);
+            // 
+            // TB_RecvData1
+            // 
+            this.TB_RecvData1.Location = new System.Drawing.Point(5, 241);
+            this.TB_RecvData1.Multiline = true;
+            this.TB_RecvData1.Name = "TB_RecvData1";
+            this.TB_RecvData1.Size = new System.Drawing.Size(292, 29);
+            this.TB_RecvData1.TabIndex = 69;
+            // 
+            // lab_ReData1
+            // 
+            this.lab_ReData1.AutoSize = true;
+            this.lab_ReData1.Location = new System.Drawing.Point(4, 226);
+            this.lab_ReData1.Name = "lab_ReData1";
+            this.lab_ReData1.Size = new System.Drawing.Size(53, 12);
+            this.lab_ReData1.TabIndex = 68;
+            this.lab_ReData1.Text = "Recv Data";
+            // 
+            // TB_Command1
+            // 
+            this.TB_Command1.Location = new System.Drawing.Point(5, 189);
+            this.TB_Command1.Multiline = true;
+            this.TB_Command1.Name = "TB_Command1";
+            this.TB_Command1.Size = new System.Drawing.Size(292, 31);
+            this.TB_Command1.TabIndex = 67;
+            // 
+            // btn_Send1
+            // 
+            this.btn_Send1.Location = new System.Drawing.Point(222, 163);
+            this.btn_Send1.Name = "btn_Send1";
+            this.btn_Send1.Size = new System.Drawing.Size(75, 21);
+            this.btn_Send1.TabIndex = 66;
+            this.btn_Send1.Text = "Send";
+            this.btn_Send1.UseVisualStyleBackColor = true;
+            this.btn_Send1.Click += new System.EventHandler(this.btn_Send1_Click);
+            // 
+            // btn_ClearSendData1
+            // 
+            this.btn_ClearSendData1.Location = new System.Drawing.Point(141, 163);
+            this.btn_ClearSendData1.Name = "btn_ClearSendData1";
+            this.btn_ClearSendData1.Size = new System.Drawing.Size(75, 21);
+            this.btn_ClearSendData1.TabIndex = 65;
+            this.btn_ClearSendData1.Text = "Clear";
+            this.btn_ClearSendData1.UseVisualStyleBackColor = true;
+            this.btn_ClearSendData1.Click += new System.EventHandler(this.btn_ClearSendData1_Click);
+            // 
+            // CB_Listen1
+            // 
+            this.CB_Listen1.AutoSize = true;
+            this.CB_Listen1.Checked = true;
+            this.CB_Listen1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CB_Listen1.Location = new System.Drawing.Point(5, 167);
+            this.CB_Listen1.Name = "CB_Listen1";
+            this.CB_Listen1.Size = new System.Drawing.Size(52, 16);
+            this.CB_Listen1.TabIndex = 64;
+            this.CB_Listen1.Text = "Listen";
+            this.CB_Listen1.UseVisualStyleBackColor = true;
+            this.CB_Listen1.CheckedChanged += new System.EventHandler(this.CB_Listen1_CheckedChanged);
+            // 
+            // TB_SendData1
+            // 
+            this.TB_SendData1.Location = new System.Drawing.Point(5, 122);
+            this.TB_SendData1.Multiline = true;
+            this.TB_SendData1.Name = "TB_SendData1";
+            this.TB_SendData1.Size = new System.Drawing.Size(292, 36);
+            this.TB_SendData1.TabIndex = 63;
+            this.TB_SendData1.Text = "1,PTP(\"CPP\",519,-122,458,185,0,90,100,200,0,false)";
+            this.TB_SendData1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_SendData1_KeyDown);
+            // 
+            // lab_Data1
+            // 
+            this.lab_Data1.AutoSize = true;
+            this.lab_Data1.Location = new System.Drawing.Point(4, 109);
+            this.lab_Data1.Name = "lab_Data1";
+            this.lab_Data1.Size = new System.Drawing.Size(74, 12);
+            this.lab_Data1.TabIndex = 62;
+            this.lab_Data1.Text = "Edit/Send Data";
+            // 
+            // btn_Disconnect1
+            // 
+            this.btn_Disconnect1.Location = new System.Drawing.Point(222, 47);
+            this.btn_Disconnect1.Name = "btn_Disconnect1";
+            this.btn_Disconnect1.Size = new System.Drawing.Size(75, 21);
+            this.btn_Disconnect1.TabIndex = 61;
+            this.btn_Disconnect1.Text = "Disconnect";
+            this.btn_Disconnect1.UseVisualStyleBackColor = true;
+            this.btn_Disconnect1.Click += new System.EventHandler(this.btn_Disconnect1_Click);
+            // 
+            // btn_Connect1
+            // 
+            this.btn_Connect1.Location = new System.Drawing.Point(222, 21);
+            this.btn_Connect1.Name = "btn_Connect1";
+            this.btn_Connect1.Size = new System.Drawing.Size(75, 21);
+            this.btn_Connect1.TabIndex = 60;
+            this.btn_Connect1.Text = "Connect";
+            this.btn_Connect1.UseVisualStyleBackColor = true;
+            this.btn_Connect1.Click += new System.EventHandler(this.btn_Connect1_Click);
+            // 
+            // TB_Port1
+            // 
+            this.TB_Port1.Location = new System.Drawing.Point(141, 46);
+            this.TB_Port1.Name = "TB_Port1";
+            this.TB_Port1.Size = new System.Drawing.Size(46, 22);
+            this.TB_Port1.TabIndex = 59;
+            this.TB_Port1.Text = "5890";
+            // 
+            // TB_IPAddress1
+            // 
+            this.TB_IPAddress1.Location = new System.Drawing.Point(6, 46);
+            this.TB_IPAddress1.Name = "TB_IPAddress1";
+            this.TB_IPAddress1.Size = new System.Drawing.Size(91, 22);
+            this.TB_IPAddress1.TabIndex = 58;
+            this.TB_IPAddress1.Text = "169.254.119.";
+            // 
+            // LB_ConnectionStatus1
+            // 
+            this.LB_ConnectionStatus1.AutoSize = true;
+            this.LB_ConnectionStatus1.Location = new System.Drawing.Point(139, 82);
+            this.LB_ConnectionStatus1.Name = "LB_ConnectionStatus1";
+            this.LB_ConnectionStatus1.Size = new System.Drawing.Size(70, 12);
+            this.LB_ConnectionStatus1.TabIndex = 57;
+            this.LB_ConnectionStatus1.Text = "Disconnected.";
+            // 
+            // lab_Status1
+            // 
+            this.lab_Status1.AutoSize = true;
+            this.lab_Status1.Location = new System.Drawing.Point(5, 82);
+            this.lab_Status1.Name = "lab_Status1";
+            this.lab_Status1.Size = new System.Drawing.Size(92, 12);
+            this.lab_Status1.TabIndex = 24;
+            this.lab_Status1.Text = "Connection Status:";
+            // 
+            // lab_Port1
+            // 
+            this.lab_Port1.AutoSize = true;
+            this.lab_Port1.Location = new System.Drawing.Point(139, 23);
+            this.lab_Port1.Name = "lab_Port1";
+            this.lab_Port1.Size = new System.Drawing.Size(24, 12);
+            this.lab_Port1.TabIndex = 25;
+            this.lab_Port1.Text = "Port";
+            // 
+            // lab_IP1
+            // 
+            this.lab_IP1.AutoSize = true;
+            this.lab_IP1.Location = new System.Drawing.Point(6, 23);
+            this.lab_IP1.Name = "lab_IP1";
+            this.lab_IP1.Size = new System.Drawing.Size(55, 12);
+            this.lab_IP1.TabIndex = 26;
+            this.lab_IP1.Text = "IP Address";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.button7);
+            this.groupBox4.Controls.Add(this.label15);
+            this.groupBox4.Controls.Add(this.label16);
+            this.groupBox4.Controls.Add(this.TB_sp_abs1);
+            this.groupBox4.Controls.Add(this.TB_sp_pc1);
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.label18);
+            this.groupBox4.Controls.Add(this.button8);
+            this.groupBox4.Controls.Add(this.button9);
+            this.groupBox4.Controls.Add(this.button10);
+            this.groupBox4.Location = new System.Drawing.Point(331, 347);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.groupBox4.Size = new System.Drawing.Size(357, 79);
+            this.groupBox4.TabIndex = 111;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "TM_動作";
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(267, 45);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 81;
+            this.button7.Text = "TM_Line2";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button39_Click);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(141, 48);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(41, 12);
+            this.label15.TabIndex = 80;
+            this.label15.Text = "0.1~1.0";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(141, 24);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 12);
+            this.label16.TabIndex = 79;
+            this.label16.Text = "0.1~1.0";
+            // 
+            // TB_sp_abs1
+            // 
+            this.TB_sp_abs1.Location = new System.Drawing.Point(80, 44);
+            this.TB_sp_abs1.Name = "TB_sp_abs1";
+            this.TB_sp_abs1.Size = new System.Drawing.Size(55, 22);
+            this.TB_sp_abs1.TabIndex = 78;
+            this.TB_sp_abs1.Text = "1.0";
+            this.TB_sp_abs1.TextChanged += new System.EventHandler(this.TB_sp_abs_TextChanged);
+            // 
+            // TB_sp_pc1
+            // 
+            this.TB_sp_pc1.Location = new System.Drawing.Point(80, 21);
+            this.TB_sp_pc1.Name = "TB_sp_pc1";
+            this.TB_sp_pc1.Size = new System.Drawing.Size(55, 22);
+            this.TB_sp_pc1.TabIndex = 77;
+            this.TB_sp_pc1.Text = "1.0";
+            this.TB_sp_pc1.TextChanged += new System.EventHandler(this.TB_sp_pc_TextChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 47);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 12);
+            this.label17.TabIndex = 76;
+            this.label17.Text = "絕對速度:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 24);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(68, 12);
+            this.label18.TabIndex = 75;
+            this.label18.Text = "百分比速度:";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(188, 46);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 74;
+            this.button8.Text = "Circle_test2";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button38_Click);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(188, 19);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 72;
+            this.button9.Text = "TM歸位";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.btn_TMtest_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(267, 19);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 73;
+            this.button10.Text = "TM_Line1";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1303, 639);
-            this.Controls.Add(this.ActionBtn);
-            this.Controls.Add(this.exportExcel);
-            this.Controls.Add(this.reMove);
-            this.Controls.Add(this.PointDataGrid);
+            this.ClientSize = new System.Drawing.Size(1282, 644);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtStatus);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = " ";
@@ -814,6 +1159,10 @@
             this.txtStatus.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -823,7 +1172,7 @@
         private System.IO.Ports.SerialPort serialPort1;
         private System.IO.Ports.SerialPort serialPort2;
         private System.IO.Ports.SerialPort serialPort3;
-        private System.Windows.Forms.Label lab_Status1;
+        private System.Windows.Forms.Label lab_Status;
         private System.Windows.Forms.Label lab_Port;
         private System.Windows.Forms.Label lab_IP;
         private System.IO.Ports.SerialPort serialPort4;
@@ -893,6 +1242,36 @@
         private System.Windows.Forms.Button reMove;
         private System.Windows.Forms.Button exportExcel;
         private System.Windows.Forms.Button ActionBtn;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox CB_Customized1;
+        private System.Windows.Forms.Button btn_ClearRecvData1;
+        private System.Windows.Forms.TextBox TB_RecvData1;
+        private System.Windows.Forms.Label lab_ReData1;
+        private System.Windows.Forms.TextBox TB_Command1;
+        private System.Windows.Forms.Button btn_Send1;
+        private System.Windows.Forms.Button btn_ClearSendData1;
+        private System.Windows.Forms.CheckBox CB_Listen1;
+        private System.Windows.Forms.TextBox TB_SendData1;
+        private System.Windows.Forms.Label lab_Data1;
+        private System.Windows.Forms.Button btn_Disconnect1;
+        private System.Windows.Forms.Button btn_Connect1;
+        private System.Windows.Forms.TextBox TB_Port1;
+        private System.Windows.Forms.TextBox TB_IPAddress1;
+        private System.Windows.Forms.Label LB_ConnectionStatus1;
+        private System.Windows.Forms.Label lab_Status1;
+        private System.Windows.Forms.Label lab_Port1;
+        private System.Windows.Forms.Label lab_IP1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox TB_sp_abs1;
+        private System.Windows.Forms.TextBox TB_sp_pc1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button10;
     }
 }
 
