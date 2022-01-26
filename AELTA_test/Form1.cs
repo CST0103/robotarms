@@ -164,8 +164,9 @@ namespace ControlUI
         #region --通訊--
         private void FirstSever()
         {
+            int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<double, double, double, double, double, double> Tolist = CoordinateConversion;
+            Action<double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
             string Declare;
             bool _open_flag = FirstListener.Start();
             Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
@@ -180,7 +181,7 @@ namespace ControlUI
                 while (true)
                 {
                     string reciveData = FirstListener.Recive();
-                    Invoke(ModifyText, reciveData);
+                    Invoke(ModifyText, Count.ToString() + "  First Command");
                     string[] Point = reciveData.Split('$');
                     Invoke(Tolist,
                         Convert.ToDouble(Point[1]),
@@ -188,7 +189,8 @@ namespace ControlUI
                         Convert.ToDouble(Point[3]),
                         Convert.ToDouble(Point[4]),
                         Convert.ToDouble(Point[5]),
-                        Convert.ToDouble(Point[6]));
+                        Convert.ToDouble(Point[6]),
+                        true);
                 }
             }
             catch { }
@@ -196,8 +198,9 @@ namespace ControlUI
 
         private void SecondSever()
         {
+            int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<double, double, double, double, double, double> Tolist = CoordinateConversion;
+            Action<double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
             string Declare;
             bool _open_flag = SecondListener.Start();
             Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
@@ -209,7 +212,7 @@ namespace ControlUI
             while (true)
             {
                 string reciveData = SecondListener.Recive();
-                Invoke(ModifyText, reciveData);
+                Invoke(ModifyText, Count.ToString() + "  Second Command");
                 string[] Point = reciveData.Split('$');
                 Invoke(Tolist,
                     Convert.ToDouble(Point[1]),
@@ -217,7 +220,8 @@ namespace ControlUI
                     Convert.ToDouble(Point[3]),
                     Convert.ToDouble(Point[4]),
                     Convert.ToDouble(Point[5]),
-                    Convert.ToDouble(Point[6]));
+                    Convert.ToDouble(Point[6]),
+                    false);
             }
         }
         protected void SockMsg<T>(T teste)
@@ -267,27 +271,50 @@ namespace ControlUI
          * 
          * */
         int CoordinateConversionCount = 0;
-        private void CoordinateConversion(double d1, double d2, double d3, double d4, double d5, double d6)
+        private void CoordinateConversion(double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
 
-            Action<int, double, double, double, double, double, double> EDG = WriteDataGrid;
-            Action<string, string, string, string, string, string> Toarm = armMove;
+            Action<int, double, double, double, double, double, double,bool> DataToGrid = WriteDataGrid;
+            Action<string, string, string, string, string, string,bool> Toarm = armMove;
 
-            int xmax = 750
-                , xmin = 70
-                , ymax = 550
-                , ymin = -550
-                , zmax = 400
-                , zmin = -45;
+
+
+            int xmax, xmin, ymax, ymin, zmax, zmin, xbias, ybias, zbias;
+
+            if (ArmFlag)
+            {
+                xmax = 750;
+                xmin = 70;
+                ymax = 550;
+                ymin = -550;
+                zmax = 400;
+                zmin = -45;
+
+                xbias = 450;
+                ybias = -122;
+                zbias = 300;
+            }
+            else
+            {
+                xmax = 750;
+                xmin = 70;
+                ymax = 550;
+                ymin = -500;
+                zmax = 600;
+                zmin = -45;
+                xbias = 450;
+                ybias = -122;
+                zbias = 430;
+            }
 
             double RotateBuffer_x = 180, RotateBuffer_y = 0, RotateBuffer_z = 90;
 
             int x, y, z;
 
-            x = Convert.ToInt32(d1) + 450;
-            y = Convert.ToInt32(d2) + (-122);
-            z = Convert.ToInt32(d3) + 300;
+            x = Convert.ToInt32(d1) + xbias;
+            y = Convert.ToInt32(d2) + ybias;
+            z = Convert.ToInt32(d3) + zbias;
 
             d1 = x;
             d2 = y;
@@ -317,8 +344,8 @@ namespace ControlUI
             if (d3 < zmin)
                 d3 = zmin;
 
-            Invoke(EDG, CoordinateConversionCount, d1, d2, d3, d4, d5, d6);
-            Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString());
+            Invoke(DataToGrid, CoordinateConversionCount, d1, d2, d3, d4, d5, d6,ArmFlag);
+            Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString(), ArmFlag);
             CoordinateConversionCount++;
         }
 
@@ -327,16 +354,19 @@ namespace ControlUI
 
         #region --點位表格--
 
-        private void WriteDataGrid(int count, double d1, double d2, double d3, double d4, double d5, double d6)
+        private void WriteDataGrid(int count, double d1, double d2, double d3, double d4, double d5, double d6,bool ArmFlag)
         {
-            this.PointDataGrid.Rows.Add(count, d1, d2, d3, d4, d5, d6);
+            if (ArmFlag)
+            { this.PointDataGrid.Rows.Add(count, d1, d2, d3, d4, d5, d6); }
+            else
+            { this.PointDataGrid1.Rows.Add(count, d1, d2, d3, d4, d5, d6); }
         }
 
         #endregion
 
         #region --移動--
 
-        private void armMove(String d1, String d2, String d3, String d4, String d5, String d6)
+        private void armMove(String d1, String d2, String d3, String d4, String d5, String d6,bool ArmFlag)
         {
 
             int speed = 100;
@@ -345,7 +375,10 @@ namespace ControlUI
             //Line(CAP
             string test_string = @"1,PTP(""CPP""" + "," + d1 + "," + d2 + "," + d3 + "," + d4 + "," + d5 + "," + d6 + "," + $"{item.speed} ,200,0,false)";
             TB_SendData.Text = test_string;
-            TM_send(test_string);
+            if(ArmFlag)
+                TM_send(test_string);
+            else
+                TM_send1(test_string);
 
         }
 
@@ -534,7 +567,7 @@ namespace ControlUI
         private void btn_Send1_Click(object sender, EventArgs e)
         {
             string s = string.Empty;
-            if (this.CB_Listen.Checked == true)
+            if (this.CB_Listen1.Checked == true)
             {
                 s = SocketClientObject.DataToPacket(CB_Customized1.SelectedItem.ToString(), this.TB_SendData1.Text);
             }
@@ -789,6 +822,17 @@ namespace ControlUI
             }
         }
 
+        void TM_send1(string _string)
+        {
+            string s = string.Empty;
+            s = SocketClientObject.DataToPacket("$TMSCT", _string);
+            //this.TB_Command.Text = s;
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+            if (this.TCPClientObject1 != null)
+            {
+                this.TCPClientObject1.WriteSyncData(bytes);
+            }
+        }
         //手臂速度百分比
         double sp_pc = 1.0;
         private void TB_sp_pc_TextChanged(object sender, EventArgs e)
@@ -817,7 +861,6 @@ namespace ControlUI
             int speed = 100;
             string test_string = @"1,PTP(""CPP"", 450, -122, 300 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
             TM_send(test_string);
-            XEG32_Open_bt.PerformClick();
         }
 
         #endregion
@@ -898,6 +941,11 @@ namespace ControlUI
                 armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5]);
                 Thread.Sleep(500);
             }
+        }
+
+        private void PointDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

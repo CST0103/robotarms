@@ -95,13 +95,6 @@
             this.exportExcel = new System.Windows.Forms.Button();
             this.reMove = new System.Windows.Forms.Button();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CB_Customized1 = new System.Windows.Forms.ComboBox();
             this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
@@ -132,6 +125,21 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PointDataGrid1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -139,6 +147,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -253,7 +262,7 @@
             this.TB_SendData.Name = "TB_SendData";
             this.TB_SendData.Size = new System.Drawing.Size(292, 36);
             this.TB_SendData.TabIndex = 63;
-            this.TB_SendData.Text = "1,PTP(\"CPP\",519,-122,458,185,0,90,100,200,0,false)";
+            this.TB_SendData.Text = "1,PTP(\"CPP\",450,-122,300,180,0,90,100,200,0,false)";
             this.TB_SendData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_SendData_KeyDown);
             // 
             // CB_Listen
@@ -730,10 +739,11 @@
             this.groupBox2.Controls.Add(this.socketmsg);
             this.groupBox2.Controls.Add(this.exportExcel);
             this.groupBox2.Controls.Add(this.reMove);
+            this.groupBox2.Controls.Add(this.PointDataGrid1);
             this.groupBox2.Controls.Add(this.PointDataGrid);
             this.groupBox2.Location = new System.Drawing.Point(688, 17);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(531, 409);
+            this.groupBox2.Size = new System.Drawing.Size(546, 617);
             this.groupBox2.TabIndex = 115;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
@@ -779,53 +789,12 @@
             this.Rx,
             this.Ry,
             this.Rz});
-            this.PointDataGrid.Location = new System.Drawing.Point(6, 167);
+            this.PointDataGrid.Location = new System.Drawing.Point(6, 154);
             this.PointDataGrid.Name = "PointDataGrid";
             this.PointDataGrid.RowTemplate.Height = 24;
             this.PointDataGrid.Size = new System.Drawing.Size(515, 228);
             this.PointDataGrid.TabIndex = 125;
-            // 
-            // number
-            // 
-            this.number.HeaderText = "unmber";
-            this.number.Name = "number";
-            this.number.Width = 50;
-            // 
-            // x
-            // 
-            this.x.HeaderText = "x";
-            this.x.Name = "x";
-            this.x.Width = 70;
-            // 
-            // y
-            // 
-            this.y.HeaderText = "y";
-            this.y.Name = "y";
-            this.y.Width = 70;
-            // 
-            // z
-            // 
-            this.z.HeaderText = "z";
-            this.z.Name = "z";
-            this.z.Width = 70;
-            // 
-            // Rx
-            // 
-            this.Rx.HeaderText = "Rx";
-            this.Rx.Name = "Rx";
-            this.Rx.Width = 70;
-            // 
-            // Ry
-            // 
-            this.Ry.HeaderText = "Ry";
-            this.Ry.Name = "Ry";
-            this.Ry.Width = 70;
-            // 
-            // Rz
-            // 
-            this.Rz.HeaderText = "Rz";
-            this.Rz.Name = "Rz";
-            this.Rz.Width = 70;
+            this.PointDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PointDataGrid_CellContentClick);
             // 
             // groupBox3
             // 
@@ -940,7 +909,7 @@
             this.TB_SendData1.Name = "TB_SendData1";
             this.TB_SendData1.Size = new System.Drawing.Size(292, 36);
             this.TB_SendData1.TabIndex = 63;
-            this.TB_SendData1.Text = "1,PTP(\"CPP\",519,-122,458,185,0,90,100,200,0,false)";
+            this.TB_SendData1.Text = "1,PTP(\"CPP\",450,-122,300,180,0,90,100,200,0,false)";
             this.TB_SendData1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TB_SendData1_KeyDown);
             // 
             // lab_Data1
@@ -986,7 +955,7 @@
             this.TB_IPAddress1.Name = "TB_IPAddress1";
             this.TB_IPAddress1.Size = new System.Drawing.Size(91, 22);
             this.TB_IPAddress1.TabIndex = 58;
-            this.TB_IPAddress1.Text = "169.254.119.";
+            this.TB_IPAddress1.Text = "169.254.30.194";
             // 
             // LB_ConnectionStatus1
             // 
@@ -1138,6 +1107,107 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
+            // number
+            // 
+            this.number.HeaderText = "number";
+            this.number.Name = "number";
+            this.number.Width = 50;
+            // 
+            // x
+            // 
+            this.x.HeaderText = "x";
+            this.x.Name = "x";
+            this.x.Width = 70;
+            // 
+            // y
+            // 
+            this.y.HeaderText = "y";
+            this.y.Name = "y";
+            this.y.Width = 70;
+            // 
+            // z
+            // 
+            this.z.HeaderText = "z";
+            this.z.Name = "z";
+            this.z.Width = 70;
+            // 
+            // Rx
+            // 
+            this.Rx.HeaderText = "Rx";
+            this.Rx.Name = "Rx";
+            this.Rx.Width = 70;
+            // 
+            // Ry
+            // 
+            this.Ry.HeaderText = "Ry";
+            this.Ry.Name = "Ry";
+            this.Ry.Width = 70;
+            // 
+            // Rz
+            // 
+            this.Rz.HeaderText = "Rz";
+            this.Rz.Name = "Rz";
+            this.Rz.Width = 70;
+            // 
+            // PointDataGrid1
+            // 
+            this.PointDataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.PointDataGrid1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6,
+            this.dataGridViewTextBoxColumn7});
+            this.PointDataGrid1.Location = new System.Drawing.Point(6, 387);
+            this.PointDataGrid1.Name = "PointDataGrid1";
+            this.PointDataGrid1.RowTemplate.Height = 24;
+            this.PointDataGrid1.Size = new System.Drawing.Size(515, 228);
+            this.PointDataGrid1.TabIndex = 125;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "number";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 50;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "x";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "y";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "z";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "Rx";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.HeaderText = "Ry";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.HeaderText = "Rz";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.Width = 70;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1163,6 +1233,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1232,13 +1303,6 @@
         private System.Windows.Forms.RichTextBox socketmsg;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView PointDataGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn number;
-        private System.Windows.Forms.DataGridViewTextBoxColumn x;
-        private System.Windows.Forms.DataGridViewTextBoxColumn y;
-        private System.Windows.Forms.DataGridViewTextBoxColumn z;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
         private System.Windows.Forms.Button reMove;
         private System.Windows.Forms.Button exportExcel;
         private System.Windows.Forms.Button ActionBtn;
@@ -1272,6 +1336,21 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.DataGridView PointDataGrid1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn number;
+        private System.Windows.Forms.DataGridViewTextBoxColumn x;
+        private System.Windows.Forms.DataGridViewTextBoxColumn y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn z;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
     }
 }
 
