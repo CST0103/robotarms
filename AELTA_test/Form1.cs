@@ -143,6 +143,7 @@ namespace ControlUI
 
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
+        //Image
         #endregion
 
         public Form1()
@@ -154,6 +155,13 @@ namespace ControlUI
         {
             CB_Customized.SelectedIndex = 0;
             CB_Customized1.SelectedIndex = 0;
+            try
+            {
+                GripCnt_Btn.PerformClick();
+                XEG32_Reset_bt.PerformClick();
+            }
+            catch (Exception ex)
+            { }
 
             Thread FirstArmSever = new Thread(FirstSever);
             Thread SecondArmSever = new Thread(SecondSever);
@@ -166,7 +174,7 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
+            Action<int, double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
             string Declare;
             bool _open_flag = FirstListener.Start();
             Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
@@ -184,6 +192,7 @@ namespace ControlUI
                     Invoke(ModifyText, Count.ToString() + "  First Command");
                     string[] Point = reciveData.Split('$');
                     Invoke(Tolist,
+                        Convert.ToInt32(Point[0]),
                         Convert.ToDouble(Point[1]),
                         Convert.ToDouble(Point[2]),
                         Convert.ToDouble(Point[3]),
@@ -200,7 +209,7 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
+            Action<int, double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
             string Declare;
             bool _open_flag = SecondListener.Start();
             Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
@@ -215,6 +224,7 @@ namespace ControlUI
                 Invoke(ModifyText, Count.ToString() + "  Second Command");
                 string[] Point = reciveData.Split('$');
                 Invoke(Tolist,
+                    Convert.ToInt32(Point[0]),
                     Convert.ToDouble(Point[1]),
                     Convert.ToDouble(Point[2]),
                     Convert.ToDouble(Point[3]),
@@ -271,7 +281,7 @@ namespace ControlUI
          * 
          * */
         int CoordinateConversionCount = 0;
-        private void CoordinateConversion(double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private void CoordinateConversion(int Conit, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
 
@@ -384,9 +394,9 @@ namespace ControlUI
 
         private void armReMove(object sender, EventArgs e)
         {
+            bool ArmFlag = true;
             Action<string> ModifyText = SockMsg;
-            Action<String, String, String, String, String, String> Toarm = armMove;
-
+            Action<String, String, String, String, String, String,bool> Toarm = armMove;
             for (int i = 0; i < PointDataGrid.RowCount - 1; i++)
             {
 
@@ -398,7 +408,7 @@ namespace ControlUI
                 String rd6 = Convert.ToString(PointDataGrid[6, i].Value);
 
                 Invoke(ModifyText, "ReMove" + rd1 + "," + rd2 + "," + rd3 + "," + rd4 + "," + rd5 + "," + rd6);
-                Invoke(Toarm, rd1, rd2, rd3, rd4, rd5, rd6);
+                Invoke(Toarm, rd1, rd2, rd3, rd4, rd5, rd6,ArmFlag);
             }
         }
         #endregion
@@ -938,7 +948,7 @@ namespace ControlUI
             }
             for (int k = 0; k < data.Count; k++)
             {
-                armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5]);
+                armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5],true);
                 Thread.Sleep(500);
             }
         }

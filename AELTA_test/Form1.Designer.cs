@@ -56,7 +56,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.XGE32_groupBox = new System.Windows.Forms.GroupBox();
             this.button35 = new System.Windows.Forms.Button();
-            this.button34 = new System.Windows.Forms.Button();
+            this.GripCnt_Btn = new System.Windows.Forms.Button();
             this.XEG32_Close_bt = new System.Windows.Forms.Button();
             this.XEG32_Open_bt = new System.Windows.Forms.Button();
             this.XEG32_Reset_bt = new System.Windows.Forms.Button();
@@ -94,7 +94,22 @@
             this.ActionBtn = new System.Windows.Forms.Button();
             this.exportExcel = new System.Windows.Forms.Button();
             this.reMove = new System.Windows.Forms.Button();
+            this.PointDataGrid1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CB_Customized1 = new System.Windows.Forms.ComboBox();
             this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
@@ -125,29 +140,14 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PointDataGrid1 = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -384,7 +384,7 @@
             // XGE32_groupBox
             // 
             this.XGE32_groupBox.Controls.Add(this.button35);
-            this.XGE32_groupBox.Controls.Add(this.button34);
+            this.XGE32_groupBox.Controls.Add(this.GripCnt_Btn);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Close_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Open_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Reset_bt);
@@ -425,15 +425,15 @@
             this.button35.UseVisualStyleBackColor = true;
             this.button35.Click += new System.EventHandler(this.button35_Click);
             // 
-            // button34
+            // GripCnt_Btn
             // 
-            this.button34.Location = new System.Drawing.Point(8, 21);
-            this.button34.Name = "button34";
-            this.button34.Size = new System.Drawing.Size(75, 28);
-            this.button34.TabIndex = 19;
-            this.button34.Text = "Connect";
-            this.button34.UseVisualStyleBackColor = true;
-            this.button34.Click += new System.EventHandler(this.button34_Click);
+            this.GripCnt_Btn.Location = new System.Drawing.Point(8, 21);
+            this.GripCnt_Btn.Name = "GripCnt_Btn";
+            this.GripCnt_Btn.Size = new System.Drawing.Size(75, 28);
+            this.GripCnt_Btn.TabIndex = 19;
+            this.GripCnt_Btn.Text = "Connect";
+            this.GripCnt_Btn.UseVisualStyleBackColor = true;
+            this.GripCnt_Btn.Click += new System.EventHandler(this.button34_Click);
             // 
             // XEG32_Close_bt
             // 
@@ -778,6 +778,65 @@
             this.reMove.UseVisualStyleBackColor = true;
             this.reMove.Click += new System.EventHandler(this.armReMove);
             // 
+            // PointDataGrid1
+            // 
+            this.PointDataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.PointDataGrid1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6,
+            this.dataGridViewTextBoxColumn7});
+            this.PointDataGrid1.Location = new System.Drawing.Point(6, 387);
+            this.PointDataGrid1.Name = "PointDataGrid1";
+            this.PointDataGrid1.RowTemplate.Height = 24;
+            this.PointDataGrid1.Size = new System.Drawing.Size(515, 228);
+            this.PointDataGrid1.TabIndex = 125;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "number";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 50;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "x";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "y";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "z";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "Rx";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.HeaderText = "Ry";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.Width = 70;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.HeaderText = "Rz";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.Width = 70;
+            // 
             // PointDataGrid
             // 
             this.PointDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -795,6 +854,48 @@
             this.PointDataGrid.Size = new System.Drawing.Size(515, 228);
             this.PointDataGrid.TabIndex = 125;
             this.PointDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PointDataGrid_CellContentClick);
+            // 
+            // number
+            // 
+            this.number.HeaderText = "number";
+            this.number.Name = "number";
+            this.number.Width = 50;
+            // 
+            // x
+            // 
+            this.x.HeaderText = "x";
+            this.x.Name = "x";
+            this.x.Width = 70;
+            // 
+            // y
+            // 
+            this.y.HeaderText = "y";
+            this.y.Name = "y";
+            this.y.Width = 70;
+            // 
+            // z
+            // 
+            this.z.HeaderText = "z";
+            this.z.Name = "z";
+            this.z.Width = 70;
+            // 
+            // Rx
+            // 
+            this.Rx.HeaderText = "Rx";
+            this.Rx.Name = "Rx";
+            this.Rx.Width = 70;
+            // 
+            // Ry
+            // 
+            this.Ry.HeaderText = "Ry";
+            this.Ry.Name = "Ry";
+            this.Ry.Width = 70;
+            // 
+            // Rz
+            // 
+            this.Rz.HeaderText = "Rz";
+            this.Rz.Name = "Rz";
+            this.Rz.Width = 70;
             // 
             // groupBox3
             // 
@@ -1107,107 +1208,6 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
-            // number
-            // 
-            this.number.HeaderText = "number";
-            this.number.Name = "number";
-            this.number.Width = 50;
-            // 
-            // x
-            // 
-            this.x.HeaderText = "x";
-            this.x.Name = "x";
-            this.x.Width = 70;
-            // 
-            // y
-            // 
-            this.y.HeaderText = "y";
-            this.y.Name = "y";
-            this.y.Width = 70;
-            // 
-            // z
-            // 
-            this.z.HeaderText = "z";
-            this.z.Name = "z";
-            this.z.Width = 70;
-            // 
-            // Rx
-            // 
-            this.Rx.HeaderText = "Rx";
-            this.Rx.Name = "Rx";
-            this.Rx.Width = 70;
-            // 
-            // Ry
-            // 
-            this.Ry.HeaderText = "Ry";
-            this.Ry.Name = "Ry";
-            this.Ry.Width = 70;
-            // 
-            // Rz
-            // 
-            this.Rz.HeaderText = "Rz";
-            this.Rz.Name = "Rz";
-            this.Rz.Width = 70;
-            // 
-            // PointDataGrid1
-            // 
-            this.PointDataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.PointDataGrid1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6,
-            this.dataGridViewTextBoxColumn7});
-            this.PointDataGrid1.Location = new System.Drawing.Point(6, 387);
-            this.PointDataGrid1.Name = "PointDataGrid1";
-            this.PointDataGrid1.RowTemplate.Height = 24;
-            this.PointDataGrid1.Size = new System.Drawing.Size(515, 228);
-            this.PointDataGrid1.TabIndex = 125;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "number";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 50;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "x";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 70;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "y";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 70;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "z";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 70;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Rx";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 70;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.HeaderText = "Ry";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.Width = 70;
-            // 
-            // dataGridViewTextBoxColumn7
-            // 
-            this.dataGridViewTextBoxColumn7.HeaderText = "Rz";
-            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.Width = 70;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1228,12 +1228,12 @@
             this.txtStatus.ResumeLayout(false);
             this.txtStatus.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1286,7 +1286,7 @@
         private System.Windows.Forms.TextBox XEG32_Vel_text;
         private System.Windows.Forms.TextBox XEG32_PosStk_text;
         private System.Windows.Forms.TextBox XEG32_Force_text;
-        private System.Windows.Forms.Button button34;
+        private System.Windows.Forms.Button GripCnt_Btn;
         private System.Windows.Forms.Button button35;
         private System.IO.Ports.SerialPort XEG32;
         private System.Windows.Forms.GroupBox txtStatus;
