@@ -32,14 +32,8 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
-            this.lab_Status = new System.Windows.Forms.Label();
-            this.lab_Port = new System.Windows.Forms.Label();
-            this.lab_IP = new System.Windows.Forms.Label();
             this.serialPort4 = new System.IO.Ports.SerialPort(this.components);
             this.oo = new System.IO.Ports.SerialPort(this.components);
-            this.LB_ConnectionStatus = new System.Windows.Forms.Label();
-            this.TB_IPAddress = new System.Windows.Forms.TextBox();
-            this.TB_Port = new System.Windows.Forms.TextBox();
             this.btn_Connect = new System.Windows.Forms.Button();
             this.btn_Disconnect = new System.Windows.Forms.Button();
             this.lab_Data = new System.Windows.Forms.Label();
@@ -140,6 +134,12 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.lab_Status = new System.Windows.Forms.Label();
+            this.LB_ConnectionStatus = new System.Windows.Forms.Label();
+            this.lab_Port = new System.Windows.Forms.Label();
+            this.TB_Port = new System.Windows.Forms.TextBox();
+            this.TB_IPAddress = new System.Windows.Forms.TextBox();
+            this.lab_IP = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -165,33 +165,6 @@
             this.serialPort3.BaudRate = 921600;
             this.serialPort3.PortName = "COM15";
             // 
-            // lab_Status
-            // 
-            this.lab_Status.AutoSize = true;
-            this.lab_Status.Location = new System.Drawing.Point(5, 82);
-            this.lab_Status.Name = "lab_Status";
-            this.lab_Status.Size = new System.Drawing.Size(92, 12);
-            this.lab_Status.TabIndex = 24;
-            this.lab_Status.Text = "Connection Status:";
-            // 
-            // lab_Port
-            // 
-            this.lab_Port.AutoSize = true;
-            this.lab_Port.Location = new System.Drawing.Point(139, 23);
-            this.lab_Port.Name = "lab_Port";
-            this.lab_Port.Size = new System.Drawing.Size(24, 12);
-            this.lab_Port.TabIndex = 25;
-            this.lab_Port.Text = "Port";
-            // 
-            // lab_IP
-            // 
-            this.lab_IP.AutoSize = true;
-            this.lab_IP.Location = new System.Drawing.Point(6, 23);
-            this.lab_IP.Name = "lab_IP";
-            this.lab_IP.Size = new System.Drawing.Size(55, 12);
-            this.lab_IP.TabIndex = 26;
-            this.lab_IP.Text = "IP Address";
-            // 
             // serialPort4
             // 
             this.serialPort4.BaudRate = 57142;
@@ -200,31 +173,6 @@
             // oo
             // 
             this.oo.PortName = "COM10";
-            // 
-            // LB_ConnectionStatus
-            // 
-            this.LB_ConnectionStatus.AutoSize = true;
-            this.LB_ConnectionStatus.Location = new System.Drawing.Point(139, 82);
-            this.LB_ConnectionStatus.Name = "LB_ConnectionStatus";
-            this.LB_ConnectionStatus.Size = new System.Drawing.Size(70, 12);
-            this.LB_ConnectionStatus.TabIndex = 57;
-            this.LB_ConnectionStatus.Text = "Disconnected.";
-            // 
-            // TB_IPAddress
-            // 
-            this.TB_IPAddress.Location = new System.Drawing.Point(6, 46);
-            this.TB_IPAddress.Name = "TB_IPAddress";
-            this.TB_IPAddress.Size = new System.Drawing.Size(91, 22);
-            this.TB_IPAddress.TabIndex = 58;
-            this.TB_IPAddress.Text = "169.254.119.180";
-            // 
-            // TB_Port
-            // 
-            this.TB_Port.Location = new System.Drawing.Point(141, 46);
-            this.TB_Port.Name = "TB_Port";
-            this.TB_Port.Size = new System.Drawing.Size(46, 22);
-            this.TB_Port.TabIndex = 59;
-            this.TB_Port.Text = "5890";
             // 
             // btn_Connect
             // 
@@ -1208,6 +1156,58 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
+            // lab_Status
+            // 
+            this.lab_Status.AutoSize = true;
+            this.lab_Status.Location = new System.Drawing.Point(5, 82);
+            this.lab_Status.Name = "lab_Status";
+            this.lab_Status.Size = new System.Drawing.Size(92, 12);
+            this.lab_Status.TabIndex = 24;
+            this.lab_Status.Text = "Connection Status:";
+            // 
+            // LB_ConnectionStatus
+            // 
+            this.LB_ConnectionStatus.AutoSize = true;
+            this.LB_ConnectionStatus.Location = new System.Drawing.Point(139, 82);
+            this.LB_ConnectionStatus.Name = "LB_ConnectionStatus";
+            this.LB_ConnectionStatus.Size = new System.Drawing.Size(70, 12);
+            this.LB_ConnectionStatus.TabIndex = 57;
+            this.LB_ConnectionStatus.Text = "Disconnected.";
+            // 
+            // lab_Port
+            // 
+            this.lab_Port.AutoSize = true;
+            this.lab_Port.Location = new System.Drawing.Point(139, 23);
+            this.lab_Port.Name = "lab_Port";
+            this.lab_Port.Size = new System.Drawing.Size(24, 12);
+            this.lab_Port.TabIndex = 25;
+            this.lab_Port.Text = "Port";
+            // 
+            // TB_Port
+            // 
+            this.TB_Port.Location = new System.Drawing.Point(141, 46);
+            this.TB_Port.Name = "TB_Port";
+            this.TB_Port.Size = new System.Drawing.Size(46, 22);
+            this.TB_Port.TabIndex = 59;
+            this.TB_Port.Text = "5890";
+            // 
+            // TB_IPAddress
+            // 
+            this.TB_IPAddress.Location = new System.Drawing.Point(6, 46);
+            this.TB_IPAddress.Name = "TB_IPAddress";
+            this.TB_IPAddress.Size = new System.Drawing.Size(91, 22);
+            this.TB_IPAddress.TabIndex = 58;
+            this.TB_IPAddress.Text = "169.254.119.180";
+            // 
+            // lab_IP
+            // 
+            this.lab_IP.AutoSize = true;
+            this.lab_IP.Location = new System.Drawing.Point(6, 23);
+            this.lab_IP.Name = "lab_IP";
+            this.lab_IP.Size = new System.Drawing.Size(55, 12);
+            this.lab_IP.TabIndex = 26;
+            this.lab_IP.Text = "IP Address";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1243,14 +1243,8 @@
         private System.IO.Ports.SerialPort serialPort1;
         private System.IO.Ports.SerialPort serialPort2;
         private System.IO.Ports.SerialPort serialPort3;
-        private System.Windows.Forms.Label lab_Status;
-        private System.Windows.Forms.Label lab_Port;
-        private System.Windows.Forms.Label lab_IP;
         private System.IO.Ports.SerialPort serialPort4;
         private System.IO.Ports.SerialPort oo;
-        private System.Windows.Forms.Label LB_ConnectionStatus;
-        private System.Windows.Forms.TextBox TB_IPAddress;
-        private System.Windows.Forms.TextBox TB_Port;
         private System.Windows.Forms.Button btn_Connect;
         private System.Windows.Forms.Button btn_Disconnect;
         private System.Windows.Forms.Label lab_Data;
@@ -1351,6 +1345,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
         private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
+        private System.Windows.Forms.TextBox TB_Port;
+        private System.Windows.Forms.TextBox TB_IPAddress;
+        private System.Windows.Forms.Label LB_ConnectionStatus;
+        private System.Windows.Forms.Label lab_Status;
+        private System.Windows.Forms.Label lab_Port;
+        private System.Windows.Forms.Label lab_IP;
     }
 }
 
