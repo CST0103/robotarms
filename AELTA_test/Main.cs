@@ -56,6 +56,7 @@ namespace ControlUI
 
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
+        private int port_num;
         //Image
         #endregion
 
@@ -66,11 +67,30 @@ namespace ControlUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            int port_num = dynamixel.portHandler(DEVICENAME);
+            try
+            {
+                int port_num = dynamixel.portHandler(DEVICENAME);
 
-      dynamixel.packetHandler();
+                dynamixel.packetHandler();
+                dynamixel.setBaudRate(port_num, BAUDRATE);
+                dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
+                int dxl_comm_result = COMM_TX_FAIL;                                   // Communication result
 
-      int dxl_comm_result = COMM_TX_FAIL;                                   // Communication result
+      dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
+      if ((dxl_comm_result = dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
+      {
+        AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getTxRxResult(PROTOCOL_VERSION, dxl_comm_result)));
+      }
+      else if ((dxl_error = dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION)) != 0)
+      {
+        AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getRxPacketError(PROTOCOL_VERSION, dxl_error)));
+      }
+      else
+      {
+        AX12A_Status.Text = ("Dynamixel has been successfully connected");
+      }
+            }
+            catch (Exception ex) { }
 //            CB_Customized.SelectedIndex = 0;
 //            CB_Customized1.SelectedIndex = 0;
 //            try
@@ -425,7 +445,6 @@ namespace ControlUI
 
         private void PointDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
         }
     }
 }

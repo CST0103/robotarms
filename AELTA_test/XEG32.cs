@@ -15,18 +15,11 @@ namespace ControlUI
         #region   --XEG32夾爪控制程式--
 
         byte Direction = 2;//模式:絕對位置
-
+        int XEG32_CJog = 0,
+            XEG32_Force = 100,
+            XEG32_PushVel = 0,
+            XEG32_PushPosStk = 0;
         //模式設定:絕對位置
-        void ABS_mode()
-        {
-            Direction = 2;
-            XEG32_PosStk_text.Enabled = true;
-            XEG32_Vel_text.Enabled = true;
-            XEG32_CJog_text.Enabled = false;
-            XEG32_Force_text.Enabled = true;
-            XEG32_PushVel_text.Enabled = false;
-            XEG32_PushPosStk_text.Enabled = false;
-        }
 
         private void button34_Click(object sender, EventArgs e)
         {
@@ -53,7 +46,6 @@ namespace ControlUI
         {
             XEG32_PosStk_text.Text = "3200";//夾爪張開 20 mm
             XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
             SendOpenClose(XEG32);
         }
 
@@ -61,7 +53,6 @@ namespace ControlUI
         {
             XEG32_PosStk_text.Text = "1000";//夾爪張開 0 mm
             XEG32_Vel_text.Text = "80";//速度 50 mm/s
-            XEG32_Force_text.Text = "100";//力 70 %
             SendOpenClose(XEG32);
         }
         private void XEG32_Enable_bt_Click(object sender, EventArgs e)
@@ -76,10 +67,10 @@ namespace ControlUI
             {
                 int i_PosStk = Convert.ToInt32(XEG32_PosStk_text.Text),
                   i_Vel = Convert.ToInt32(XEG32_Vel_text.Text) * 100,
-                  i_CJog = Convert.ToInt32(XEG32_CJog_text.Text),
-                  i_Force = Convert.ToInt32(XEG32_Force_text.Text),
-                  i_PushVel = Convert.ToInt32(XEG32_PushVel_text.Text),
-                  i_PushPosStk = Convert.ToInt32(XEG32_PushPosStk_text.Text);
+                  i_CJog = XEG32_CJog,
+                  i_Force = XEG32_Force,
+                  i_PushVel = XEG32_PushVel,
+                  i_PushPosStk = XEG32_PushPosStk;
                 long num = 0L;
                 List<byte> list = new List<byte>();
                 list.Add((byte)250);

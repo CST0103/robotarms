@@ -48,6 +48,12 @@
             this.CB_Customized = new System.Windows.Forms.ComboBox();
             this.btn_TMtest = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.TB_Port = new System.Windows.Forms.TextBox();
+            this.TB_IPAddress = new System.Windows.Forms.TextBox();
+            this.LB_ConnectionStatus = new System.Windows.Forms.Label();
+            this.lab_Status = new System.Windows.Forms.Label();
+            this.lab_Port = new System.Windows.Forms.Label();
+            this.lab_IP = new System.Windows.Forms.Label();
             this.XGE32_groupBox = new System.Windows.Forms.GroupBox();
             this.button35 = new System.Windows.Forms.Button();
             this.GripCnt_Btn = new System.Windows.Forms.Button();
@@ -55,24 +61,20 @@
             this.XEG32_Open_bt = new System.Windows.Forms.Button();
             this.XEG32_Reset_bt = new System.Windows.Forms.Button();
             this.XEG32_Enable_bt = new System.Windows.Forms.Button();
-            this.XEG32_PushPosStkC_lab = new System.Windows.Forms.Label();
-            this.XEG32_PushVelC_lab = new System.Windows.Forms.Label();
-            this.XEG32_Forcec_lab = new System.Windows.Forms.Label();
-            this.XEG32_CJogC_lab = new System.Windows.Forms.Label();
             this.XEG32_VelC_lab = new System.Windows.Forms.Label();
             this.XEG32_Info_lab = new System.Windows.Forms.Label();
             this.XEG32_VelL_lab = new System.Windows.Forms.Label();
             this.XEG32_PosStkL_lab = new System.Windows.Forms.Label();
-            this.XEG32_ForceL_lab = new System.Windows.Forms.Label();
             this.XEG32_PosStkC_lab = new System.Windows.Forms.Label();
-            this.XEG32_PushPosStk_text = new System.Windows.Forms.TextBox();
-            this.XEG32_PushVel_text = new System.Windows.Forms.TextBox();
-            this.XEG32_CJog_text = new System.Windows.Forms.TextBox();
             this.XEG32_Vel_text = new System.Windows.Forms.TextBox();
             this.XEG32_PosStk_text = new System.Windows.Forms.TextBox();
-            this.XEG32_Force_text = new System.Windows.Forms.TextBox();
             this.XEG32 = new System.IO.Ports.SerialPort(this.components);
             this.txtStatus = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.AX12A_Close = new System.Windows.Forms.Button();
+            this.AX12A_Open = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.AX12A_Status = new System.Windows.Forms.Label();
             this.button39 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -134,15 +136,10 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.lab_Status = new System.Windows.Forms.Label();
-            this.LB_ConnectionStatus = new System.Windows.Forms.Label();
-            this.lab_Port = new System.Windows.Forms.Label();
-            this.TB_Port = new System.Windows.Forms.TextBox();
-            this.TB_IPAddress = new System.Windows.Forms.TextBox();
-            this.lab_IP = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
@@ -329,6 +326,58 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
             // 
+            // TB_Port
+            // 
+            this.TB_Port.Location = new System.Drawing.Point(141, 46);
+            this.TB_Port.Name = "TB_Port";
+            this.TB_Port.Size = new System.Drawing.Size(46, 22);
+            this.TB_Port.TabIndex = 59;
+            this.TB_Port.Text = "5890";
+            // 
+            // TB_IPAddress
+            // 
+            this.TB_IPAddress.Location = new System.Drawing.Point(6, 46);
+            this.TB_IPAddress.Name = "TB_IPAddress";
+            this.TB_IPAddress.Size = new System.Drawing.Size(91, 22);
+            this.TB_IPAddress.TabIndex = 58;
+            this.TB_IPAddress.Text = "169.254.119.180";
+            // 
+            // LB_ConnectionStatus
+            // 
+            this.LB_ConnectionStatus.AutoSize = true;
+            this.LB_ConnectionStatus.Location = new System.Drawing.Point(139, 82);
+            this.LB_ConnectionStatus.Name = "LB_ConnectionStatus";
+            this.LB_ConnectionStatus.Size = new System.Drawing.Size(70, 12);
+            this.LB_ConnectionStatus.TabIndex = 57;
+            this.LB_ConnectionStatus.Text = "Disconnected.";
+            // 
+            // lab_Status
+            // 
+            this.lab_Status.AutoSize = true;
+            this.lab_Status.Location = new System.Drawing.Point(5, 82);
+            this.lab_Status.Name = "lab_Status";
+            this.lab_Status.Size = new System.Drawing.Size(92, 12);
+            this.lab_Status.TabIndex = 24;
+            this.lab_Status.Text = "Connection Status:";
+            // 
+            // lab_Port
+            // 
+            this.lab_Port.AutoSize = true;
+            this.lab_Port.Location = new System.Drawing.Point(139, 23);
+            this.lab_Port.Name = "lab_Port";
+            this.lab_Port.Size = new System.Drawing.Size(24, 12);
+            this.lab_Port.TabIndex = 25;
+            this.lab_Port.Text = "Port";
+            // 
+            // lab_IP
+            // 
+            this.lab_IP.AutoSize = true;
+            this.lab_IP.Location = new System.Drawing.Point(6, 23);
+            this.lab_IP.Name = "lab_IP";
+            this.lab_IP.Size = new System.Drawing.Size(55, 12);
+            this.lab_IP.TabIndex = 26;
+            this.lab_IP.Text = "IP Address";
+            // 
             // XGE32_groupBox
             // 
             this.XGE32_groupBox.Controls.Add(this.button35);
@@ -337,28 +386,19 @@
             this.XGE32_groupBox.Controls.Add(this.XEG32_Open_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Reset_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Enable_bt);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_PushPosStkC_lab);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_PushVelC_lab);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_Forcec_lab);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_CJogC_lab);
             this.XGE32_groupBox.Controls.Add(this.XEG32_VelC_lab);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Info_lab);
             this.XGE32_groupBox.Controls.Add(this.XEG32_VelL_lab);
             this.XGE32_groupBox.Controls.Add(this.XEG32_PosStkL_lab);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_ForceL_lab);
             this.XGE32_groupBox.Controls.Add(this.XEG32_PosStkC_lab);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_PushPosStk_text);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_PushVel_text);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_CJog_text);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Vel_text);
             this.XGE32_groupBox.Controls.Add(this.XEG32_PosStk_text);
-            this.XGE32_groupBox.Controls.Add(this.XEG32_Force_text);
             this.XGE32_groupBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.XGE32_groupBox.Location = new System.Drawing.Point(8, 82);
             this.XGE32_groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.XGE32_groupBox.Name = "XGE32_groupBox";
             this.XGE32_groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 216);
+            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 122);
             this.XGE32_groupBox.TabIndex = 110;
             this.XGE32_groupBox.TabStop = false;
             this.XGE32_groupBox.Text = "XEG-32夾爪控制";
@@ -385,8 +425,7 @@
             // 
             // XEG32_Close_bt
             // 
-            this.XEG32_Close_bt.Enabled = false;
-            this.XEG32_Close_bt.Location = new System.Drawing.Point(8, 174);
+            this.XEG32_Close_bt.Location = new System.Drawing.Point(170, 89);
             this.XEG32_Close_bt.Name = "XEG32_Close_bt";
             this.XEG32_Close_bt.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Close_bt.TabIndex = 18;
@@ -396,7 +435,7 @@
             // 
             // XEG32_Open_bt
             // 
-            this.XEG32_Open_bt.Location = new System.Drawing.Point(8, 138);
+            this.XEG32_Open_bt.Location = new System.Drawing.Point(89, 90);
             this.XEG32_Open_bt.Name = "XEG32_Open_bt";
             this.XEG32_Open_bt.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Open_bt.TabIndex = 18;
@@ -416,49 +455,13 @@
             // 
             // XEG32_Enable_bt
             // 
-            this.XEG32_Enable_bt.Location = new System.Drawing.Point(254, 149);
+            this.XEG32_Enable_bt.Location = new System.Drawing.Point(254, 86);
             this.XEG32_Enable_bt.Name = "XEG32_Enable_bt";
-            this.XEG32_Enable_bt.Size = new System.Drawing.Size(75, 48);
+            this.XEG32_Enable_bt.Size = new System.Drawing.Size(80, 34);
             this.XEG32_Enable_bt.TabIndex = 16;
             this.XEG32_Enable_bt.Text = "Enable";
             this.XEG32_Enable_bt.UseVisualStyleBackColor = true;
             this.XEG32_Enable_bt.Click += new System.EventHandler(this.XEG32_Enable_bt_Click);
-            // 
-            // XEG32_PushPosStkC_lab
-            // 
-            this.XEG32_PushPosStkC_lab.AutoSize = true;
-            this.XEG32_PushPosStkC_lab.Location = new System.Drawing.Point(83, 177);
-            this.XEG32_PushPosStkC_lab.Name = "XEG32_PushPosStkC_lab";
-            this.XEG32_PushPosStkC_lab.Size = new System.Drawing.Size(58, 12);
-            this.XEG32_PushPosStkC_lab.TabIndex = 9;
-            this.XEG32_PushPosStkC_lab.Text = "PushPosStk";
-            // 
-            // XEG32_PushVelC_lab
-            // 
-            this.XEG32_PushVelC_lab.AutoSize = true;
-            this.XEG32_PushVelC_lab.Location = new System.Drawing.Point(89, 149);
-            this.XEG32_PushVelC_lab.Name = "XEG32_PushVelC_lab";
-            this.XEG32_PushVelC_lab.Size = new System.Drawing.Size(43, 12);
-            this.XEG32_PushVelC_lab.TabIndex = 10;
-            this.XEG32_PushVelC_lab.Text = "PushVel";
-            // 
-            // XEG32_Forcec_lab
-            // 
-            this.XEG32_Forcec_lab.AutoSize = true;
-            this.XEG32_Forcec_lab.Location = new System.Drawing.Point(102, 107);
-            this.XEG32_Forcec_lab.Name = "XEG32_Forcec_lab";
-            this.XEG32_Forcec_lab.Size = new System.Drawing.Size(17, 12);
-            this.XEG32_Forcec_lab.TabIndex = 11;
-            this.XEG32_Forcec_lab.Text = "力";
-            // 
-            // XEG32_CJogC_lab
-            // 
-            this.XEG32_CJogC_lab.AutoSize = true;
-            this.XEG32_CJogC_lab.Location = new System.Drawing.Point(97, 93);
-            this.XEG32_CJogC_lab.Name = "XEG32_CJogC_lab";
-            this.XEG32_CJogC_lab.Size = new System.Drawing.Size(29, 12);
-            this.XEG32_CJogC_lab.TabIndex = 12;
-            this.XEG32_CJogC_lab.Text = "CJog";
             // 
             // XEG32_VelC_lab
             // 
@@ -497,15 +500,6 @@
             this.XEG32_PosStkL_lab.TabIndex = 14;
             this.XEG32_PosStkL_lab.Text = "0~3200 ";
             // 
-            // XEG32_ForceL_lab
-            // 
-            this.XEG32_ForceL_lab.AutoSize = true;
-            this.XEG32_ForceL_lab.Location = new System.Drawing.Point(252, 121);
-            this.XEG32_ForceL_lab.Name = "XEG32_ForceL_lab";
-            this.XEG32_ForceL_lab.Size = new System.Drawing.Size(14, 12);
-            this.XEG32_ForceL_lab.TabIndex = 14;
-            this.XEG32_ForceL_lab.Text = "%";
-            // 
             // XEG32_PosStkC_lab
             // 
             this.XEG32_PosStkC_lab.AutoSize = true;
@@ -514,30 +508,6 @@
             this.XEG32_PosStkC_lab.Size = new System.Drawing.Size(29, 12);
             this.XEG32_PosStkC_lab.TabIndex = 15;
             this.XEG32_PosStkC_lab.Text = "位置";
-            // 
-            // XEG32_PushPosStk_text
-            // 
-            this.XEG32_PushPosStk_text.Location = new System.Drawing.Point(146, 174);
-            this.XEG32_PushPosStk_text.Name = "XEG32_PushPosStk_text";
-            this.XEG32_PushPosStk_text.Size = new System.Drawing.Size(100, 22);
-            this.XEG32_PushPosStk_text.TabIndex = 3;
-            this.XEG32_PushPosStk_text.Text = "0";
-            // 
-            // XEG32_PushVel_text
-            // 
-            this.XEG32_PushVel_text.Location = new System.Drawing.Point(146, 146);
-            this.XEG32_PushVel_text.Name = "XEG32_PushVel_text";
-            this.XEG32_PushVel_text.Size = new System.Drawing.Size(100, 22);
-            this.XEG32_PushVel_text.TabIndex = 4;
-            this.XEG32_PushVel_text.Text = "0";
-            // 
-            // XEG32_CJog_text
-            // 
-            this.XEG32_CJog_text.Location = new System.Drawing.Point(146, 90);
-            this.XEG32_CJog_text.Name = "XEG32_CJog_text";
-            this.XEG32_CJog_text.Size = new System.Drawing.Size(100, 22);
-            this.XEG32_CJog_text.TabIndex = 6;
-            this.XEG32_CJog_text.Text = "0";
             // 
             // XEG32_Vel_text
             // 
@@ -555,14 +525,6 @@
             this.XEG32_PosStk_text.TabIndex = 8;
             this.XEG32_PosStk_text.Text = "0";
             // 
-            // XEG32_Force_text
-            // 
-            this.XEG32_Force_text.Location = new System.Drawing.Point(146, 118);
-            this.XEG32_Force_text.Name = "XEG32_Force_text";
-            this.XEG32_Force_text.Size = new System.Drawing.Size(100, 22);
-            this.XEG32_Force_text.TabIndex = 5;
-            this.XEG32_Force_text.Text = "70";
-            // 
             // XEG32
             // 
             this.XEG32.BaudRate = 115200;
@@ -570,6 +532,7 @@
             // 
             // txtStatus
             // 
+            this.txtStatus.Controls.Add(this.groupBox5);
             this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.button39);
             this.txtStatus.Controls.Add(this.label6);
@@ -588,6 +551,61 @@
             this.txtStatus.TabIndex = 111;
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.AX12A_Close);
+            this.groupBox5.Controls.Add(this.AX12A_Open);
+            this.groupBox5.Controls.Add(this.label2);
+            this.groupBox5.Controls.Add(this.AX12A_Status);
+            this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.groupBox5.Location = new System.Drawing.Point(9, 221);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox5.Size = new System.Drawing.Size(339, 82);
+            this.groupBox5.TabIndex = 110;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "AX12A";
+            // 
+            // AX12A_Close
+            // 
+            this.AX12A_Close.Location = new System.Drawing.Point(5, 20);
+            this.AX12A_Close.Name = "AX12A_Close";
+            this.AX12A_Close.Size = new System.Drawing.Size(75, 28);
+            this.AX12A_Close.TabIndex = 18;
+            this.AX12A_Close.Text = "關夾爪";
+            this.AX12A_Close.UseVisualStyleBackColor = true;
+            this.AX12A_Close.Click += new System.EventHandler(this.AX12A_Close_Click);
+            // 
+            // AX12A_Open
+            // 
+            this.AX12A_Open.Location = new System.Drawing.Point(86, 20);
+            this.AX12A_Open.Name = "AX12A_Open";
+            this.AX12A_Open.Size = new System.Drawing.Size(75, 28);
+            this.AX12A_Open.TabIndex = 18;
+            this.AX12A_Open.Text = "開夾爪";
+            this.AX12A_Open.UseVisualStyleBackColor = true;
+            this.AX12A_Open.Click += new System.EventHandler(this.AX12A_Open_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label2.Location = new System.Drawing.Point(4, 14);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(101, 12);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "夾爪無反應時使用";
+            // 
+            // AX12A_Status
+            // 
+            this.AX12A_Status.AutoSize = true;
+            this.AX12A_Status.Location = new System.Drawing.Point(9, 59);
+            this.AX12A_Status.Name = "AX12A_Status";
+            this.AX12A_Status.Size = new System.Drawing.Size(44, 12);
+            this.AX12A_Status.TabIndex = 14;
+            this.AX12A_Status.Text = "0~3200 ";
             // 
             // button39
             // 
@@ -1156,58 +1174,6 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
-            // lab_Status
-            // 
-            this.lab_Status.AutoSize = true;
-            this.lab_Status.Location = new System.Drawing.Point(5, 82);
-            this.lab_Status.Name = "lab_Status";
-            this.lab_Status.Size = new System.Drawing.Size(92, 12);
-            this.lab_Status.TabIndex = 24;
-            this.lab_Status.Text = "Connection Status:";
-            // 
-            // LB_ConnectionStatus
-            // 
-            this.LB_ConnectionStatus.AutoSize = true;
-            this.LB_ConnectionStatus.Location = new System.Drawing.Point(139, 82);
-            this.LB_ConnectionStatus.Name = "LB_ConnectionStatus";
-            this.LB_ConnectionStatus.Size = new System.Drawing.Size(70, 12);
-            this.LB_ConnectionStatus.TabIndex = 57;
-            this.LB_ConnectionStatus.Text = "Disconnected.";
-            // 
-            // lab_Port
-            // 
-            this.lab_Port.AutoSize = true;
-            this.lab_Port.Location = new System.Drawing.Point(139, 23);
-            this.lab_Port.Name = "lab_Port";
-            this.lab_Port.Size = new System.Drawing.Size(24, 12);
-            this.lab_Port.TabIndex = 25;
-            this.lab_Port.Text = "Port";
-            // 
-            // TB_Port
-            // 
-            this.TB_Port.Location = new System.Drawing.Point(141, 46);
-            this.TB_Port.Name = "TB_Port";
-            this.TB_Port.Size = new System.Drawing.Size(46, 22);
-            this.TB_Port.TabIndex = 59;
-            this.TB_Port.Text = "5890";
-            // 
-            // TB_IPAddress
-            // 
-            this.TB_IPAddress.Location = new System.Drawing.Point(6, 46);
-            this.TB_IPAddress.Name = "TB_IPAddress";
-            this.TB_IPAddress.Size = new System.Drawing.Size(91, 22);
-            this.TB_IPAddress.TabIndex = 58;
-            this.TB_IPAddress.Text = "169.254.119.180";
-            // 
-            // lab_IP
-            // 
-            this.lab_IP.AutoSize = true;
-            this.lab_IP.Location = new System.Drawing.Point(6, 23);
-            this.lab_IP.Name = "lab_IP";
-            this.lab_IP.Size = new System.Drawing.Size(55, 12);
-            this.lab_IP.TabIndex = 26;
-            this.lab_IP.Text = "IP Address";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1227,6 +1193,8 @@
             this.XGE32_groupBox.PerformLayout();
             this.txtStatus.ResumeLayout(false);
             this.txtStatus.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
@@ -1264,22 +1232,13 @@
         private System.Windows.Forms.Button XEG32_Open_bt;
         private System.Windows.Forms.Button XEG32_Reset_bt;
         private System.Windows.Forms.Button XEG32_Enable_bt;
-        private System.Windows.Forms.Label XEG32_PushPosStkC_lab;
-        private System.Windows.Forms.Label XEG32_PushVelC_lab;
-        private System.Windows.Forms.Label XEG32_Forcec_lab;
-        private System.Windows.Forms.Label XEG32_CJogC_lab;
         private System.Windows.Forms.Label XEG32_VelC_lab;
         private System.Windows.Forms.Label XEG32_Info_lab;
         private System.Windows.Forms.Label XEG32_VelL_lab;
         private System.Windows.Forms.Label XEG32_PosStkL_lab;
-        private System.Windows.Forms.Label XEG32_ForceL_lab;
         private System.Windows.Forms.Label XEG32_PosStkC_lab;
-        private System.Windows.Forms.TextBox XEG32_PushPosStk_text;
-        private System.Windows.Forms.TextBox XEG32_PushVel_text;
-        private System.Windows.Forms.TextBox XEG32_CJog_text;
         private System.Windows.Forms.TextBox XEG32_Vel_text;
         private System.Windows.Forms.TextBox XEG32_PosStk_text;
-        private System.Windows.Forms.TextBox XEG32_Force_text;
         private System.Windows.Forms.Button GripCnt_Btn;
         private System.Windows.Forms.Button button35;
         private System.IO.Ports.SerialPort XEG32;
@@ -1351,6 +1310,11 @@
         private System.Windows.Forms.Label lab_Status;
         private System.Windows.Forms.Label lab_Port;
         private System.Windows.Forms.Label lab_IP;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button AX12A_Close;
+        private System.Windows.Forms.Button AX12A_Open;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label AX12A_Status;
     }
 }
 
