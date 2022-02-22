@@ -66,21 +66,23 @@ namespace ControlUI
 
         private void btn_Send_Click(object sender, EventArgs e)
         {
-            string s = string.Empty;
-            if (this.CB_Listen.Checked == true)
-            {
-                s = SocketClientObject.DataToPacket(CB_Customized.SelectedItem.ToString(), this.TB_SendData.Text);
-            }
-            else
-            {
-                s = this.TB_SendData.Text;
-            }
-            this.TB_Command.Text = s;
-            byte[] bytes = Encoding.UTF8.GetBytes(s);
-            if (this.TCPClientObject != null)
-            {
-                this.TCPClientObject.WriteSyncData(bytes);
-            }
+            string cmd = TB_SendData.Text;
+            TM_send(cmd);
+//            string s = string.Empty;
+//            if (this.CB_Listen.Checked == true)
+//            {
+//                s = SocketClientObject.DataToPacket(CB_Customized.SelectedItem.ToString(), this.TB_SendData.Text);
+//            }
+//            else
+//            {
+//                s = this.TB_SendData.Text;
+//            }
+//            this.TB_Command.Text = s;
+//            byte[] bytes = Encoding.UTF8.GetBytes(s);
+//            if (this.TCPClientObject != null)
+//            {
+//                this.TCPClientObject.WriteSyncData(bytes);
+//            }
         }
         private void showConnectStatus(object sender, string resp)
         {

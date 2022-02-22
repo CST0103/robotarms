@@ -10,19 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 //使用XEG-32夾爪 請加入此參考
-using System.IO.Ports;
 //
 using System.Runtime.InteropServices;
-using System.Reflection;
-using System.CodeDom.Compiler;
-using System.Diagnostics;
 using System.Net;
-using System.Collections;
 
-using RASDK.Basic;
-using RASDK.Basic.Message;
-
-using ClosedXML;
 using System.Net.Sockets;
 using ClosedXML.Excel;
 
@@ -67,8 +58,11 @@ namespace ControlUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Gripper: AX12A and XEG32 - initial
             try
             {
+
+                //AX12A 
                 int port_num = dynamixel.portHandler(DEVICENAME);
 
                 dynamixel.packetHandler();
@@ -76,35 +70,47 @@ namespace ControlUI
                 dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
                 int dxl_comm_result = COMM_TX_FAIL;                                   // Communication result
 
-      dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
-      if ((dxl_comm_result = dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
-      {
-        AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getTxRxResult(PROTOCOL_VERSION, dxl_comm_result)));
-      }
-      else if ((dxl_error = dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION)) != 0)
-      {
-        AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getRxPacketError(PROTOCOL_VERSION, dxl_error)));
-      }
-      else
-      {
-        AX12A_Status.Text = ("Dynamixel has been successfully connected");
-      }
+                dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
+                if ((dxl_comm_result = dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
+                {
+                    AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getTxRxResult(PROTOCOL_VERSION, dxl_comm_result)));
+                }
+                else if ((dxl_error = dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION)) != 0)
+                {
+                    AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getRxPacketError(PROTOCOL_VERSION, dxl_error)));
+                }
+                else
+                {
+                    AX12A_Status.Text = ("Dynamixel has been successfully connected");
+                }
+
+                //XEG32
+                GripCnt_Btn.PerformClick();
+                XEG32_Reset_bt.PerformClick();
             }
             catch (Exception ex) { }
-//            CB_Customized.SelectedIndex = 0;
-//            CB_Customized1.SelectedIndex = 0;
-//            try
-//            {
-//                GripCnt_Btn.PerformClick();
-//                XEG32_Reset_bt.PerformClick();
-//            }
-//            catch (Exception ex)
-//            { }
-//
-//            Thread FirstArmSever = new Thread(FirstSever);
-//            Thread SecondArmSever = new Thread(SecondSever);
-//            FirstArmSever.Start();
-//            SecondArmSever.Start();
+
+            CB_Customized.SelectedIndex = 0;
+            CB_Customized1.SelectedIndex = 0;
+
+            Thread FirstArmSever = new Thread(FirstSever);
+            Thread SecondArmSever = new Thread(SecondSever);
+            FirstArmSever.Start();
+            SecondArmSever.Start();
+        }
+        private void NewThread(Thread thread, bool flag)
+        {
+            thread.Abort();
+            Thread NewThread; 
+            if (flag)
+            {
+                NewThread = new Thread(FirstSever);
+            }
+            else
+            {
+                NewThread = new Thread(SecondSever);
+            }
+            NewThread.Start();  
         }
 
         #region --通訊--
@@ -113,16 +119,16 @@ namespace ControlUI
             int Count = 0;
             Action<String> ModifyText = SockMsg;
             Action<int, double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
-            string Declare;
-            bool _open_flag = FirstListener.Start();
-            Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
-            Invoke(ModifyText, Declare);
-
-            bool _connect_flag = FirstListener.Connect();
-            Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
-            Invoke(ModifyText, Declare);
             try
             {
+                string Declare;
+                bool _open_flag = FirstListener.Start();
+                Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
+                Invoke(ModifyText, Declare);
+
+                bool _connect_flag = FirstListener.Connect();
+                Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
+                Invoke(ModifyText, Declare);
 
                 while (true)
                 {
@@ -140,7 +146,11 @@ namespace ControlUI
                         true);
                 }
             }
-            catch { }
+            catch (FormatException ex)
+            {
+                MessageBox.Show(ex.Message);
+                NewThread(Thread.CurrentThread, true); }
+            catch (Exception e) { MessageBox.Show(e.Message); }
         }
 
         private void SecondSever()
@@ -149,36 +159,45 @@ namespace ControlUI
             Action<String> ModifyText = SockMsg;
             Action<int, double, double, double, double, double, double,bool> Tolist = CoordinateConversion;
             string Declare;
-            bool _open_flag = SecondListener.Start();
-            Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
-            Invoke(ModifyText, Declare);
-
-            bool _connect_flag = SecondListener.Connect();
-            Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
-            Invoke(ModifyText, Declare);
-            while (true)
+            try
             {
-                string reciveData = SecondListener.Recive();
-                Invoke(ModifyText, Count.ToString() + "  Second Command");
-                string[] Point = reciveData.Split('$');
-                Invoke(Tolist,
-                    Convert.ToInt32(Point[0]),
-                    Convert.ToDouble(Point[1]),
-                    Convert.ToDouble(Point[2]),
-                    Convert.ToDouble(Point[3]),
-                    Convert.ToDouble(Point[4]),
-                    Convert.ToDouble(Point[5]),
-                    Convert.ToDouble(Point[6]),
-                    false);
-                try
+                bool _open_flag = SecondListener.Start();
+                Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
+                Invoke(ModifyText, Declare);
+
+                bool _connect_flag = SecondListener.Connect();
+                Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
+                Invoke(ModifyText, Declare);
+                while (true)
                 {
-                    if (Convert.ToBoolean(Point[7]))
-                        XEG32_Open_bt.PerformClick();
-                    else
-                        XEG32_Close_bt.PerformClick();
+                    string reciveData = SecondListener.Recive();
+                    Invoke(ModifyText, Count.ToString() + "  Second Command");
+                    string[] Point = reciveData.Split('$');
+                    Invoke(Tolist,
+                        Convert.ToInt32(Point[0]),
+                        Convert.ToDouble(Point[1]),
+                        Convert.ToDouble(Point[2]),
+                        Convert.ToDouble(Point[3]),
+                        Convert.ToDouble(Point[4]),
+                        Convert.ToDouble(Point[5]),
+                        Convert.ToDouble(Point[6]),
+                        false);
+                    try
+                    {
+                        if (Convert.ToBoolean(Point[7]))
+                            XEG32_Open_bt.PerformClick();
+                        else
+                            XEG32_Close_bt.PerformClick();
+                    }
+                    catch (Exception ex) { }
                 }
-                catch (Exception ex)
-                { }
+            }
+            catch(FormatException ex)
+            {
+                NewThread(Thread.CurrentThread, false);
+            }
+            catch (Exception ex) {
+
             }
         }
         protected void SockMsg<T>(T teste)
@@ -365,16 +384,6 @@ namespace ControlUI
 
         #endregion
 
-        #region --TM_test--
-
-        //Line_絕對速度
-        private void button37_Click(object sender, EventArgs e)
-        {
-            int speed = 1000;
-            string test_string = @"1,Line(""CAP"",500,100,500,185,0,90," + string.Format("{0:000}", speed * sp_abs) + ",200,0,false)";
-            TM_send(test_string);
-        }
-
         private void exportExcel_Click(object sender, EventArgs e)
         {
             //Creating DataTable
@@ -398,23 +407,6 @@ namespace ControlUI
                 workbook.SaveAs(folderPath + "DataGridViewExport.xlsx");
             }
         }
-
-        //Circle_絕對速度
-        private void button38_Click(object sender, EventArgs e)
-        {
-            int speed = 2000;
-            string test_string = @"1,Circle(""CPR"",540,-50,408,185,0,90,519,50,458,185,0,90," + string.Format("{0:000}", speed * sp_abs) + ",200,0,0,false)";
-            TM_send(test_string);
-        }
-        //Line_絕對速度
-        private void button39_Click(object sender, EventArgs e)
-        {
-            int speed = 2000;
-            string test_string = @"1,Line(""CAP"",500,100,500,185,0,90," + string.Format("{0:000}", speed * sp_abs) + ",200,0,false)";
-            TM_send(test_string);
-        }
-
-        #endregion
 
         #endregion
 
@@ -443,8 +435,5 @@ namespace ControlUI
             }
         }
 
-        private void PointDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
     }
 }

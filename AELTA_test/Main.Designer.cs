@@ -75,15 +75,12 @@
             this.AX12A_Open = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.AX12A_Status = new System.Windows.Forms.Label();
-            this.button39 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.TB_sp_abs = new System.Windows.Forms.TextBox();
             this.TB_sp_pc = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button38 = new System.Windows.Forms.Button();
-            this.button37 = new System.Windows.Forms.Button();
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -126,16 +123,13 @@
             this.lab_Port1 = new System.Windows.Forms.Label();
             this.lab_IP1 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button7 = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.TB_sp_abs1 = new System.Windows.Forms.TextBox();
             this.TB_sp_pc1 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -291,7 +285,7 @@
             // 
             // btn_TMtest
             // 
-            this.btn_TMtest.Location = new System.Drawing.Point(188, 19);
+            this.btn_TMtest.Location = new System.Drawing.Point(194, 18);
             this.btn_TMtest.Name = "btn_TMtest";
             this.btn_TMtest.Size = new System.Drawing.Size(75, 23);
             this.btn_TMtest.TabIndex = 72;
@@ -534,16 +528,13 @@
             // 
             this.txtStatus.Controls.Add(this.groupBox5);
             this.txtStatus.Controls.Add(this.XGE32_groupBox);
-            this.txtStatus.Controls.Add(this.button39);
             this.txtStatus.Controls.Add(this.label6);
             this.txtStatus.Controls.Add(this.label5);
             this.txtStatus.Controls.Add(this.TB_sp_abs);
             this.txtStatus.Controls.Add(this.TB_sp_pc);
             this.txtStatus.Controls.Add(this.label4);
             this.txtStatus.Controls.Add(this.label3);
-            this.txtStatus.Controls.Add(this.button38);
             this.txtStatus.Controls.Add(this.btn_TMtest);
-            this.txtStatus.Controls.Add(this.button37);
             this.txtStatus.Location = new System.Drawing.Point(325, 17);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -607,16 +598,6 @@
             this.AX12A_Status.TabIndex = 14;
             this.AX12A_Status.Text = "0~3200 ";
             // 
-            // button39
-            // 
-            this.button39.Location = new System.Drawing.Point(267, 45);
-            this.button39.Name = "button39";
-            this.button39.Size = new System.Drawing.Size(75, 23);
-            this.button39.TabIndex = 81;
-            this.button39.Text = "TM_Line2";
-            this.button39.UseVisualStyleBackColor = true;
-            this.button39.Click += new System.EventHandler(this.button39_Click);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -671,31 +652,11 @@
             this.label3.TabIndex = 75;
             this.label3.Text = "百分比速度:";
             // 
-            // button38
-            // 
-            this.button38.Location = new System.Drawing.Point(188, 46);
-            this.button38.Name = "button38";
-            this.button38.Size = new System.Drawing.Size(75, 23);
-            this.button38.TabIndex = 74;
-            this.button38.Text = "Circle_test2";
-            this.button38.UseVisualStyleBackColor = true;
-            this.button38.Click += new System.EventHandler(this.button38_Click);
-            // 
-            // button37
-            // 
-            this.button37.Location = new System.Drawing.Point(267, 19);
-            this.button37.Name = "button37";
-            this.button37.Size = new System.Drawing.Size(75, 23);
-            this.button37.TabIndex = 73;
-            this.button37.Text = "TM_Line1";
-            this.button37.UseVisualStyleBackColor = true;
-            this.button37.Click += new System.EventHandler(this.button37_Click);
-            // 
             // socketmsg
             // 
             this.socketmsg.Location = new System.Drawing.Point(6, 15);
             this.socketmsg.Name = "socketmsg";
-            this.socketmsg.Size = new System.Drawing.Size(434, 133);
+            this.socketmsg.Size = new System.Drawing.Size(434, 93);
             this.socketmsg.TabIndex = 113;
             this.socketmsg.Text = "";
             // 
@@ -755,7 +716,7 @@
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6,
             this.dataGridViewTextBoxColumn7});
-            this.PointDataGrid1.Location = new System.Drawing.Point(6, 387);
+            this.PointDataGrid1.Location = new System.Drawing.Point(6, 349);
             this.PointDataGrid1.Name = "PointDataGrid1";
             this.PointDataGrid1.RowTemplate.Height = 24;
             this.PointDataGrid1.Size = new System.Drawing.Size(515, 228);
@@ -814,12 +775,11 @@
             this.Rx,
             this.Ry,
             this.Rz});
-            this.PointDataGrid.Location = new System.Drawing.Point(6, 154);
+            this.PointDataGrid.Location = new System.Drawing.Point(6, 114);
             this.PointDataGrid.Name = "PointDataGrid";
             this.PointDataGrid.RowTemplate.Height = 24;
             this.PointDataGrid.Size = new System.Drawing.Size(515, 228);
             this.PointDataGrid.TabIndex = 125;
-            this.PointDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PointDataGrid_CellContentClick);
             // 
             // number
             // 
@@ -1062,16 +1022,13 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.button7);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.label16);
             this.groupBox4.Controls.Add(this.TB_sp_abs1);
             this.groupBox4.Controls.Add(this.TB_sp_pc1);
             this.groupBox4.Controls.Add(this.label17);
             this.groupBox4.Controls.Add(this.label18);
-            this.groupBox4.Controls.Add(this.button8);
             this.groupBox4.Controls.Add(this.button9);
-            this.groupBox4.Controls.Add(this.button10);
             this.groupBox4.Location = new System.Drawing.Point(331, 347);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1079,16 +1036,6 @@
             this.groupBox4.TabIndex = 111;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "TM_動作";
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(267, 45);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
-            this.button7.TabIndex = 81;
-            this.button7.Text = "TM_Line2";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button39_Click);
             // 
             // label15
             // 
@@ -1144,16 +1091,6 @@
             this.label18.TabIndex = 75;
             this.label18.Text = "百分比速度:";
             // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(188, 46);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 74;
-            this.button8.Text = "Circle_test2";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button38_Click);
-            // 
             // button9
             // 
             this.button9.Location = new System.Drawing.Point(188, 19);
@@ -1163,16 +1100,6 @@
             this.button9.Text = "TM歸位";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.btn_TMtest_Click);
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(267, 19);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 73;
-            this.button10.Text = "TM_Line1";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button37_Click);
             // 
             // Form1
             // 
@@ -1243,15 +1170,12 @@
         private System.Windows.Forms.Button button35;
         private System.IO.Ports.SerialPort XEG32;
         private System.Windows.Forms.GroupBox txtStatus;
-        private System.Windows.Forms.Button button37;
-        private System.Windows.Forms.Button button38;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox TB_sp_abs;
         private System.Windows.Forms.TextBox TB_sp_pc;
-        private System.Windows.Forms.Button button39;
         private System.Windows.Forms.Timer timer_rec;
         private System.Windows.Forms.RichTextBox socketmsg;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -1279,16 +1203,13 @@
         private System.Windows.Forms.Label lab_Port1;
         private System.Windows.Forms.Label lab_IP1;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox TB_sp_abs1;
         private System.Windows.Forms.TextBox TB_sp_pc1;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
         private System.Windows.Forms.DataGridView PointDataGrid1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;

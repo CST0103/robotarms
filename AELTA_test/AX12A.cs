@@ -41,6 +41,8 @@ namespace ControlUI
 
         byte dxl_error = 0;                                                   // Dynamixel error
         UInt16 dxl_present_position = 0;                                      // Present position
+
+
         public const int Goal_Position_Open = 768;
         public const int Goal_Position_Close = 512;
 
