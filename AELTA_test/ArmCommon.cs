@@ -48,11 +48,11 @@ namespace ControlUI
             if (this.InvokeRequired)
             {
                 AddReceiveDataDelegate ReceiveData = new AddReceiveDataDelegate(AddReceiveData);
-                this.Invoke(ReceiveData, _receivedata, _textbox);
+                _textbox.Invoke(ReceiveData, _receivedata, _textbox);
             }
             else
             {
-                _textbox.AppendText(_receivedata);
+                _textbox.Text = _receivedata;
             }
         }
     }

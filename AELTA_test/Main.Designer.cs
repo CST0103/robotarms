@@ -57,6 +57,7 @@
             this.XGE32_groupBox = new System.Windows.Forms.GroupBox();
             this.button35 = new System.Windows.Forms.Button();
             this.GripCnt_Btn = new System.Windows.Forms.Button();
+            this.XEG32_Close_Other = new System.Windows.Forms.Button();
             this.XEG32_Close_bt = new System.Windows.Forms.Button();
             this.XEG32_Open_bt = new System.Windows.Forms.Button();
             this.XEG32_Reset_bt = new System.Windows.Forms.Button();
@@ -70,10 +71,10 @@
             this.XEG32_PosStk_text = new System.Windows.Forms.TextBox();
             this.XEG32 = new System.IO.Ports.SerialPort(this.components);
             this.txtStatus = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.AX12A_Close = new System.Windows.Forms.Button();
             this.AX12A_Open = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.AX12A_Status = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -259,12 +260,12 @@
             this.TB_RecvData.Location = new System.Drawing.Point(5, 241);
             this.TB_RecvData.Multiline = true;
             this.TB_RecvData.Name = "TB_RecvData";
-            this.TB_RecvData.Size = new System.Drawing.Size(292, 29);
+            this.TB_RecvData.Size = new System.Drawing.Size(292, 40);
             this.TB_RecvData.TabIndex = 69;
             // 
             // btn_ClearRecvData
             // 
-            this.btn_ClearRecvData.Location = new System.Drawing.Point(222, 276);
+            this.btn_ClearRecvData.Location = new System.Drawing.Point(222, 287);
             this.btn_ClearRecvData.Name = "btn_ClearRecvData";
             this.btn_ClearRecvData.Size = new System.Drawing.Size(75, 21);
             this.btn_ClearRecvData.TabIndex = 70;
@@ -315,7 +316,7 @@
             this.groupBox1.Controls.Add(this.lab_IP);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(307, 308);
+            this.groupBox1.Size = new System.Drawing.Size(307, 314);
             this.groupBox1.TabIndex = 73;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
@@ -376,6 +377,7 @@
             // 
             this.XGE32_groupBox.Controls.Add(this.button35);
             this.XGE32_groupBox.Controls.Add(this.GripCnt_Btn);
+            this.XGE32_groupBox.Controls.Add(this.XEG32_Close_Other);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Close_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Open_bt);
             this.XGE32_groupBox.Controls.Add(this.XEG32_Reset_bt);
@@ -392,7 +394,7 @@
             this.XGE32_groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.XGE32_groupBox.Name = "XGE32_groupBox";
             this.XGE32_groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 122);
+            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 160);
             this.XGE32_groupBox.TabIndex = 110;
             this.XGE32_groupBox.TabStop = false;
             this.XGE32_groupBox.Text = "XEG-32夾爪控制";
@@ -417,13 +419,23 @@
             this.GripCnt_Btn.UseVisualStyleBackColor = true;
             this.GripCnt_Btn.Click += new System.EventHandler(this.button34_Click);
             // 
+            // XEG32_Close_Other
+            // 
+            this.XEG32_Close_Other.Location = new System.Drawing.Point(170, 123);
+            this.XEG32_Close_Other.Name = "XEG32_Close_Other";
+            this.XEG32_Close_Other.Size = new System.Drawing.Size(75, 28);
+            this.XEG32_Close_Other.TabIndex = 18;
+            this.XEG32_Close_Other.Text = "關夾爪_200";
+            this.XEG32_Close_Other.UseVisualStyleBackColor = true;
+            this.XEG32_Close_Other.Click += new System.EventHandler(this.XEG32_Close_Other_Click);
+            // 
             // XEG32_Close_bt
             // 
             this.XEG32_Close_bt.Location = new System.Drawing.Point(170, 89);
             this.XEG32_Close_bt.Name = "XEG32_Close_bt";
             this.XEG32_Close_bt.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Close_bt.TabIndex = 18;
-            this.XEG32_Close_bt.Text = "關夾爪";
+            this.XEG32_Close_bt.Text = "關夾爪_600";
             this.XEG32_Close_bt.UseVisualStyleBackColor = true;
             this.XEG32_Close_bt.Click += new System.EventHandler(this.XEG32_Close_bt_Click);
             // 
@@ -526,6 +538,7 @@
             // 
             // txtStatus
             // 
+            this.txtStatus.Controls.Add(this.button1);
             this.txtStatus.Controls.Add(this.groupBox5);
             this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.label6);
@@ -543,25 +556,34 @@
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(194, 47);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 116;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.AX12A_Close);
             this.groupBox5.Controls.Add(this.AX12A_Open);
-            this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.AX12A_Status);
             this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox5.Location = new System.Drawing.Point(9, 221);
+            this.groupBox5.Location = new System.Drawing.Point(5, 255);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Size = new System.Drawing.Size(339, 82);
+            this.groupBox5.Size = new System.Drawing.Size(342, 48);
             this.groupBox5.TabIndex = 110;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "AX12A";
             // 
             // AX12A_Close
             // 
-            this.AX12A_Close.Location = new System.Drawing.Point(5, 20);
+            this.AX12A_Close.Location = new System.Drawing.Point(57, 12);
             this.AX12A_Close.Name = "AX12A_Close";
             this.AX12A_Close.Size = new System.Drawing.Size(75, 28);
             this.AX12A_Close.TabIndex = 18;
@@ -571,7 +593,7 @@
             // 
             // AX12A_Open
             // 
-            this.AX12A_Open.Location = new System.Drawing.Point(86, 20);
+            this.AX12A_Open.Location = new System.Drawing.Point(138, 12);
             this.AX12A_Open.Name = "AX12A_Open";
             this.AX12A_Open.Size = new System.Drawing.Size(75, 28);
             this.AX12A_Open.TabIndex = 18;
@@ -579,20 +601,10 @@
             this.AX12A_Open.UseVisualStyleBackColor = true;
             this.AX12A_Open.Click += new System.EventHandler(this.AX12A_Open_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(4, 14);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 12);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "夾爪無反應時使用";
-            // 
             // AX12A_Status
             // 
             this.AX12A_Status.AutoSize = true;
-            this.AX12A_Status.Location = new System.Drawing.Point(9, 59);
+            this.AX12A_Status.Location = new System.Drawing.Point(12, 20);
             this.AX12A_Status.Name = "AX12A_Status";
             this.AX12A_Status.Size = new System.Drawing.Size(44, 12);
             this.AX12A_Status.TabIndex = 14;
@@ -1234,8 +1246,9 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button AX12A_Close;
         private System.Windows.Forms.Button AX12A_Open;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label AX12A_Status;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button XEG32_Close_Other;
     }
 }
 

@@ -86,7 +86,7 @@ namespace ControlUI
 
                 //XEG32
                 GripCnt_Btn.PerformClick();
-                XEG32_Reset_bt.PerformClick();
+                //XEG32_Reset_bt.PerformClick();
             }
             catch (Exception ex) { }
 
@@ -98,20 +98,7 @@ namespace ControlUI
             FirstArmSever.Start();
             SecondArmSever.Start();
         }
-        private void NewThread(Thread thread, bool flag)
-        {
-            thread.Abort();
-            Thread NewThread; 
-            if (flag)
-            {
-                NewThread = new Thread(FirstSever);
-            }
-            else
-            {
-                NewThread = new Thread(SecondSever);
-            }
-            NewThread.Start();  
-        }
+        
 
         #region --通訊--
         private void FirstSever()
@@ -146,11 +133,7 @@ namespace ControlUI
                         true);
                 }
             }
-            catch (FormatException ex)
-            {
-                MessageBox.Show(ex.Message);
-                NewThread(Thread.CurrentThread, true); }
-            catch (Exception e) { MessageBox.Show(e.Message); }
+            catch (Exception e) {}
         }
 
         private void SecondSever()
@@ -182,19 +165,11 @@ namespace ControlUI
                         Convert.ToDouble(Point[5]),
                         Convert.ToDouble(Point[6]),
                         false);
-                    try
-                    {
                         if (Convert.ToBoolean(Point[7]))
                             XEG32_Open_bt.PerformClick();
                         else
                             XEG32_Close_bt.PerformClick();
-                    }
-                    catch (Exception ex) { }
                 }
-            }
-            catch(FormatException ex)
-            {
-                NewThread(Thread.CurrentThread, false);
             }
             catch (Exception ex) {
 
@@ -433,6 +408,99 @@ namespace ControlUI
                 armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5],true);
                 Thread.Sleep(500);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string point;
+            //original position
+            point = "450, -122, 300 ,180,0,90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+          //聯軸器上方
+          point = "300, -286.81, 150, 180, 0 , 90";
+          TM_send(TM_Send_(point, 100));
+          Thread.Sleep(3000);
+
+            //聯軸器夾取位置
+            point = "300, -286.81, 65, 180, 0 , 90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //聯軸器夾取
+            XEG32_Close_bt.PerformClick();
+            Thread.Sleep(1000);
+
+            //聯軸器夾起
+            point = "306.35, -286.81, 150, 180, 0 , 90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //固定座上方
+            point = "535,-290,150,180,0,90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //放入聯軸器(速度30慢放)
+            point = "535,-290, 75,180,0,90";
+            TM_send(TM_Send_(point, 20));
+            Thread.Sleep(6000);
+
+            //開夾爪
+            XEG32_Open_bt.PerformClick();
+            Thread.Sleep(1000);
+
+            //抬起手臂
+            point = "535,-290,150,180,0,90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //旋轉手臂
+            point = "535,-290,150,180,0,0";
+            TM_send(TM_Send_(point, 400));
+            Thread.Sleep(5000);
+
+            //墊高板上方
+            point = "365, -298, 150,180,0,0";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //墊高版夾取位置
+            point = "365, -289, 75,180,0,0";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //墊高版夾取
+            XEG32_Close_bt.PerformClick();
+            Thread.Sleep(1000);
+
+            //墊高版夾起
+            point = "365, -289, 150, 180,0,0";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //固定座上方
+            point = "535, -290, 150, 180,0,90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+
+            //放入墊高版(速度30慢放)
+            point = "535, -290, 105, 180,0,90";
+            TM_send(TM_Send_(point, 30));
+            Thread.Sleep(4000);
+            XEG32_Open_bt.PerformClick();
+            Thread.Sleep(1000);
+
+            //手臂抬起
+            point = "535, -290, 150, 180,0,90";
+            TM_send(TM_Send_(point, 100));
+            Thread.Sleep(3000);
+        }
+        private string TM_Send_(string cmd, int speed=100)
+        {
+            int allSpeed = (int)(speed * sp_pc);
+            return @"1,PTP(""CPP"", " + cmd + "," + string.Format("{0:000}", allSpeed) + ",200,0,false)";
         }
 
     }

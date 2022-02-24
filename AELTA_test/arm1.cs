@@ -93,7 +93,7 @@ namespace ControlUI
         {
             string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
             this.showRecvDataLog.AppendLine(str);
-            AddReceiveData(showRecvDataLog.ToString(), TB_RecvData);
+            AddReceiveData(showRecvDataLog.ToString(), this.TB_RecvData);
         }
 
         private void TB_SendData_KeyDown(object sender, KeyEventArgs e)
