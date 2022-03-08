@@ -93,7 +93,11 @@ namespace ControlUI
         {
             string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
             this.showRecvDataLog.AppendLine(str);
+            ReceiveDataHandler(recv_data.ToString());
             AddReceiveData(showRecvDataLog.ToString(), this.TB_RecvData);
+            try
+            { GetNowPosition(recv_data); }
+            catch (Exception ex) { }
         }
 
         private void TB_SendData_KeyDown(object sender, KeyEventArgs e)
@@ -117,9 +121,10 @@ namespace ControlUI
                 this.CB_Customized.Visible = false;
             }
         }
-        void TM_send(string _string)
+        public void TM_send(string _string)
         {
             string s = string.Empty;
+            _string += "\r\nQueueTag(1)";
             s = SocketClientObject.DataToPacket("$TMSCT", _string);
             //this.TB_Command.Text = s;
             byte[] bytes = Encoding.UTF8.GetBytes(s);

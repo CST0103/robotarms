@@ -48,6 +48,7 @@
             this.CB_Customized = new System.Windows.Forms.ComboBox();
             this.btn_TMtest = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ArmMoving_CheckBox = new System.Windows.Forms.CheckBox();
             this.TB_Port = new System.Windows.Forms.TextBox();
             this.TB_IPAddress = new System.Windows.Forms.TextBox();
             this.LB_ConnectionStatus = new System.Windows.Forms.Label();
@@ -71,7 +72,7 @@
             this.XEG32_PosStk_text = new System.Windows.Forms.TextBox();
             this.XEG32 = new System.IO.Ports.SerialPort(this.components);
             this.txtStatus = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.AssembleBtn = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.AX12A_Close = new System.Windows.Forms.Button();
             this.AX12A_Open = new System.Windows.Forms.Button();
@@ -82,6 +83,8 @@
             this.TB_sp_pc = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.Img_Btn = new System.Windows.Forms.Button();
+            this.img_Label = new System.Windows.Forms.Label();
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -131,6 +134,12 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
+            this.NowPositionLb = new System.Windows.Forms.Label();
+            this.BaisLB = new System.Windows.Forms.Label();
+            this.聯軸器 = new System.Windows.Forms.Button();
+            this.萬象軸 = new System.Windows.Forms.Button();
+            this.固定座 = new System.Windows.Forms.Button();
+            this.img_Position = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -296,6 +305,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ArmMoving_CheckBox);
             this.groupBox1.Controls.Add(this.CB_Customized);
             this.groupBox1.Controls.Add(this.btn_ClearRecvData);
             this.groupBox1.Controls.Add(this.TB_RecvData);
@@ -320,6 +330,16 @@
             this.groupBox1.TabIndex = 73;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
+            // 
+            // ArmMoving_CheckBox
+            // 
+            this.ArmMoving_CheckBox.AutoSize = true;
+            this.ArmMoving_CheckBox.Location = new System.Drawing.Point(217, 105);
+            this.ArmMoving_CheckBox.Name = "ArmMoving_CheckBox";
+            this.ArmMoving_CheckBox.Size = new System.Drawing.Size(82, 16);
+            this.ArmMoving_CheckBox.TabIndex = 72;
+            this.ArmMoving_CheckBox.Text = "ArmMoving";
+            this.ArmMoving_CheckBox.UseVisualStyleBackColor = true;
             // 
             // TB_Port
             // 
@@ -538,7 +558,7 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Controls.Add(this.button1);
+            this.txtStatus.Controls.Add(this.AssembleBtn);
             this.txtStatus.Controls.Add(this.groupBox5);
             this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.label6);
@@ -556,15 +576,15 @@
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
             // 
-            // button1
+            // AssembleBtn
             // 
-            this.button1.Location = new System.Drawing.Point(194, 47);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 116;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.AssembleBtn.Location = new System.Drawing.Point(194, 47);
+            this.AssembleBtn.Name = "AssembleBtn";
+            this.AssembleBtn.Size = new System.Drawing.Size(75, 23);
+            this.AssembleBtn.TabIndex = 116;
+            this.AssembleBtn.Text = "動作測試";
+            this.AssembleBtn.UseVisualStyleBackColor = true;
+            this.AssembleBtn.Click += new System.EventHandler(this.AssembleBtn_Click);
             // 
             // groupBox5
             // 
@@ -663,6 +683,25 @@
             this.label3.Size = new System.Drawing.Size(68, 12);
             this.label3.TabIndex = 75;
             this.label3.Text = "百分比速度:";
+            // 
+            // Img_Btn
+            // 
+            this.Img_Btn.Location = new System.Drawing.Point(333, 432);
+            this.Img_Btn.Name = "Img_Btn";
+            this.Img_Btn.Size = new System.Drawing.Size(92, 23);
+            this.Img_Btn.TabIndex = 72;
+            this.Img_Btn.Text = "影像辨識測試";
+            this.Img_Btn.UseVisualStyleBackColor = true;
+            this.Img_Btn.Click += new System.EventHandler(this.Img_Btn_Click);
+            // 
+            // img_Label
+            // 
+            this.img_Label.AutoSize = true;
+            this.img_Label.Location = new System.Drawing.Point(339, 474);
+            this.img_Label.Name = "img_Label";
+            this.img_Label.Size = new System.Drawing.Size(55, 12);
+            this.img_Label.TabIndex = 117;
+            this.img_Label.Text = "img_Label";
             // 
             // socketmsg
             // 
@@ -1113,16 +1152,82 @@
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.btn_TMtest_Click);
             // 
+            // NowPositionLb
+            // 
+            this.NowPositionLb.AutoSize = true;
+            this.NowPositionLb.Location = new System.Drawing.Point(331, 490);
+            this.NowPositionLb.Name = "NowPositionLb";
+            this.NowPositionLb.Size = new System.Drawing.Size(77, 12);
+            this.NowPositionLb.TabIndex = 118;
+            this.NowPositionLb.Text = "NowPositionLb";
+            // 
+            // BaisLB
+            // 
+            this.BaisLB.AutoSize = true;
+            this.BaisLB.Location = new System.Drawing.Point(353, 511);
+            this.BaisLB.Name = "BaisLB";
+            this.BaisLB.Size = new System.Drawing.Size(25, 12);
+            this.BaisLB.TabIndex = 119;
+            this.BaisLB.Text = "Bais";
+            // 
+            // 聯軸器
+            // 
+            this.聯軸器.Location = new System.Drawing.Point(440, 435);
+            this.聯軸器.Name = "聯軸器";
+            this.聯軸器.Size = new System.Drawing.Size(67, 23);
+            this.聯軸器.TabIndex = 120;
+            this.聯軸器.Text = "聯軸器";
+            this.聯軸器.UseVisualStyleBackColor = true;
+            this.聯軸器.Click += new System.EventHandler(this.聯軸器_Click);
+            // 
+            // 萬象軸
+            // 
+            this.萬象軸.Location = new System.Drawing.Point(511, 435);
+            this.萬象軸.Name = "萬象軸";
+            this.萬象軸.Size = new System.Drawing.Size(67, 23);
+            this.萬象軸.TabIndex = 120;
+            this.萬象軸.Text = "萬象軸";
+            this.萬象軸.UseVisualStyleBackColor = true;
+            this.萬象軸.Click += new System.EventHandler(this.萬象軸_Click);
+            // 
+            // 固定座
+            // 
+            this.固定座.Location = new System.Drawing.Point(587, 435);
+            this.固定座.Name = "固定座";
+            this.固定座.Size = new System.Drawing.Size(67, 23);
+            this.固定座.TabIndex = 120;
+            this.固定座.Text = "固定座";
+            this.固定座.UseVisualStyleBackColor = true;
+            this.固定座.Click += new System.EventHandler(this.固定座_Click);
+            // 
+            // img_Position
+            // 
+            this.img_Position.AutoSize = true;
+            this.img_Position.Location = new System.Drawing.Point(558, 464);
+            this.img_Position.Name = "img_Position";
+            this.img_Position.Size = new System.Drawing.Size(96, 16);
+            this.img_Position.TabIndex = 121;
+            this.img_Position.Text = "影像辨識位置";
+            this.img_Position.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 644);
+            this.Controls.Add(this.img_Position);
+            this.Controls.Add(this.固定座);
+            this.Controls.Add(this.萬象軸);
+            this.Controls.Add(this.聯軸器);
+            this.Controls.Add(this.BaisLB);
+            this.Controls.Add(this.NowPositionLb);
+            this.Controls.Add(this.img_Label);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.Img_Btn);
             this.Name = "Form1";
             this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1142,6 +1247,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1247,8 +1353,17 @@
         private System.Windows.Forms.Button AX12A_Close;
         private System.Windows.Forms.Button AX12A_Open;
         private System.Windows.Forms.Label AX12A_Status;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button AssembleBtn;
         private System.Windows.Forms.Button XEG32_Close_Other;
+        private System.Windows.Forms.CheckBox ArmMoving_CheckBox;
+        private System.Windows.Forms.Button Img_Btn;
+        private System.Windows.Forms.Label img_Label;
+        private System.Windows.Forms.Label NowPositionLb;
+        private System.Windows.Forms.Label BaisLB;
+        private System.Windows.Forms.Button 聯軸器;
+        private System.Windows.Forms.Button 萬象軸;
+        private System.Windows.Forms.Button 固定座;
+        private System.Windows.Forms.CheckBox img_Position;
     }
 }
 
