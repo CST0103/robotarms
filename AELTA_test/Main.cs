@@ -19,6 +19,11 @@ using ClosedXML.Excel;
 
 using dynamixel_sdk;
 
+public enum ImageRecogntionBais
+{
+    X=-69,
+    Y=-7
+}
 namespace ControlUI
 {
     public partial class Form1 : Form
@@ -48,11 +53,11 @@ namespace ControlUI
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
 
+        private int GripPosition = 0;
         private int port_num;
 
-        private static AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         //Image
-        ImageProcess k = new ImageProcess();
+        ImageProcess ImageHandler = new ImageProcess();
         #endregion
 
         public Form1()
@@ -104,7 +109,7 @@ namespace ControlUI
             Thread SecondArmSever = new Thread(SecondSever);
             FirstArmSever.Start();
             SecondArmSever.Start();
-
+            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
         }
 
 
@@ -127,15 +132,15 @@ namespace ControlUI
 
                 while (true)
                 {
-                    int position_int = 1;
+                    int position_int = 2;
                     string reciveData = FirstListener.Recive();
                     Invoke(ModifyText, Count.ToString() + "  First Command");
                     string[] data = reciveData.Split('$');
-                    switch(data[1].ToString())
+                    switch(data[position_int].ToString())
                     {
                         case "position":
                             Invoke(Tolist,
-                                Convert.ToInt32(data[0]),
+                                Convert.ToInt32(data[1]),
                                 Convert.ToDouble(data[position_int + 1]),
                                 Convert.ToDouble(data[position_int + 2]),
                                 Convert.ToDouble(data[position_int + 3]),
@@ -183,6 +188,7 @@ namespace ControlUI
                         Convert.ToDouble(data[6]),
                         false);
                     Count++;
+                    GripPosition = Convert.ToInt32(data[0]);
                 }
             }
             catch (Exception ex)
@@ -201,7 +207,7 @@ namespace ControlUI
         #endregion
 
         #region --座標修正--
-        int CoordinateConversionCount = 0;
+
         private void CoordinateConversion(int Conit, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
@@ -275,9 +281,8 @@ namespace ControlUI
             if (d3 < zmin)
                 d3 = zmin;
 
-            Invoke(DataToGrid, CoordinateConversionCount, d1, d2, d3, d4, d5, d6, ArmFlag);
+            Invoke(DataToGrid, Conit, d1, d2, d3, d4, d5, d6, ArmFlag);
             Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString(), ArmFlag);
-            CoordinateConversionCount++;
         }
 
 
@@ -540,29 +545,63 @@ namespace ControlUI
         private void Img_Btn_Click(object sender, EventArgs e)
         {
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
-            Thread.Sleep(500);
             string point = null;
             string point_format = null;
+            Thread.Sleep(500);
 
-            double[] bais = k.ImageRecognition();
-            double bais_X = NowPosition[0] + 69 - bais[0];
-            double bais_Y = NowPosition[1] + 7 + bais[1];
-            BaisLB.Text = "Image_Bais: " + bais[0].ToString("#0.00") + ", " + bais[1].ToString("#0.00");
-            img_Label.Text = String.Format("GoalPosition: {0}, {1}", bais_X.ToString("#0.00"), bais_Y.ToString("#0.00"));
+            double[] ImageCenter_bais = ImageHandler.ImageRecognition();
+            BaisLB.Text = "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00");
+
             NowPositionLb.Text = String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"));
 
-            for (int i = 3;i<6;i++)
-            {
-                point_format += "," + NowPosition[i].ToString();
-            }
-            point = bais_X.ToString() + ", " + bais_Y.ToString() + ", 150" + point_format;
-            if (ArmMoving_CheckBox.Checked) {
+            Grip(ImageCenter_bais);
+
+
+
+
+        }
+        private void Grip(double[] ImageBais)
+        {
+            double[] ImageRecogntionPosition = NowPosition;
+
+            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X - ImageBais[0];
+            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y + ImageBais[1];
+            img_Label.Text = String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00"));
+
+            string point = double2Point(ImageRecogntionPosition);
+            TM_send(TM_Send_format(point, 30));
+
+            if (ArmMoving_CheckBox.Checked & GripPosition != 0) {
+                switch(GripPosition)
+                {
+                    case 1:
+                        ImageRecogntionPosition[2] = 65;
+                        break;
+
+                    case 2:
+                        ImageRecogntionPosition[2] = 45;
+                        break;
+                    case 3:
+                        ImageRecogntionPosition[2] = 50;
+                        break;
+                }
+
+                point = double2Point(ImageRecogntionPosition);
+
                 TM_send(TM_Send_format(point,30));
-                point = bais_X.ToString() + ", " + bais_Y.ToString() + ", 65" + point_format;
-                //TM_send(TM_Send_format(point,30));
-            //    Thread.Sleep(5000);
-            //    XEG32_Close_Other.PerformClick();
+                Thread.Sleep(5000);
+                XEG32_Close_Other.PerformClick();
+
             }
+        }
+        private string double2Point(double[] position, int iterate = 0)
+        {
+            string result = null;
+            for(int i = 0; i < 6; i++)
+            {
+               result += position[i]+",";
+            }
+            return result.Remove(result.Length - 1);
         }
 
         private void 聯軸器_Click(object sender, EventArgs e)
@@ -588,5 +627,6 @@ namespace ControlUI
             else
                 TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
         }
+
     }
 }

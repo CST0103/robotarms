@@ -68,7 +68,6 @@ namespace ControlUI
                 int index = recvData.IndexOf("$TMSTA");
 
                 recvData = recvData.Substring(index, recvData.Length - index);
-                _autoResetEvent.Set();
                 string target = recvData.Split(',')[4];
                 if (target == "true")
                 {
