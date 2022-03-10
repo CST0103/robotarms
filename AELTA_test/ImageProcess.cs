@@ -43,7 +43,7 @@ namespace ControlUI
                 CvInvoke.FindContours(threshold, contours, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
                 for (int i = 0; i < contours.Size; i++)
                 {
-                    if (CvInvoke.ContourArea(contours[i]) > 10000)
+                    if (CvInvoke.ContourArea(contours[i]) > 5000)
                     {
                         Rectangle BoundingBox = CvInvoke.BoundingRectangle(contours[i]);
                         CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
@@ -58,7 +58,7 @@ namespace ControlUI
                 CvInvoke.Imshow("Test", threshold);
                 CvInvoke.WaitKey(1);
                 double[] vs = new double[2] { (Center.Y - CameraSize[1] / 2) / 6, (Center.X - CameraSize[0] / 2) / 4.5 };
-                return vs;
+                //return vs;
             }
 
         }

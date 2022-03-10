@@ -72,7 +72,6 @@
             this.XEG32_PosStk_text = new System.Windows.Forms.TextBox();
             this.XEG32 = new System.IO.Ports.SerialPort(this.components);
             this.txtStatus = new System.Windows.Forms.GroupBox();
-            this.AssembleBtn = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.AX12A_Close = new System.Windows.Forms.Button();
             this.AX12A_Open = new System.Windows.Forms.Button();
@@ -93,6 +92,7 @@
             this.reMove = new System.Windows.Forms.Button();
             this.PointDataGrid1 = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.command1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -101,6 +101,7 @@
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
             this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -558,7 +559,6 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Controls.Add(this.AssembleBtn);
             this.txtStatus.Controls.Add(this.groupBox5);
             this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.label6);
@@ -575,16 +575,6 @@
             this.txtStatus.TabIndex = 111;
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
-            // 
-            // AssembleBtn
-            // 
-            this.AssembleBtn.Location = new System.Drawing.Point(194, 47);
-            this.AssembleBtn.Name = "AssembleBtn";
-            this.AssembleBtn.Size = new System.Drawing.Size(75, 23);
-            this.AssembleBtn.TabIndex = 116;
-            this.AssembleBtn.Text = "動作測試";
-            this.AssembleBtn.UseVisualStyleBackColor = true;
-            this.AssembleBtn.Click += new System.EventHandler(this.AssembleBtn_Click);
             // 
             // groupBox5
             // 
@@ -761,6 +751,7 @@
             this.PointDataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PointDataGrid1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
+            this.command1,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3,
             this.dataGridViewTextBoxColumn4,
@@ -777,49 +768,56 @@
             // 
             this.dataGridViewTextBoxColumn1.HeaderText = "number";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 50;
+            this.dataGridViewTextBoxColumn1.Width = 58;
+            // 
+            // command1
+            // 
+            this.command1.HeaderText = "command";
+            this.command1.Name = "command1";
+            this.command1.Width = 58;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "x";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 70;
+            this.dataGridViewTextBoxColumn2.Width = 58;
             // 
             // dataGridViewTextBoxColumn3
             // 
             this.dataGridViewTextBoxColumn3.HeaderText = "y";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 70;
+            this.dataGridViewTextBoxColumn3.Width = 58;
             // 
             // dataGridViewTextBoxColumn4
             // 
             this.dataGridViewTextBoxColumn4.HeaderText = "z";
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 70;
+            this.dataGridViewTextBoxColumn4.Width = 58;
             // 
             // dataGridViewTextBoxColumn5
             // 
             this.dataGridViewTextBoxColumn5.HeaderText = "Rx";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 70;
+            this.dataGridViewTextBoxColumn5.Width = 58;
             // 
             // dataGridViewTextBoxColumn6
             // 
             this.dataGridViewTextBoxColumn6.HeaderText = "Ry";
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.Width = 70;
+            this.dataGridViewTextBoxColumn6.Width = 58;
             // 
             // dataGridViewTextBoxColumn7
             // 
             this.dataGridViewTextBoxColumn7.HeaderText = "Rz";
             this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.Width = 70;
+            this.dataGridViewTextBoxColumn7.Width = 58;
             // 
             // PointDataGrid
             // 
             this.PointDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PointDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.number,
+            this.command,
             this.x,
             this.y,
             this.z,
@@ -836,43 +834,49 @@
             // 
             this.number.HeaderText = "number";
             this.number.Name = "number";
-            this.number.Width = 50;
+            this.number.Width = 60;
+            // 
+            // command
+            // 
+            this.command.HeaderText = "command";
+            this.command.Name = "command";
+            this.command.Width = 57;
             // 
             // x
             // 
             this.x.HeaderText = "x";
             this.x.Name = "x";
-            this.x.Width = 70;
+            this.x.Width = 57;
             // 
             // y
             // 
             this.y.HeaderText = "y";
             this.y.Name = "y";
-            this.y.Width = 70;
+            this.y.Width = 57;
             // 
             // z
             // 
             this.z.HeaderText = "z";
             this.z.Name = "z";
-            this.z.Width = 70;
+            this.z.Width = 57;
             // 
             // Rx
             // 
             this.Rx.HeaderText = "Rx";
             this.Rx.Name = "Rx";
-            this.Rx.Width = 70;
+            this.Rx.Width = 57;
             // 
             // Ry
             // 
             this.Ry.HeaderText = "Ry";
             this.Ry.Name = "Ry";
-            this.Ry.Width = 70;
+            this.Ry.Width = 57;
             // 
             // Rz
             // 
             this.Rz.HeaderText = "Rz";
             this.Rz.Name = "Rz";
-            this.Rz.Width = 70;
+            this.Rz.Width = 57;
             // 
             // groupBox3
             // 
@@ -1329,20 +1333,6 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.DataGridView PointDataGrid1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn number;
-        private System.Windows.Forms.DataGridViewTextBoxColumn x;
-        private System.Windows.Forms.DataGridViewTextBoxColumn y;
-        private System.Windows.Forms.DataGridViewTextBoxColumn z;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
         private System.Windows.Forms.TextBox TB_Port;
         private System.Windows.Forms.TextBox TB_IPAddress;
         private System.Windows.Forms.Label LB_ConnectionStatus;
@@ -1353,7 +1343,6 @@
         private System.Windows.Forms.Button AX12A_Close;
         private System.Windows.Forms.Button AX12A_Open;
         private System.Windows.Forms.Label AX12A_Status;
-        private System.Windows.Forms.Button AssembleBtn;
         private System.Windows.Forms.Button XEG32_Close_Other;
         private System.Windows.Forms.CheckBox ArmMoving_CheckBox;
         private System.Windows.Forms.Button Img_Btn;
@@ -1364,6 +1353,22 @@
         private System.Windows.Forms.Button 萬象軸;
         private System.Windows.Forms.Button 固定座;
         private System.Windows.Forms.CheckBox img_Position;
+        private System.Windows.Forms.DataGridViewTextBoxColumn number;
+        private System.Windows.Forms.DataGridViewTextBoxColumn command;
+        private System.Windows.Forms.DataGridViewTextBoxColumn x;
+        private System.Windows.Forms.DataGridViewTextBoxColumn y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn z;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn command1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
     }
 }
 

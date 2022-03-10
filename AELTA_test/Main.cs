@@ -21,8 +21,8 @@ using dynamixel_sdk;
 
 public enum ImageRecogntionBais
 {
-    X=-69,
-    Y=-7
+    X = -68,
+    Y = -7
 }
 namespace ControlUI
 {
@@ -68,7 +68,6 @@ namespace ControlUI
         private void Form1_Load(object sender, EventArgs e)
         {
             Point bais = new Point();
-
             //Gripper: AX12A and XEG32 - initial
             try
             {
@@ -109,7 +108,6 @@ namespace ControlUI
             Thread SecondArmSever = new Thread(SecondSever);
             FirstArmSever.Start();
             SecondArmSever.Start();
-            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
         }
 
 
@@ -118,29 +116,33 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<int, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
-            try
+            Action<int, string, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
+            Action<int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
+            Action Image = ImageProcess;
+            string Declare;
+            bool _open_flag = FirstListener.Start();
+            Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
+            Invoke(ModifyText, Declare);
+
+            bool _connect_flag = FirstListener.Connect();
+            Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
+            Invoke(ModifyText, Declare);
+
+            while (true)
             {
-                string Declare;
-                bool _open_flag = FirstListener.Start();
-                Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
-                Invoke(ModifyText, Declare);
-
-                bool _connect_flag = FirstListener.Connect();
-                Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
-                Invoke(ModifyText, Declare);
-
-                while (true)
+                try
                 {
                     int position_int = 2;
                     string reciveData = FirstListener.Recive();
                     Invoke(ModifyText, Count.ToString() + "  First Command");
                     string[] data = reciveData.Split('$');
-                    switch(data[position_int].ToString())
+                    GripPosition = Convert.ToInt32(data[1]);
+                    switch (data[position_int].ToString())
                     {
                         case "position":
                             Invoke(Tolist,
                                 Convert.ToInt32(data[1]),
+                                data[position_int],
                                 Convert.ToDouble(data[position_int + 1]),
                                 Convert.ToDouble(data[position_int + 2]),
                                 Convert.ToDouble(data[position_int + 3]),
@@ -150,19 +152,25 @@ namespace ControlUI
                                 true);
                             break;
                         case "Image":
-                            Img_Btn.PerformClick();
+                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[position_int], 0, 0, 0, 0, 0, 0, true);
+                            Image.Invoke();
+                            break;
+                        case "Grip":
+                            SendOpenClose(XEG32, 3200, 80);
+                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[position_int], 0, 0, 0, 0, 0, 0, true);
                             break;
                     }
+                    Count++;
                 }
+                catch (Exception ex) { };
             }
-            catch (Exception e) { }
         }
 
         private void SecondSever()
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<int, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
+            Action<int, string, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
             string Declare;
             try
             {
@@ -208,11 +216,11 @@ namespace ControlUI
 
         #region --座標修正--
 
-        private void CoordinateConversion(int Conit, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private void CoordinateConversion(int Conit, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
 
-            Action<int, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
+            Action<int, string, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
             Action<string, string, string, string, string, string, bool> Toarm = armMove;
 
 
@@ -281,7 +289,7 @@ namespace ControlUI
             if (d3 < zmin)
                 d3 = zmin;
 
-            Invoke(DataToGrid, Conit, d1, d2, d3, d4, d5, d6, ArmFlag);
+            Invoke(DataToGrid, Conit, command, d1, d2, d3, d4, d5, d6, ArmFlag);
             Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString(), ArmFlag);
         }
 
@@ -290,10 +298,10 @@ namespace ControlUI
 
         #region --點位表格--
 
-        private void WriteDataGrid(int count, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private void WriteDataGrid(int count, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             if (ArmFlag)
-            { this.PointDataGrid.Rows.Add(count, d1, d2, d3, d4, d5, d6); }
+            { this.PointDataGrid.Rows.Add(count, command, d1, d2, d3, d4, d5, d6); }
             else
             { this.PointDataGrid1.Rows.Add(count, d1, d2, d3, d4, d5, d6); }
         }
@@ -354,7 +362,7 @@ namespace ControlUI
             try
             { sp_pc = Convert.ToDouble(TB_sp_pc.Text); }
             catch (Exception ex) { };
-            
+
         }
 
         //手臂絕對速度
@@ -409,170 +417,88 @@ namespace ControlUI
                 Thread.Sleep(500);
             }
         }
-        //可修改為Excel使用
-        private void AssembleBtn_Click(object sender, EventArgs e)
+        private void 聯軸器_Click(object sender, EventArgs e)
         {
-            string point;
-            //original position
-            point = "450, -122, 300 ,180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(2000);
-            XEG32_Open_bt.PerformClick();
-            Thread.Sleep(1000);
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
+        }
 
-            //聯軸器上方
-            point = "300, -287, 150, 180, 0 , 90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(5000);
+        private void 萬象軸_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("327, -327, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
+        }
 
-            //聯軸器夾取位置
-            point = "300, -287, 65, 180, 0 , 90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //聯軸器夾取
-            XEG32_Close_Other.PerformClick();
-            Thread.Sleep(1000);
-
-            //聯軸器夾起
-            point = "300, -287, 150, 180, 0 , 90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(2000);
-
-            //固定座上方
-            point = "535,-291,150,180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //放入聯軸器(速度30慢放)
-            point = "535,-291, 75,180,0,90";
-            TM_send(TM_Send_format(point, 30));
-            Thread.Sleep(6000);
-
-            //開夾爪
-            XEG32_Open_bt.PerformClick();
-            Thread.Sleep(1000);
-
-            //抬起手臂
-            point = "535,-291,150,180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //旋轉手臂
-            point = "535,-291,150,180,0,0";
-            TM_send(TM_Send_format(point, 400));
-            Thread.Sleep(5500);
-
-            //墊高板上方
-            point = "365, -298, 150,180,0,0";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //墊高版夾取位置
-            point = "365, -298, 75,180,0,0";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(4000);
-
-            //墊高版夾取
-            XEG32_Close_bt.PerformClick();
-            Thread.Sleep(1000);
-
-            //墊高版夾起
-            point = "365, -298, 150, 180,0,0";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //固定座上方
-            point = "535, -291, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(5000);
-
-            //放入墊高版(速度30慢放)
-            point = "535, -291, 105, 180,0,90";
-            TM_send(TM_Send_format(point, 30));
-            Thread.Sleep(5500);
-            XEG32_Open_bt.PerformClick();
-            Thread.Sleep(1000);
-
-            //手臂抬起
-            point = "535, -291, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //萬象軸上方
-            point = "438, -320, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //萬象軸夾取位置
-            point = "438, -320, 45, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //萬象軸夾取
-            XEG32_Close_bt.PerformClick();
-            Thread.Sleep(1000);
-
-            //手臂抬起
-            point = "438, -320, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //固定座上方
-            point = "535, -291, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
-
-            //放入萬象軸(速度30慢放)
-            point = "535, -291, 85, 180,0,90";
-            TM_send(TM_Send_format(point, 30));
-            Thread.Sleep(5000);
-
-            //開啟夾爪
-            XEG32_Open_bt.PerformClick();
-            Thread.Sleep(1000);
-
-            //抬起手臂
-            point = "535, -291, 150, 180,0,90";
-            TM_send(TM_Send_format(point, 100));
-            Thread.Sleep(3000);
+        private void 固定座_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
         }
         private string TM_Send_format(string cmd, int speed = 100)
         {
             int allSpeed = (int)(speed * sp_pc);
             return @"1,PTP(""CPP"", " + cmd + "," + string.Format("{0:000}", allSpeed) + ",200,0,false)";
         }
-        private void Img_Btn_Click(object sender, EventArgs e)
+        private void ChangeName(Control control, string text)
+        {
+            if (control.InvokeRequired)
+            {
+                Action<Control, string> action = ChangeName;
+                action.Invoke(control, text);
+            }
+            else
+            {
+                control.Text = text;
+            }
+        }
+        
+        private void ImageProcess()
         {
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
+
+            Thread.Sleep(1000);
+            double[] ImageRecogntionPosition = NowPosition;
+
+            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] + (double)ImageRecogntionBais.X;
+            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] + (double)ImageRecogntionBais.Y;
+            TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
+            Thread.Sleep(1000);
             string point = null;
             string point_format = null;
-            Thread.Sleep(500);
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
-            BaisLB.Text = "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00");
-
-            NowPositionLb.Text = String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"));
+            ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
 
             Grip(ImageCenter_bais);
 
-
-
-
         }
+
+        private void Img_Btn_Click(object sender, EventArgs e)
+        {
+            ImageProcess();
+        }
+
         private void Grip(double[] ImageBais)
         {
             double[] ImageRecogntionPosition = NowPosition;
 
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X - ImageBais[0];
             ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y + ImageBais[1];
-            img_Label.Text = String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00"));
+            //          ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
             TM_send(TM_Send_format(point, 30));
 
-            if (ArmMoving_CheckBox.Checked & GripPosition != 0) {
-                switch(GripPosition)
+            if (ArmMoving_CheckBox.Checked & GripPosition != 0)
+            {
+                switch (GripPosition)
                 {
                     case 1:
                         ImageRecogntionPosition[2] = 65;
@@ -580,6 +506,7 @@ namespace ControlUI
 
                     case 2:
                         ImageRecogntionPosition[2] = 45;
+                        ImageRecogntionPosition[5] = 180;
                         break;
                     case 3:
                         ImageRecogntionPosition[2] = 50;
@@ -588,45 +515,31 @@ namespace ControlUI
 
                 point = double2Point(ImageRecogntionPosition);
 
-                TM_send(TM_Send_format(point,30));
-                Thread.Sleep(5000);
-                XEG32_Close_Other.PerformClick();
+                TM_send(TM_Send_format(point, 30));
+                Thread.Sleep(10000);
+                if (GripPosition == 1)
+                {
+                    SendOpenClose(XEG32, 200, 80);
+                }
+                else
+                {
+                    SendOpenClose(XEG32, 600, 80);
+                }
+                Thread.Sleep(1000);
+                ImageRecogntionPosition[2] = 150;
+                TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
+                Thread.Sleep(1000);
 
             }
         }
         private string double2Point(double[] position, int iterate = 0)
         {
             string result = null;
-            for(int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
-               result += position[i]+",";
+                result += position[i] + ",";
             }
             return result.Remove(result.Length - 1);
         }
-
-        private void 聯軸器_Click(object sender, EventArgs e)
-        {
-            if(img_Position.Checked)
-                TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
-        }
-
-        private void 萬象軸_Click(object sender, EventArgs e)
-        {
-            if(img_Position.Checked)
-                TM_send(TM_Send_format("369, -327, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("438, -320, 150, 180, 0, 90"));
-        }
-
-        private void 固定座_Click(object sender, EventArgs e)
-        {
-            if(img_Position.Checked)
-                TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
-        }
-
     }
 }

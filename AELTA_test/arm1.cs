@@ -91,13 +91,13 @@ namespace ControlUI
 
         public void showReceiveData(object sender, string recv_data)
         {
+            try
+            { GetNowPosition(recv_data); }
+            catch (Exception ex) { }
             string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
             this.showRecvDataLog.AppendLine(str);
             ReceiveDataHandler(recv_data.ToString());
             AddReceiveData(showRecvDataLog.ToString(), this.TB_RecvData);
-            try
-            { GetNowPosition(recv_data); }
-            catch (Exception ex) { }
         }
 
         private void TB_SendData_KeyDown(object sender, KeyEventArgs e)

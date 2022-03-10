@@ -71,7 +71,7 @@ namespace ControlUI
         {
             try
             {
-                int i_PosStk = Convert.ToInt32(XEG32_PosStk_text.Text),
+                    int i_PosStk = Convert.ToInt32(XEG32_PosStk_text.Text),
                   i_Vel = Convert.ToInt32(XEG32_Vel_text.Text) * 100,
                   i_CJog = XEG32_CJog,
                   i_Force = XEG32_Force,
@@ -115,6 +115,53 @@ namespace ControlUI
             }
         }
 
+        public string SendOpenClose(SerialPort Comm1, int PosStk, int Vel)
+        {
+            try
+            {
+                    int i_PosStk = PosStk,
+                  i_Vel = Vel * 100,
+                  i_CJog = XEG32_CJog,
+                  i_Force = XEG32_Force,
+                  i_PushVel = XEG32_PushVel,
+                  i_PushPosStk = XEG32_PushPosStk;
+                long num = 0L;
+                List<byte> list = new List<byte>();
+                list.Add((byte)250);
+                list.Add((byte)0xfb);
+                list.Add((byte)0xf3);
+                list.Add((byte)((i_PosStk & 0xff00) >> 8));
+                list.Add((byte)(i_PosStk & 0xff));
+                list.Add((byte)((i_Vel & 0xff00) >> 8));
+                list.Add((byte)(i_Vel & 0xff));
+                list.Add((byte)0);
+                list.Add((byte)((i_CJog * 4) + Direction));
+                list.Add((byte)0);
+                list.Add((byte)0);
+                list.Add((byte)((i_Force & 0xff00) >> 8));
+                list.Add((byte)(i_Force & 0xff));
+                list.Add((byte)0);
+                list.Add((byte)0);
+                list.Add((byte)((i_PushVel & 0xff00) >> 8));
+                list.Add((byte)(i_PushVel & 0xff));
+                list.Add((byte)((i_PushPosStk & 0xff00) >> 8));
+                list.Add((byte)(i_PushPosStk & 0xff));
+                for (int i = 3; i < (list.Count - 1); i++)
+                {
+                    num += Convert.ToByte(list[i]);
+                }
+                list.Add((byte)(num & 0xffL));
+                list.Add((byte)0xfe);
+                byte[] buffer = (byte[])list.ToArray();
+                Comm1.Write(buffer, 0, buffer.Length);
+                return BitConverter.ToString(buffer).Replace("-", " ");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+                return "";
+            }
+        }
         //命令封包
         public string SendIndexCmd(SerialPort Comm1, byte index)
         {
