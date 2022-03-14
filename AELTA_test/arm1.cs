@@ -121,10 +121,10 @@ namespace ControlUI
                 this.CB_Customized.Visible = false;
             }
         }
-        public void TM_send(string _string)
+        public void TM_send(string _string, bool flag = true)
         {
             string s = string.Empty;
-            _string += "\r\nQueueTag(1)";
+            if (flag) { _string += "\r\nQueueTag(1)"; }
             s = SocketClientObject.DataToPacket("$TMSCT", _string);
             //this.TB_Command.Text = s;
             byte[] bytes = Encoding.UTF8.GetBytes(s);
