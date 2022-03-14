@@ -116,7 +116,7 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<int, string, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
+            Action<int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
             Action<int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
             Action Image = ImageProcess;
             string Declare;
@@ -132,32 +132,55 @@ namespace ControlUI
             {
                 try
                 {
-                    int position_int = 2;
+                    int command_int = 3;
                     string reciveData = FirstListener.Recive();
                     Invoke(ModifyText, Count.ToString() + "  First Command");
+
                     string[] data = reciveData.Split('$');
                     GripPosition = Convert.ToInt32(data[1]);
-                    switch (data[position_int].ToString())
+                    double[] position = new double[6];
+
+                    switch (data[command_int].ToString())
                     {
                         case "position":
+                            for (int i = 0; i < 6; i++)
+                            {
+                                position[i] = Convert.ToDouble(data[command_int + 1 + i]);
+                            }
+                            position = CoordinateConversion(position, true);
+
+                            switch (Convert.ToInt32(data[command_int - 1]))
+                            {
+                                case 1:
+                                    if (position[2] < 70) { position[2] = 72; }
+                                    break;
+                                case 2:
+                                    if (position[2] < 70) { position[2] = 95; }
+                                    break;
+                                case 3:
+                                    if (position[2] < 80) { position[2] = 80; }
+                                    break;
+                            }
+
                             Invoke(Tolist,
-                                Convert.ToInt32(data[1]),
-                                data[position_int],
-                                Convert.ToDouble(data[position_int + 1]),
-                                Convert.ToDouble(data[position_int + 2]),
-                                Convert.ToDouble(data[position_int + 3]),
-                                Convert.ToDouble(data[position_int + 4]),
-                                Convert.ToDouble(data[position_int + 5]),
-                                Convert.ToDouble(data[position_int + 6]),
+                                Convert.ToInt32(data[1]),//position_name
+                                data[command_int],//command
+                                position[0],
+                                position[1],
+                                position[2],
+                                position[3],
+                                position[4],
+                                position[5],
                                 true);
                             break;
                         case "Image":
-                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[position_int], 0, 0, 0, 0, 0, 0, true);
+                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                             Image.Invoke();
                             break;
                         case "Grip":
                             SendOpenClose(XEG32, 3200, 80);
-                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[position_int], 0, 0, 0, 0, 0, 0, true);
+                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+
                             break;
                     }
                     Count++;
@@ -170,7 +193,7 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<int, string, double, double, double, double, double, double, bool> Tolist = CoordinateConversion;
+            Action<int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
             string Declare;
             try
             {
@@ -216,14 +239,14 @@ namespace ControlUI
 
         #region --座標修正--
 
-        private void CoordinateConversion(int Conit, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private double[] CoordinateConversion(double[] position,bool ArmFlag)
         {
-            double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
-
-            Action<int, string, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
-            Action<string, string, string, string, string, string, bool> Toarm = armMove;
-
-
+            double d1 = position[0],
+                 d2 = position[1],
+                 d3 = position[2],
+                 d4 = position[3],
+                 d5 = position[4],
+                 d6 = position[5];
 
             int xmax, xmin, ymax, ymin, zmax, zmin, xbias, ybias, zbias;
 
@@ -289,6 +312,24 @@ namespace ControlUI
             if (d3 < zmin)
                 d3 = zmin;
 
+            position[0] = d1;
+            position[1] = d2;
+            position[2] = d3;
+            position[3] = d4;
+            position[4] = d5;
+            position[5] = d6;
+
+            return position;
+
+        }
+
+        private void DataToArm(int Conit, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        {
+            double[] origin = new double[6] { 450, -122, 300, 180, 0, 90 };
+
+            Action<int, string, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
+            Action<string, string, string, string, string, string, bool> Toarm = armMove;
+
             Invoke(DataToGrid, Conit, command, d1, d2, d3, d4, d5, d6, ArmFlag);
             Invoke(Toarm, d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString(), ArmFlag);
         }
@@ -347,58 +388,11 @@ namespace ControlUI
         }
         #endregion
 
-
-
-        #region --TM手臂動作--
-
-        #region --TM_副程式--
-
-        //TM控制副程式
-
-        //手臂速度百分比
-        double sp_pc = 1.0;
-        private void TB_sp_pc_TextChanged(object sender, EventArgs e)
-        {
-            try
-            { sp_pc = Convert.ToDouble(TB_sp_pc.Text); }
-            catch (Exception ex) { };
-
-        }
-
-        //手臂絕對速度
-        double sp_abs = 1.0;
-        private void TB_sp_abs_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                sp_abs = Convert.ToDouble(TB_sp_abs.Text);
-            }
-            catch (Exception ex)
-            {
-                TB_Command.Text = ex.Message;
-                //TB_sp_abs.Text = "1";
-            }
-        }
-
-        //手臂歸位
-        private void btn_TMtest_Click(object sender, EventArgs e)
-        {
-            int speed = 100;
-            string test_string = @"1,PTP(""CPP"", 450, -122, 300 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
-            TM_send(test_string);
-        }
-
-        #endregion
-
-
-        #endregion
-
         private void ActionBtn_Click(object sender, EventArgs e)
         {
             var workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
             var ws = workbook.Worksheet(1);
             int NumberOfLastRow = ws.LastRowUsed().RowNumber();
-            //List<double[]> data = new List<double[]>();
             List<string[]> data = new List<string[]>();
             var range = ws.RangeUsed();
             for (int i = 1; i < range.RowCount() + 1; i++)
@@ -408,7 +402,6 @@ namespace ControlUI
                 {
                     point[j - 1] = (string)ws.Cell(i, j).Value.ToString();
                 }
-                //data.Add(Array.ConvertAll(point, double.Parse));
                 data.Add(point);
             }
             for (int k = 0; k < data.Count; k++)
@@ -416,29 +409,6 @@ namespace ControlUI
                 armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5], true);
                 Thread.Sleep(500);
             }
-        }
-        private void 聯軸器_Click(object sender, EventArgs e)
-        {
-            if (img_Position.Checked)
-                TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
-        }
-
-        private void 萬象軸_Click(object sender, EventArgs e)
-        {
-            if (img_Position.Checked)
-                TM_send(TM_Send_format("327, -327, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
-        }
-
-        private void 固定座_Click(object sender, EventArgs e)
-        {
-            if (img_Position.Checked)
-                TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
-            else
-                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
         }
         private string TM_Send_format(string cmd, int speed = 100)
         {
@@ -473,8 +443,8 @@ namespace ControlUI
             string point_format = null;
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
-            ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+            //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+            //ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
 
             Grip(ImageCenter_bais);
 
@@ -491,7 +461,7 @@ namespace ControlUI
 
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X - ImageBais[0];
             ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y + ImageBais[1];
-            //          ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
+            ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
             TM_send(TM_Send_format(point, 30));
@@ -505,11 +475,10 @@ namespace ControlUI
                         break;
 
                     case 2:
-                        ImageRecogntionPosition[2] = 45;
-                        ImageRecogntionPosition[5] = 180;
+                        ImageRecogntionPosition[2] = 75;
                         break;
                     case 3:
-                        ImageRecogntionPosition[2] = 50;
+                        ImageRecogntionPosition[2] = 45;
                         break;
                 }
 

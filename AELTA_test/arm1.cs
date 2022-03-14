@@ -134,5 +134,28 @@ namespace ControlUI
             }
         }
         #endregion
+        private void 聯軸器_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
+        }
+
+        private void 萬象軸_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("327, -327, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
+        }
+
+        private void 固定座_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
+        }
     }
 }

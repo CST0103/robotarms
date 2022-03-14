@@ -13,6 +13,50 @@ namespace ControlUI
     {
         double[] NowPosition = null;
         bool ArmMoving;
+
+        #region --TM手臂動作--
+
+        #region --TM_副程式--
+
+        //TM控制副程式
+
+        //手臂速度百分比
+        double sp_pc = 1.0;
+        private void TB_sp_pc_TextChanged(object sender, EventArgs e)
+        {
+            try
+            { sp_pc = Convert.ToDouble(TB_sp_pc.Text); }
+            catch (Exception ex) { };
+
+        }
+
+        //手臂絕對速度
+        double sp_abs = 1.0;
+        private void TB_sp_abs_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                sp_abs = Convert.ToDouble(TB_sp_abs.Text);
+            }
+            catch (Exception ex)
+            {
+                TB_Command.Text = ex.Message;
+                //TB_sp_abs.Text = "1";
+            }
+        }
+
+        //手臂歸位
+        private void btn_TMtest_Click(object sender, EventArgs e)
+        {
+            int speed = 100;
+            string test_string = @"1,PTP(""CPP"", 450, -122, 300 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+            TM_send(test_string);
+        }
+
+        #endregion
+
+
+        #endregion
         private bool checkIPAddressValid(string sIP)
         {
             IPAddress address;

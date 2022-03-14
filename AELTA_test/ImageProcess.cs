@@ -21,6 +21,8 @@ namespace ControlUI
             cap = new VideoCapture();
             cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
             cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
+            cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure,0);
+            cap.Set(Emgu.CV.CvEnum.CapProp.Exposure, -5);
             cap.FlipVertical = true;
         }
         public double[] ImageRecognition()
@@ -49,7 +51,6 @@ namespace ControlUI
                         CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
                         Center = new Point(BoundingBox.X + BoundingBox.Width / 2, BoundingBox.Y + BoundingBox.Height / 2);
 
-//                        CvInvoke.Circle(img, new Point(320, 240), 2, new MCvScalar(255), 5);
                         CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
                         CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
                     }
@@ -58,7 +59,7 @@ namespace ControlUI
                 CvInvoke.Imshow("Test", threshold);
                 CvInvoke.WaitKey(1);
                 double[] vs = new double[2] { (Center.Y - CameraSize[1] / 2) / 6, (Center.X - CameraSize[0] / 2) / 4.5 };
-                //return vs;
+                return vs;
             }
 
         }
