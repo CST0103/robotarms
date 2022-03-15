@@ -443,14 +443,15 @@ namespace ControlUI
             string point_format = null;
             double[] ImageCenter_bais = new double[] { };
             ImageCenter_bais = ImageHandler.ImageRecognition();
+
             while (ImageCenter_bais[0] >= 1 || ImageCenter_bais[0] <= -1)
             {
                 ImageCenter_bais = ImageHandler.ImageRecognition();
                 double bais = -1;
                 if (ImageCenter_bais[0] < 0)
                 { bais = 1; }
-                Thread.Sleep(800);
-                TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)");
+                Thread.Sleep(700);
+                TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                 ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             }
@@ -460,12 +461,16 @@ namespace ControlUI
                 ImageCenter_bais = ImageHandler.ImageRecognition();
                 if (ImageCenter_bais[1] < 0)
                 { bais = -1; }
-                Thread.Sleep(800);
-                TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)");
+                Thread.Sleep(700);
+                TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                 ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             }
 
+            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+            Thread.Sleep(1000);
+
+            ImageRecogntionPosition = NowPosition;
             ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
 
