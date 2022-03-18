@@ -29,7 +29,7 @@ namespace ControlUI
         {
             // 480,640
             Image<Bgr, byte> img = cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
-            img = img.SmoothGaussian(3);
+            img = img.SmoothGaussian(1);
             int[] CameraSize = new int[] { cap.Width, cap.Height };
             Image<Hsv, byte> img_hsv = new Image<Hsv, byte>(img.Width, img.Height);
             CvInvoke.CvtColor(img, img_hsv, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);

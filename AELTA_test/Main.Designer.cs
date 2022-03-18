@@ -1154,7 +1154,7 @@
             this.button9.TabIndex = 72;
             this.button9.Text = "TM歸位";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.btn_TMtest_Click);
+            this.button9.Click += new System.EventHandler(this.btn_TMtest_Click1);
             // 
             // NowPositionLb
             // 

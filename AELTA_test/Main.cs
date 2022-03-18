@@ -53,6 +53,7 @@ namespace ControlUI
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
 
+        private AutoResetEvent autoResetEvent = new AutoResetEvent(false);
         private int GripPosition = 0;
         private int port_num;
 
@@ -127,8 +128,8 @@ namespace ControlUI
             bool _connect_flag = FirstListener.Connect();
             Declare = _connect_flag == true ? "FirstSever Connect" : "FirstSever Not Connect";
             Invoke(ModifyText, Declare);
-
-            while (true)
+            double[] refrencePosition = new double[] { };
+            while (_connect_flag)
             {
                 try
                 {
@@ -152,15 +153,18 @@ namespace ControlUI
                             switch (Convert.ToInt32(data[command_int - 1]))
                             {
                                 case 1:
-                                    if (position[2] < 70) { position[2] = 72; }
+                                    if (position[2] < 72) { position[2] = 72; }
                                     break;
                                 case 2:
-                                    if (position[2] < 70) { position[2] = 95; }
+                                    if (position[2] < 85) { position[2] = 85; }
                                     break;
                                 case 3:
                                     if (position[2] < 80) { position[2] = 80; }
                                     break;
+                                default:
+                                    break;
                             }
+                            refrencePosition = position;
 
                             Invoke(Tolist,
                                 Convert.ToInt32(data[1]),//position_name
@@ -172,10 +176,20 @@ namespace ControlUI
                                 position[4],
                                 position[5],
                                 true);
+                            ArmMoving = false;
                             break;
                         case "Image":
                             Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-                            Image.Invoke();
+                            do
+                            {
+                                TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
+                                Thread.Sleep(2000);
+                            } while (
+                            NowPosition[0] - refrencePosition[0] > 1 &&
+                            NowPosition[1] - refrencePosition[1] > 1 &&
+                            NowPosition[2] - refrencePosition[2] > 1
+                            );
+                            Image.Invoke(); 
                             break;
                         case "Grip":
                             SendOpenClose(XEG32, 3200, 80);
@@ -204,22 +218,29 @@ namespace ControlUI
                 bool _connect_flag = SecondListener.Connect();
                 Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
                 Invoke(ModifyText, Declare);
+                int command_int = 1;
                 while (true)
                 {
                     string reciveData = SecondListener.Recive();
                     Invoke(ModifyText, Count.ToString() + "  Second Command");
                     string[] data = reciveData.Split('$');
+                    double[] position = new double[6];
+                    for (int i = 0; i < 6; i++)
+                    {
+                        position[i] = Convert.ToDouble(data[command_int + 1 + i]);
+                    }
+                    position = CoordinateConversion(position, false);
                     Invoke(Tolist,
                         Convert.ToInt32(data[0]),
-                        Convert.ToDouble(data[1]),
-                        Convert.ToDouble(data[2]),
-                        Convert.ToDouble(data[3]),
-                        Convert.ToDouble(data[4]),
-                        Convert.ToDouble(data[5]),
-                        Convert.ToDouble(data[6]),
+                        data[1],
+                        position[0],
+                        position[1],
+                        position[2],
+                        position[3],
+                        position[4],
+                        position[5],
                         false);
                     Count++;
-                    GripPosition = Convert.ToInt32(data[0]);
                 }
             }
             catch (Exception ex)
@@ -344,7 +365,7 @@ namespace ControlUI
             if (ArmFlag)
             { this.PointDataGrid.Rows.Add(count, command, d1, d2, d3, d4, d5, d6); }
             else
-            { this.PointDataGrid1.Rows.Add(count, d1, d2, d3, d4, d5, d6); }
+            { this.PointDataGrid1.Rows.Add(count, command, d1, d2, d3, d4, d5, d6); }
         }
 
         #endregion
@@ -453,7 +474,7 @@ namespace ControlUI
                 Thread.Sleep(700);
                 TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
-                ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+                //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             }
             while (ImageCenter_bais[1] >= 1 || ImageCenter_bais[1] <= -1)
             {
@@ -464,15 +485,15 @@ namespace ControlUI
                 Thread.Sleep(700);
                 TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
-                ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+               // ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             }
 
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
             Thread.Sleep(1000);
 
             ImageRecogntionPosition = NowPosition;
-            ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+            //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+            //ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
 
             Grip();
 
@@ -491,7 +512,7 @@ namespace ControlUI
 
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X;
             ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y;
-            ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
+            //ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
             TM_send(TM_Send_format(point, 30));
@@ -505,7 +526,7 @@ namespace ControlUI
                         break;
 
                     case 2:
-                        ImageRecogntionPosition[2] = 75;
+                        ImageRecogntionPosition[2] = 65;
                         break;
                     case 3:
                         ImageRecogntionPosition[2] = 45;

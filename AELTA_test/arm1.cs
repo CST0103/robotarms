@@ -31,6 +31,7 @@ namespace ControlUI
                             {
                                 if (this.TCPClientObject.Connect(0))
                                 {
+                                    TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.GetNowPosition);
                                     TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData);
                                 }
                             };
@@ -59,6 +60,7 @@ namespace ControlUI
         {
             if ((this.TCPClientObject != null) && this.TCPClientObject.Disconnect())
             {
+                this.TCPClientObject.ReceiveData -= new SocketClientObject.TCPReceiveData(this.GetNowPosition);
                 this.TCPClientObject.ReceiveData -= new SocketClientObject.TCPReceiveData(this.showReceiveData);
                 this.TCPClientObject = null;
             }
@@ -91,15 +93,17 @@ namespace ControlUI
 
         public void showReceiveData(object sender, string recv_data)
         {
+            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
+            this.showRecvDataLog.AppendLine(str);
+            AddReceiveData(showRecvDataLog.ToString(), this.TB_RecvData);
+        }
+        public void GetNowPosition(object sender, string recv_data)
+        {
             try
             { GetNowPosition(recv_data); }
             catch (Exception ex) { }
-//            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
-//            this.showRecvDataLog.AppendLine(str);
-//            ReceiveDataHandler(recv_data.ToString());
-//            AddReceiveData(showRecvDataLog.ToString(), this.TB_RecvData);
+            ReceiveDataHandler(recv_data.ToString());
         }
-
         private void TB_SendData_KeyDown(object sender, KeyEventArgs e)
         {
             int selectionStart = this.TB_SendData.SelectionStart;
