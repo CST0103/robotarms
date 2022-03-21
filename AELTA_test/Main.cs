@@ -159,7 +159,7 @@ namespace ControlUI
                                     if (position[2] < 85) { position[2] = 85; }
                                     break;
                                 case 3:
-                                    if (position[2] < 80) { position[2] = 80; }
+                                    if (position[2] < 82) { position[2] = 82; }
                                     break;
                                 default:
                                     break;
@@ -179,22 +179,28 @@ namespace ControlUI
                             ArmMoving = false;
                             break;
                         case "Image":
-                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-                            do
+                            if (Image_checkBox.Checked)
                             {
-                                TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
-                                Thread.Sleep(2000);
-                            } while (
-                            NowPosition[0] - refrencePosition[0] > 1 &&
-                            NowPosition[1] - refrencePosition[1] > 1 &&
-                            NowPosition[2] - refrencePosition[2] > 1
-                            );
-                            Image.Invoke(); 
+                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                do
+                                {
+                                    TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
+                                    Thread.Sleep(2000);
+                                } while (
+                                NowPosition[0] - refrencePosition[0] > 1 &&
+                                NowPosition[1] - refrencePosition[1] > 1 &&
+                                NowPosition[2] - refrencePosition[2] > 1
+                                );
+                                Image.Invoke();
+                            }
                             break;
-                        case "Grip":
+                        case "GripOpen":
                             SendOpenClose(XEG32, 3200, 80);
                             Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-
+                            break;
+                        case "GripClose":
+                            SendOpenClose(XEG32, 200, 80);
+                            Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                             break;
                     }
                     Count++;
@@ -230,6 +236,7 @@ namespace ControlUI
                         position[i] = Convert.ToDouble(data[command_int + 1 + i]);
                     }
                     position = CoordinateConversion(position, false);
+                    if(position[2] <= 100) { position[2] = 100; }
                     Invoke(Tolist,
                         Convert.ToInt32(data[0]),
                         data[1],
@@ -292,9 +299,10 @@ namespace ControlUI
                 ymin = -500;
                 zmax = 600;
                 zmin = -45;
+
                 xbias = 450;
                 ybias = -122;
-                zbias = 430;
+                zbias = 380;
             }
 
             double RotateBuffer_x = 180, RotateBuffer_y = 0, RotateBuffer_z = 90;
@@ -517,7 +525,7 @@ namespace ControlUI
             string point = double2Point(ImageRecogntionPosition);
             TM_send(TM_Send_format(point, 30));
 
-            if (ArmMoving_CheckBox.Checked & GripPosition != 0)
+            if (ImageGrip_CheckBox.Checked & GripPosition != 0)
             {
                 switch (GripPosition)
                 {

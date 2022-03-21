@@ -44,6 +44,12 @@ namespace ControlUI
             }
         }
 
+        private void btn_TMtest_Click1(object sender, EventArgs e)
+        {
+            int speed = 100;
+            string test_string = @"1,PTP(""CPP"", 450, -122, 380 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+            TM_send1(test_string);
+        }
         private void btn_Disconnect1_Click(object sender, EventArgs e)
         {
 

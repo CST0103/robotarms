@@ -48,7 +48,7 @@
             this.CB_Customized = new System.Windows.Forms.ComboBox();
             this.btn_TMtest = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ArmMoving_CheckBox = new System.Windows.Forms.CheckBox();
+            this.ImageGrip_CheckBox = new System.Windows.Forms.CheckBox();
             this.TB_Port = new System.Windows.Forms.TextBox();
             this.TB_IPAddress = new System.Windows.Forms.TextBox();
             this.LB_ConnectionStatus = new System.Windows.Forms.Label();
@@ -141,6 +141,7 @@
             this.萬象軸 = new System.Windows.Forms.Button();
             this.固定座 = new System.Windows.Forms.Button();
             this.img_Position = new System.Windows.Forms.CheckBox();
+            this.Image_checkBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -306,7 +307,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.ArmMoving_CheckBox);
+            this.groupBox1.Controls.Add(this.Image_checkBox);
+            this.groupBox1.Controls.Add(this.ImageGrip_CheckBox);
             this.groupBox1.Controls.Add(this.CB_Customized);
             this.groupBox1.Controls.Add(this.btn_ClearRecvData);
             this.groupBox1.Controls.Add(this.TB_RecvData);
@@ -332,15 +334,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
             // 
-            // ArmMoving_CheckBox
+            // ImageGrip_CheckBox
             // 
-            this.ArmMoving_CheckBox.AutoSize = true;
-            this.ArmMoving_CheckBox.Location = new System.Drawing.Point(217, 105);
-            this.ArmMoving_CheckBox.Name = "ArmMoving_CheckBox";
-            this.ArmMoving_CheckBox.Size = new System.Drawing.Size(82, 16);
-            this.ArmMoving_CheckBox.TabIndex = 72;
-            this.ArmMoving_CheckBox.Text = "ArmMoving";
-            this.ArmMoving_CheckBox.UseVisualStyleBackColor = true;
+            this.ImageGrip_CheckBox.AutoSize = true;
+            this.ImageGrip_CheckBox.Location = new System.Drawing.Point(217, 105);
+            this.ImageGrip_CheckBox.Name = "ImageGrip_CheckBox";
+            this.ImageGrip_CheckBox.Size = new System.Drawing.Size(74, 16);
+            this.ImageGrip_CheckBox.TabIndex = 72;
+            this.ImageGrip_CheckBox.Text = "ImageGrip";
+            this.ImageGrip_CheckBox.UseVisualStyleBackColor = true;
             // 
             // TB_Port
             // 
@@ -1214,6 +1216,16 @@
             this.img_Position.Text = "影像辨識位置";
             this.img_Position.UseVisualStyleBackColor = true;
             // 
+            // Image_checkBox
+            // 
+            this.Image_checkBox.AutoSize = true;
+            this.Image_checkBox.Location = new System.Drawing.Point(217, 86);
+            this.Image_checkBox.Name = "Image_checkBox";
+            this.Image_checkBox.Size = new System.Drawing.Size(53, 16);
+            this.Image_checkBox.TabIndex = 72;
+            this.Image_checkBox.Text = "Image";
+            this.Image_checkBox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1344,7 +1356,7 @@
         private System.Windows.Forms.Button AX12A_Open;
         private System.Windows.Forms.Label AX12A_Status;
         private System.Windows.Forms.Button XEG32_Close_Other;
-        private System.Windows.Forms.CheckBox ArmMoving_CheckBox;
+        private System.Windows.Forms.CheckBox ImageGrip_CheckBox;
         private System.Windows.Forms.Button Img_Btn;
         private System.Windows.Forms.Label img_Label;
         private System.Windows.Forms.Label NowPositionLb;
@@ -1369,6 +1381,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.CheckBox Image_checkBox;
     }
 }
 

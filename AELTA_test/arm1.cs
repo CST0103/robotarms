@@ -45,6 +45,14 @@ namespace ControlUI
             }
         }
 
+        //手臂歸位
+        private void btn_TMtest_Click(object sender, EventArgs e)
+        {
+            int speed = 100;
+            string test_string = @"1,PTP(""CPP"", 450, -122, 300 ,180,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+            TM_send(test_string);
+        }
+
         private void btn_ClearSendData_Click(object sender, EventArgs e)
         {
             this.TB_SendData.Text = string.Empty;
