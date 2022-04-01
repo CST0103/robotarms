@@ -108,7 +108,6 @@ namespace ControlUI
                 if (target == "true")
                 {
                     ArmMoving = true;
-                    autoResetEvent.Set();
                 }
             }
             catch (Exception ex)
@@ -128,23 +127,6 @@ namespace ControlUI
                 if (pos.Length == 6)
                 {
                     NowPosition = Array.ConvertAll<string,double>(pos,value =>(Convert.ToDouble(value)));
-
-                    //                    for (int i = 0; i < 6; i++)
-                    //                    {
-                    //                        try
-                    //                        {
-                    //                            _lastPosition[i] = Convert.ToDouble(pos[i]);
-                    //                        }
-                    //                        catch (Exception)
-                    //                        {
-                    //                            _lastPosition = null;
-                    //                        }
-                    //                    }
-                    //                }
-                    //                else
-                    //                {
-                    //                    _lastPosition = null;
-                    //                }
                 }
             }
         }

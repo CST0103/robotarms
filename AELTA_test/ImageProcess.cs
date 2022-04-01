@@ -56,7 +56,7 @@ namespace ControlUI
             CvInvoke.Imshow("ori", img);
             CvInvoke.Imshow("Test", threshold);
             CvInvoke.WaitKey(1);
-            double[] vs = new double[2] { (Center.Y - CameraSize[1] / 2) / 6, (Center.X - CameraSize[0] / 2) / 4.5 };
+            double[] vs = new double[2] { (Center.Y - CameraSize[1] / 2), (Center.X - CameraSize[0] / 2)};
             return vs;
 
         }
