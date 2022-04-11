@@ -84,6 +84,7 @@ namespace ControlUI
             Thread SecondArmSever = new Thread(SecondSever);
             FirstArmSever.Start();
             SecondArmSever.Start();
+
         }
 
 
@@ -99,6 +100,8 @@ namespace ControlUI
             Action<int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
             Action Image = ImageProcess;
 
+            while(true)
+            {
             bool _open_flag = FirstListener.Start();
             Declare = _open_flag == true ? "FirstSever Open" : "FirstSever Not Open";
 
@@ -109,100 +112,102 @@ namespace ControlUI
             Invoke(ModifyText, Declare);
 
             double[] refrencePosition = new double[] { };
-            while (_connect_flag)
-            {
-                try
+                while (_connect_flag)
                 {
-
-                    string reciveData = FirstListener.Recive();
-                    Invoke(ModifyText, Count.ToString() + "  First Command");
-
-                    string[] data = reciveData.Split('$');
-                    GripPosition = Convert.ToInt32(data[1]);
-                    double[] position = new double[6];
-
-                    switch (data[command_int].ToString())
+                    try
                     {
-                        case "position":
-                            for (int i = 0; i < 6; i++)
-                            {
-                                position[i] = Convert.ToDouble(data[command_int + 1 + i]);
-                            }
-                            position = CoordinateConversion(position, true);
 
-                            switch (Convert.ToInt32(data[command_int - 1]))
-                            {
-                                case 1:
-                                    if (position[2] < 75) { position[2] = 75; }
-                                    break;
-                                case 2:
-                                    if (position[2] < 85) { position[2] = 85; }
-                                    break;
-                                case 3:
-                                    if (position[2] < 82) { position[2] = 82; }
-                                    break;
+                        string reciveData = FirstListener.Recive();
+                        Invoke(ModifyText, Count.ToString() + "  First Command");
 
-                                case 10:
-                                    if (position[2] < 82) { position[2] = 82; }
-                                    break;
+                        string[] data = reciveData.Split('$');
+                        if (data == null || data.Length < 3)
+                        { break; }
+                        GripPosition = Convert.ToInt32(data[1]);
+                        double[] position = new double[6];
 
-                                case 11:
-                                    if (position[2] < 82) { position[2] = 82; }
-                                    break;
-
-                                case 5:
-                                    if (position[2] <72) { position[2] = 72; }
-                                    break;
-                            }
-                            refrencePosition = position;
-
-                            Invoke(Tolist,
-                                Convert.ToInt32(data[1]),//position_name
-                                data[command_int],//command
-                                position[0],
-                                position[1],
-                                position[2],
-                                position[3],
-                                position[4],
-                                position[5],
-                                true);
-                            ArmMoving = false;
-                            break;
-
-                        case "Image":
-                            if(GripPosition == 10)
-                            {
-                                GripRotation(Convert.ToInt32(data[2]));
-                                break;
-                            }
-                            if (Image_checkBox.Checked)
-                            {
-                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-                                do
+                        switch (data[command_int].ToString())
+                        {
+                            case "position":
+                                for (int i = 0; i < 6; i++)
                                 {
-                                    TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
-                                    Thread.Sleep(1000);
-                                } while (
-                                NowPosition[0] - refrencePosition[0] > 1 &&
-                                NowPosition[1] - refrencePosition[1] > 1 &&
-                                NowPosition[2] - refrencePosition[2] > 1
-                                );
-                                Image.Invoke();
-                            }
-                            break;
-                        case "GripOpen":
-                            while (!ArmMoving) { }
+                                    position[i] = Convert.ToDouble(data[command_int + 1 + i]);
+                                }
+                                position = CoordinateConversion(position, true);
+
+                                switch (Convert.ToInt32(data[command_int - 1]))
+                                {
+                                    case 1:
+                                        if (position[2] < 75) { position[2] = 75; }
+                                        break;
+                                    case 2:
+                                        if (position[2] < 85) { position[2] = 85; }
+                                        break;
+                                    case 3:
+                                        if (position[2] < 82) { position[2] = 82; }
+                                        break;
+
+                                    case 10:
+                                        if (position[2] < 82) { position[2] = 82; }
+                                        break;
+
+                                    case 11:
+                                        if (position[2] < 82) { position[2] = 82; }
+                                        break;
+
+                                    case 5:
+                                        if (position[2] < 170) { position[2] = 170; }
+                                        break;
+                                }
+                                refrencePosition = position;
+
+                                Invoke(Tolist,
+                                    Convert.ToInt32(data[1]),//position_name
+                                    data[command_int],//command
+                                    position[0],
+                                    position[1],
+                                    position[2],
+                                    position[3],
+                                    position[4],
+                                    position[5],
+                                    true);
+                                ArmMoving = false;
+                                break;
+
+                            case "Image":
+                                if (Image_checkBox.Checked)
+                                {
+                                    if (GripPosition == 10)
+                                    {
+                                        GripRotation(Convert.ToInt32(data[2]));
+                                        break;
+                                    }
+                                    Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                    do
+                                    {
+                                        TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                                        Thread.Sleep(1000);
+                                    } while (
+                                    Math.Abs(NowPosition[0] - refrencePosition[0]) >= 1 ||
+                                    Math.Abs(NowPosition[1] - refrencePosition[1]) >= 1 ||
+                                    Math.Abs(NowPosition[2] - refrencePosition[2]) >= 1
+                                    );
+                                    Image.Invoke();
+                                }
+                                break;
+                            case "GripOpen":
                                 SendOpenClose(XEG32, 3200, 80);
                                 Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-                            break;
-                        case "GripClose":
-                            SendOpenClose(XEG32, 200, 80);
-                            Invoke(ToDataGrid,Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
-                            break;
+                                break;
+                            case "GripClose":
+                                SendOpenClose(XEG32, 200, 80);
+                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                break;
+                        }
+                        Count++;
                     }
-                    Count++;
+                    catch (Exception ex) { };
                 }
-                catch (Exception ex) { };
             }
         }
 
@@ -213,46 +218,52 @@ namespace ControlUI
             Action<int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
 
             string Declare;
-
-            try
+            while (true)
             {
-                bool _open_flag = SecondListener.Start();
-                Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
-                Invoke(ModifyText, Declare);
-
-                bool _connect_flag = SecondListener.Connect();
-                Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
-                Invoke(ModifyText, Declare);
-                int command_int = 1;
-                while (true)
+                try
                 {
-                    string reciveData = SecondListener.Recive();
-                    Invoke(ModifyText, Count.ToString() + "  Second Command");
-                    string[] data = reciveData.Split('$');
-                    double[] position = new double[6];
-                    for (int i = 0; i < 6; i++)
-                    {
-                        position[i] = Convert.ToDouble(data[command_int + 1 + i]);
-                    }
-                    if (position[1] < -110) { position[1] = -110; }
-                    position = CoordinateConversion(position, false);
-                    if (position[2] <= 100) { position[2] = 100; }
-                    Invoke(Tolist,
-                        Convert.ToInt32(data[0]),
-                        data[1],
-                        position[0],
-                        position[1],
-                        position[2],
-                        position[3],
-                        position[4],
-                        position[5],
-                        false);
-                    Count++;
-                }
-            }
-            catch (Exception ex)
-            {
+                    bool _open_flag = SecondListener.Start();
+                    Declare = _open_flag == true ? "SecondSever Open" : "SecondSever Not Open";
+                    Invoke(ModifyText, Declare);
 
+                    bool _connect_flag = SecondListener.Connect();
+                    Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
+                    Invoke(ModifyText, Declare);
+                    int command_int = 1;
+                    while (true)
+                    {
+                        string reciveData = SecondListener.Recive();
+                        Invoke(ModifyText, Count.ToString() + "  Second Command");
+                        string[] data = reciveData.Split('$');
+
+                        if (data == null || data.Length == 0)
+                        { break; }
+
+                        double[] position = new double[6];
+                        for (int i = 0; i < 6; i++)
+                        {
+                            position[i] = Convert.ToDouble(data[command_int + 1 + i]);
+                        }
+                        position = CoordinateConversion(position, false);
+                        if (position[5] == 0 && position[1] < -185) { position[1] = -185; }
+                        if (position[2] <= 100) { position[2] = 100; }
+                        Invoke(Tolist,
+                            Convert.ToInt32(data[0]),
+                            data[1],
+                            position[0],
+                            position[1],
+                            position[2],
+                            position[3],
+                            position[4],
+                            position[5],
+                            false);
+                        Count++;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
         protected void SockMsg<T>(T teste)
@@ -294,14 +305,14 @@ namespace ControlUI
             else
             {
                 xmax = 750;
-                xmin = 70;
+                xmin = 40;
                 ymax = 550;
-                ymin = -500;
+                ymin = -800;
                 zmax = 600;
                 zmin = -45;
 
                 xbias = 450;
-                ybias = -122;
+                ybias = 20;
                 zbias = 380;
             }
 
@@ -451,7 +462,7 @@ namespace ControlUI
         
         private void ImageProcess()
         {
-            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
+            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))",false);
 
             Thread.Sleep(1000);
             double[] ImageRecogntionPosition = NowPosition;
@@ -463,14 +474,14 @@ namespace ControlUI
             Thread.Sleep(1000);
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
-            while (Math.Abs(ImageCenter_bais[0]) >= 7 || Math.Abs(ImageCenter_bais[1]) >= 7)
+            while (Math.Abs(ImageCenter_bais[0]) >= 10 || Math.Abs(ImageCenter_bais[1]) >= 10)
             {
                 while (Math.Abs(ImageCenter_bais[0]) >= 5)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
                     double bais = -1;
                     if (ImageCenter_bais[0] < 0) { bais = 1; }
-                    Thread.Sleep(600);
+                    Thread.Sleep(750);
                     TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                     //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
@@ -481,7 +492,7 @@ namespace ControlUI
                     double bais = 1;
                     ImageCenter_bais = ImageHandler.ImageRecognition();
                     if (ImageCenter_bais[1] < 0) { bais = -1; }
-                    Thread.Sleep(600);
+                    Thread.Sleep(750);
                     TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                     // ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
@@ -526,7 +537,7 @@ namespace ControlUI
                         break;
 
                     case 5:
-                        ImageRecogntionPosition[2] = 65;
+                        ImageRecogntionPosition[2] = 86;
                         break;
 
                 }
@@ -571,12 +582,12 @@ namespace ControlUI
         {
             string point = "540, -190, 150, 180, 0, 90";
             TM_send(TM_Send_format(point));
-            Thread.Sleep(1000);
-            point = "540, -190, 50, 180, 0, 90";
+            while (!waitPoint(point)) { }
+                point = "540, -190, 50, 180, 0, 90";
             TM_send(TM_Send_format(point));
-            Thread.Sleep(3000);
+            while (!waitPoint(point)) { }
             if (NowStatic == 10)
-                SendOpenClose(XEG32, 1300, 80);
+                SendOpenClose(XEG32, 1200, 80);
             else if (NowStatic == 11)
                 SendOpenClose(XEG32, 3200, 80);
             point = "540, -190, 150, 180, 0, 90";

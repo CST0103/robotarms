@@ -48,6 +48,7 @@
             this.CB_Customized = new System.Windows.Forms.ComboBox();
             this.btn_TMtest = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Image_checkBox = new System.Windows.Forms.CheckBox();
             this.ImageGrip_CheckBox = new System.Windows.Forms.CheckBox();
             this.TB_Port = new System.Windows.Forms.TextBox();
             this.TB_IPAddress = new System.Windows.Forms.TextBox();
@@ -141,7 +142,6 @@
             this.萬象軸 = new System.Windows.Forms.Button();
             this.固定座 = new System.Windows.Forms.Button();
             this.img_Position = new System.Windows.Forms.CheckBox();
-            this.Image_checkBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -333,6 +333,16 @@
             this.groupBox1.TabIndex = 73;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "TM_TCP";
+            // 
+            // Image_checkBox
+            // 
+            this.Image_checkBox.AutoSize = true;
+            this.Image_checkBox.Location = new System.Drawing.Point(217, 86);
+            this.Image_checkBox.Name = "Image_checkBox";
+            this.Image_checkBox.Size = new System.Drawing.Size(53, 16);
+            this.Image_checkBox.TabIndex = 72;
+            this.Image_checkBox.Text = "Image";
+            this.Image_checkBox.UseVisualStyleBackColor = true;
             // 
             // ImageGrip_CheckBox
             // 
@@ -557,7 +567,7 @@
             // XEG32
             // 
             this.XEG32.BaudRate = 115200;
-            this.XEG32.PortName = "COM3";
+            this.XEG32.PortName = "COM5";
             // 
             // txtStatus
             // 
@@ -1215,16 +1225,6 @@
             this.img_Position.TabIndex = 121;
             this.img_Position.Text = "影像辨識位置";
             this.img_Position.UseVisualStyleBackColor = true;
-            // 
-            // Image_checkBox
-            // 
-            this.Image_checkBox.AutoSize = true;
-            this.Image_checkBox.Location = new System.Drawing.Point(217, 86);
-            this.Image_checkBox.Name = "Image_checkBox";
-            this.Image_checkBox.Size = new System.Drawing.Size(53, 16);
-            this.Image_checkBox.TabIndex = 72;
-            this.Image_checkBox.Text = "Image";
-            this.Image_checkBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

@@ -113,6 +113,25 @@ namespace ControlUI
             catch (Exception ex)
             { }
         }
+        private bool waitPoint(string point)
+        {
+            string[] _point = point.Split(',');
+            double[] _Nowposition = new double[] { };
+            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+            if (NowPosition == null)
+            { return false; }
+            do
+            {
+                TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                Thread.Sleep(1000);
+                _Nowposition = NowPosition;
+            } while (
+            Math.Abs(NowPosition[0] - Convert.ToDouble(_point[0])) >= 1 ||
+            Math.Abs(NowPosition[1] - Convert.ToDouble(_point[1])) >= 1 ||
+            Math.Abs(NowPosition[2] - Convert.ToDouble(_point[2])) >= 1
+            );
+            return true;
+        }
         public void GetNowPosition(string recvData)
         {
 

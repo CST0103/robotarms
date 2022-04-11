@@ -13,24 +13,26 @@ namespace ControlUI
 {
     public class ImageProcess
     {
-        private VideoCapture cap;
+        private VideoCapture Arm_cap;
+        private VideoCapture monitor_cap;
         public ImageProcess()
         {
 
             Environment.SetEnvironmentVariable("OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS", "0");
-            cap = new VideoCapture();
-            cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
-            cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
-            cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
-            cap.Set(Emgu.CV.CvEnum.CapProp.Exposure, -5);
-            cap.FlipVertical = true;
+            Arm_cap = new VideoCapture(0);
+            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
+            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
+            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
+            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Exposure, -5);
+            Arm_cap.FlipVertical = true;
+
         }
         public double[] ImageRecognition()
         {
             // 480,640
-            Image<Bgr, byte> img = cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
+            Image<Bgr, byte> img = Arm_cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
             img = img.SmoothGaussian(1);
-            int[] CameraSize = new int[] { cap.Width, cap.Height };
+            int[] CameraSize = new int[] { Arm_cap.Width, Arm_cap.Height };
             Image<Hsv, byte> img_hsv = new Image<Hsv, byte>(img.Width, img.Height);
             CvInvoke.CvtColor(img, img_hsv, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
 
@@ -60,6 +62,5 @@ namespace ControlUI
             return vs;
 
         }
-
     }
 }
