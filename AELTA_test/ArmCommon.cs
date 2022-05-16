@@ -118,6 +118,7 @@ namespace ControlUI
             string[] _point = point.Split(',');
             double[] _Nowposition = new double[] { };
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+            Thread.Sleep(500);
             if (NowPosition == null)
             { return false; }
             do

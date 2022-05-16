@@ -142,6 +142,7 @@
             this.萬象軸 = new System.Windows.Forms.Button();
             this.固定座 = new System.Windows.Forms.Button();
             this.img_Position = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -1226,11 +1227,21 @@
             this.img_Position.Text = "影像辨識位置";
             this.img_Position.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(458, 479);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 122;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 644);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.img_Position);
             this.Controls.Add(this.固定座);
             this.Controls.Add(this.萬象軸);
@@ -1382,6 +1393,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
         private System.Windows.Forms.CheckBox Image_checkBox;
+        private System.Windows.Forms.Button button1;
     }
 }
 

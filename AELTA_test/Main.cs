@@ -47,7 +47,6 @@ namespace ControlUI
 
         /* Initializes the Listener */
         TCP_Listener FirstListener = new TCP_Listener(ipAd.ToString(), PortNumber);
-        //TCP_Listener FirstListener = new TCP_Listener("192.168.100.213", PortNumber);
         TCP_Listener SecondListener = new TCP_Listener(ipAd.ToString(), PortNumber + 1);
 
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
@@ -151,14 +150,29 @@ namespace ControlUI
                                         if (position[2] < 82) { position[2] = 82; }
                                         break;
 
-                                    case 11:
-                                        if (position[2] < 82) { position[2] = 82; }
-                                        break;
-
                                     case 5:
                                         if (position[2] < 170) { position[2] = 170; }
                                         break;
+
+                                    case 11:
+                                        if(position[2] < 82) { position[2] = 82; }
+                                        break;
                                 }
+
+                                switch (Convert.ToInt32(data[1]))
+                                {
+                                    case 11:
+                                        if (position[2] < 160) { position[2] = 160; }
+                                        break;
+                                    case 13:
+                                        if(position[2] < 90) { position[2] = 87; }
+                                        break;
+
+                                    case 14:
+                                        if (position[2] < 260) { position[2] = 260; }
+                                        break;
+                                }
+
                                 refrencePosition = position;
 
                                 Invoke(Tolist,
@@ -182,6 +196,14 @@ namespace ControlUI
                                         GripRotation(Convert.ToInt32(data[2]));
                                         break;
                                     }
+                                    if(GripPosition > 20)
+                                    {
+                                        int legs = GripPosition % 10;
+                                        GripChairLegs(legs);
+                                        break;
+                                    }
+
+                                    //-------------------------------------------------------------------------------------------------------------------------------
                                     Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                                     do
                                     {
@@ -192,7 +214,9 @@ namespace ControlUI
                                     Math.Abs(NowPosition[1] - refrencePosition[1]) >= 1 ||
                                     Math.Abs(NowPosition[2] - refrencePosition[2]) >= 1
                                     );
+
                                     Image.Invoke();
+
                                 }
                                 break;
                             case "GripOpen":
@@ -229,7 +253,7 @@ namespace ControlUI
                     bool _connect_flag = SecondListener.Connect();
                     Declare = _connect_flag == true ? "SecondSever Connect" : "SecondSever Not Connect";
                     Invoke(ModifyText, Declare);
-                    int command_int = 1;
+                    int command_int = 2;
                     while (true)
                     {
                         string reciveData = SecondListener.Recive();
@@ -245,8 +269,29 @@ namespace ControlUI
                             position[i] = Convert.ToDouble(data[command_int + 1 + i]);
                         }
                         position = CoordinateConversion(position, false);
-                        if (position[5] == 0 && position[1] < -185) { position[1] = -185; }
-                        if (position[2] <= 100) { position[2] = 100; }
+                        switch (Convert.ToInt32(data[command_int - 1]))
+                        {
+                            case 0:
+                                if (position[5] == 0 && position[1] < -185) { position[1] = -185; }
+                                if (position[2] <= 100) { position[2] = 100; }
+                                break;
+                            case 1:
+                                if (position[0] > 250 && position[1] < 217 && position[5] == 0)
+                                {
+                                    position[1] = 217;
+                                }
+
+                                if (position[0] > 200 && position[1] > -215 && position[5] == 180)
+                                {
+                                    position[1] = -215;
+
+                                }
+                                else if (position[0] < 200 && position[0] > 100 && position[1] > -206)
+                                {
+                                    position[1] = -206;
+                                }
+                                break;
+                        }
                         Invoke(Tolist,
                             Convert.ToInt32(data[0]),
                             data[1],
@@ -294,7 +339,7 @@ namespace ControlUI
                 xmax = 750;
                 xmin = 70;
                 ymax = 550;
-                ymin = -550;
+                ymin = -750;
                 zmax = 400;
                 zmin = -45;
 
@@ -457,7 +502,14 @@ namespace ControlUI
 
         private void Img_Btn_Click(object sender, EventArgs e)
         {
-            ImageProcess();
+            if (Image_checkBox.Checked)
+            {
+                ImageProcess();
+            }
+            else
+            {
+                double[] vs = ImageHandler.ImageRecognition();
+            }
         }
         
         private void ImageProcess()
@@ -540,6 +592,10 @@ namespace ControlUI
                         ImageRecogntionPosition[2] = 86;
                         break;
 
+                    case 11:
+                        ImageRecogntionPosition[2] = 160;
+                        break;
+
                 }
 
                 point = double2Point(ImageRecogntionPosition);
@@ -555,13 +611,24 @@ namespace ControlUI
                 {
                     SendOpenClose(XEG32, 0, 80);
                 }
+                else if(GripPosition == 11)
+                {
+                    SendOpenClose(XEG32, 1400, 80);
+                }
                 else
                 {
                     SendOpenClose(XEG32, 500, 80);
                 }
                 Thread.Sleep(1000);
 
-                ImageRecogntionPosition[2] = 150;
+                if(GripPosition <= 10)
+                {
+                    ImageRecogntionPosition[2] = 150;
+                }
+                else
+                {
+                    ImageRecogntionPosition[2] = 200;
+                }
 
                 TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
                 Thread.Sleep(1000);
@@ -594,6 +661,54 @@ namespace ControlUI
             Thread.Sleep(1000);
             TM_send(TM_Send_format(point));
         }
+        private void GripChairLegs(int legs)
+        {
+            int time_out = 0;
+            string[] Point_array = new string[] { "424.5", "113, ", "200, ", "180, ", "0, ", "90" };
+            double chair_legs = (legs * 32.5);
 
+            Point_array[0] = (Convert.ToDouble(Point_array[0]) - chair_legs).ToString() + ", ";
+            string point = String.Concat(Point_array);
+            TM_send(TM_Send_format(point),false);
+            while (!waitPoint(point))
+            {
+                time_out++;
+                if (time_out > 10)
+                {
+                    break;
+                }
+            }
+
+            Point_array[2] = "95, "; 
+            point = String.Concat(Point_array);
+            TM_send(TM_Send_format(point));
+
+            time_out = 0;
+            while (!waitPoint(point))
+            {
+                time_out++;
+                if (time_out > 10)
+                {
+                    break;
+                }
+            }
+            SendOpenClose(XEG32, 600, 80);
+
+            time_out = 0;
+            while (!waitPoint(point))
+            {
+                time_out++;
+                if (time_out > 10)
+                {
+                    break;
+                }
+            }
+
+            Point_array[2] = "150, "; 
+            point = String.Concat (Point_array);
+
+            Thread.Sleep(700);
+            TM_send(TM_Send_format(point));
+        }
     }
 }

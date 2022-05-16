@@ -14,12 +14,11 @@ namespace ControlUI
     public class ImageProcess
     {
         private VideoCapture Arm_cap;
-        private VideoCapture monitor_cap;
         public ImageProcess()
         {
 
             Environment.SetEnvironmentVariable("OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS", "0");
-            Arm_cap = new VideoCapture(0);
+            Arm_cap = new VideoCapture(1);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
