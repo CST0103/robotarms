@@ -21,7 +21,7 @@ namespace ControlUI
         // Default setting
         public const int DXL_ID = 1;                   // Dynamixel ID: 1
         public const int BAUDRATE = 1000000;
-        public const string DEVICENAME = "COM4";              // Check which port is being used on your controller
+        public const string DEVICENAME = "COM3";              // Check which port is being used on your controller
                                                               // ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
         public const int TORQUE_ENABLE = 1;                   // Value for enabling the torque
@@ -59,10 +59,12 @@ namespace ControlUI
         }
         public void VaildPresentPosition(int Position)
         {
-            do
+            if (Position < -300)
             {
                 dxl_present_position = dynamixel.read2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_PRESENT_POSITION);
-            } while ((Math.Abs(Position - dxl_present_position) > DXL_MOVING_STATUS_THRESHOLD));
+                VaildPresentPosition(888);
+            }
+             ;
         }
     }
 }

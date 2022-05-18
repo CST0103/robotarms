@@ -124,7 +124,7 @@ namespace ControlUI
             do
             {
                 TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
-                Thread.Sleep(1000);
+                Thread.Sleep(700);
                 _Nowposition = NowPosition;
             } while (
             Math.Abs(NowPosition[0] - Convert.ToDouble(_point[0])) >= 1 ||

@@ -72,6 +72,27 @@ namespace ControlUI
             try
             {
 
+                int port_num = dynamixel.portHandler(DEVICENAME);
+
+                dynamixel.packetHandler();
+                dynamixel.setBaudRate(port_num, BAUDRATE);
+                dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
+                int dxl_comm_result = COMM_TX_FAIL;                                   // Communication result
+
+                dynamixel.write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_TORQUE_ENABLE, TORQUE_ENABLE);
+                if ((dxl_comm_result = dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
+                {
+                    AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getTxRxResult(PROTOCOL_VERSION, dxl_comm_result)));
+                }
+                else if ((dxl_error = dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION)) != 0)
+                {
+                    AX12A_Status.Text = (Marshal.PtrToStringAnsi(dynamixel.getRxPacketError(PROTOCOL_VERSION, dxl_error)));
+                }
+                else
+                {
+                    AX12A_Status.Text = ("Dynamixel has been successfully connected");
+                }
+
                 //XEG32
                 GripCnt_Btn.PerformClick();
             } catch (Exception ex) { }
@@ -169,7 +190,7 @@ namespace ControlUI
                                         break;
 
                                     case 14:
-                                        if (position[2] < 260) { position[2] = 260; }
+                                        if (position[2] < 260) { position[2] = 258; }
                                         break;
                                 }
 
@@ -196,6 +217,8 @@ namespace ControlUI
                                         GripRotation(Convert.ToInt32(data[2]));
                                         break;
                                     }
+                                    if(GripPosition == 11)
+                                    { break; }
                                     if(GripPosition > 20)
                                     {
                                         int legs = GripPosition % 10;
@@ -276,14 +299,14 @@ namespace ControlUI
                                 if (position[2] <= 100) { position[2] = 100; }
                                 break;
                             case 1:
-                                if (position[0] > 250 && position[1] < 217 && position[5] == 0)
+                                if (position[0] > 250 && position[1] < 215 && position[5] == 0)
                                 {
-                                    position[1] = 217;
+                                    position[1] = 215;
                                 }
 
-                                if (position[0] > 200 && position[1] > -215 && position[5] == 180)
+                                if (position[0] > 200 && position[1] > -197 && position[5] == 180)
                                 {
-                                    position[1] = -215;
+                                    position[1] = -197;
 
                                 }
                                 else if (position[0] < 200 && position[0] > 100 && position[1] > -206)
@@ -663,51 +686,25 @@ namespace ControlUI
         }
         private void GripChairLegs(int legs)
         {
-            int time_out = 0;
             string[] Point_array = new string[] { "424.5", "113, ", "200, ", "180, ", "0, ", "90" };
             double chair_legs = (legs * 32.5);
 
             Point_array[0] = (Convert.ToDouble(Point_array[0]) - chair_legs).ToString() + ", ";
             string point = String.Concat(Point_array);
             TM_send(TM_Send_format(point),false);
-            while (!waitPoint(point))
-            {
-                time_out++;
-                if (time_out > 10)
-                {
-                    break;
-                }
-            }
+            while (!waitPoint(point)) { }
 
             Point_array[2] = "95, "; 
             point = String.Concat(Point_array);
             TM_send(TM_Send_format(point));
 
-            time_out = 0;
-            while (!waitPoint(point))
-            {
-                time_out++;
-                if (time_out > 10)
-                {
-                    break;
-                }
-            }
+            while (!waitPoint(point)) { }
             SendOpenClose(XEG32, 600, 80);
 
-            time_out = 0;
-            while (!waitPoint(point))
-            {
-                time_out++;
-                if (time_out > 10)
-                {
-                    break;
-                }
-            }
+            Thread.Sleep(700);
 
             Point_array[2] = "150, "; 
             point = String.Concat (Point_array);
-
-            Thread.Sleep(700);
             TM_send(TM_Send_format(point));
         }
     }
