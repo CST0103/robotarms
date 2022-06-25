@@ -595,18 +595,18 @@
             this.groupBox5.Controls.Add(this.AX12A_Open);
             this.groupBox5.Controls.Add(this.AX12A_Status);
             this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox5.Location = new System.Drawing.Point(5, 255);
+            this.groupBox5.Location = new System.Drawing.Point(8, 246);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Size = new System.Drawing.Size(342, 48);
+            this.groupBox5.Size = new System.Drawing.Size(342, 73);
             this.groupBox5.TabIndex = 110;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "AX12A";
             // 
             // AX12A_Close
             // 
-            this.AX12A_Close.Location = new System.Drawing.Point(57, 12);
+            this.AX12A_Close.Location = new System.Drawing.Point(-2, 20);
             this.AX12A_Close.Name = "AX12A_Close";
             this.AX12A_Close.Size = new System.Drawing.Size(75, 28);
             this.AX12A_Close.TabIndex = 18;
@@ -616,7 +616,7 @@
             // 
             // AX12A_Open
             // 
-            this.AX12A_Open.Location = new System.Drawing.Point(138, 12);
+            this.AX12A_Open.Location = new System.Drawing.Point(79, 20);
             this.AX12A_Open.Name = "AX12A_Open";
             this.AX12A_Open.Size = new System.Drawing.Size(75, 28);
             this.AX12A_Open.TabIndex = 18;
@@ -627,7 +627,7 @@
             // AX12A_Status
             // 
             this.AX12A_Status.AutoSize = true;
-            this.AX12A_Status.Location = new System.Drawing.Point(12, 20);
+            this.AX12A_Status.Location = new System.Drawing.Point(3, 51);
             this.AX12A_Status.Name = "AX12A_Status";
             this.AX12A_Status.Size = new System.Drawing.Size(44, 12);
             this.AX12A_Status.TabIndex = 14;
@@ -1097,7 +1097,7 @@
             this.groupBox4.Controls.Add(this.label17);
             this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.button9);
-            this.groupBox4.Location = new System.Drawing.Point(331, 347);
+            this.groupBox4.Location = new System.Drawing.Point(330, 350);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.groupBox4.Size = new System.Drawing.Size(357, 79);

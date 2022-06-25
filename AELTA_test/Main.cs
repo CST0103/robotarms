@@ -21,7 +21,7 @@ using dynamixel_sdk;
 
 public enum ImageRecogntionBais
 {
-    X = -68,
+    X = -65,
     Y = -7
 }
 namespace ControlUI
@@ -210,6 +210,7 @@ namespace ControlUI
                                 break;
 
                             case "Image":
+                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                                 if (Image_checkBox.Checked)
                                 {
                                     if (GripPosition == 10)
@@ -227,7 +228,6 @@ namespace ControlUI
                                     }
 
                                     //-------------------------------------------------------------------------------------------------------------------------------
-                                    Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                                     do
                                     {
                                         TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
@@ -295,13 +295,13 @@ namespace ControlUI
                         switch (Convert.ToInt32(data[command_int - 1]))
                         {
                             case 0:
-                                if (position[5] == 0 && position[1] < -185) { position[1] = -185; }
+                                if (position[5] == 0 && position[1] < -195) { position[1] = -195; }
                                 if (position[2] <= 100) { position[2] = 100; }
                                 break;
                             case 1:
-                                if (position[0] > 250 && position[1] < 215 && position[5] == 0)
+                                if (position[0] > 250 && position[1] < 198 && position[5] == 0)
                                 {
-                                    position[1] = 215;
+                                    position[1] = 198;
                                 }
 
                                 if (position[0] > 200 && position[1] > -197 && position[5] == 180)
@@ -556,7 +556,7 @@ namespace ControlUI
                     ImageCenter_bais = ImageHandler.ImageRecognition();
                     double bais = -1;
                     if (ImageCenter_bais[0] < 0) { bais = 1; }
-                    Thread.Sleep(750);
+                    Thread.Sleep(850);
                     TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                     //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
@@ -567,7 +567,7 @@ namespace ControlUI
                     double bais = 1;
                     ImageCenter_bais = ImageHandler.ImageRecognition();
                     if (ImageCenter_bais[1] < 0) { bais = -1; }
-                    Thread.Sleep(750);
+                    Thread.Sleep(850);
                     TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                     // ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
@@ -640,7 +640,7 @@ namespace ControlUI
                 }
                 else
                 {
-                    SendOpenClose(XEG32, 500, 80);
+                    SendOpenClose(XEG32, 400, 80);
                 }
                 Thread.Sleep(1000);
 
@@ -677,7 +677,7 @@ namespace ControlUI
             TM_send(TM_Send_format(point));
             while (!waitPoint(point)) { }
             if (NowStatic == 10)
-                SendOpenClose(XEG32, 1200, 80);
+                SendOpenClose(XEG32, 1100, 80);
             else if (NowStatic == 11)
                 SendOpenClose(XEG32, 3200, 80);
             point = "540, -190, 150, 180, 0, 90";

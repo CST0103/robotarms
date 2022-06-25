@@ -46,6 +46,7 @@ namespace ControlUI
         public const int Goal_Position_Open = 768;
         public const int Goal_Position_Close = 512;
 
+        public bool trackArmFlag = false;
         private void AX12A_Open_Click(object sender, EventArgs e)
         {
             dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, Goal_Position_Open);
@@ -59,12 +60,6 @@ namespace ControlUI
         }
         public void VaildPresentPosition(int Position)
         {
-            if (Position < -300)
-            {
-                dxl_present_position = dynamixel.read2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_PRESENT_POSITION);
-                VaildPresentPosition(888);
-            }
-             ;
         }
     }
 }

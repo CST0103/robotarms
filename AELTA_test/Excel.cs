@@ -21,7 +21,7 @@ namespace ControlUI
                 //MessageBox.Show(PointDataGrid[6,0].Value.ToString());
                 for (int x = 1; x < PointDataGrid.Rows.Count; x++)
                 {
-                    for (int i = 1; i < 7; i++)
+                    for (int i = 1; i < PointDataGrid.Columns.Count; i++)
                     {
                         wb.Cell(x, i).Value = PointDataGrid[i, x - 1].Value.ToString();
                     }
