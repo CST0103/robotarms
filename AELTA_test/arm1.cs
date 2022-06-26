@@ -32,7 +32,7 @@ namespace ControlUI
                                 if (this.TCPClientObject.Connect(0))
                                 {
                                     TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.GetNowPosition);
-                                    TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData);
+                                    //TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData);
                                 }
                             };
                         }
@@ -151,7 +151,13 @@ namespace ControlUI
             if (img_Position.Checked)
                 TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
             else
+            {
                 TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
+                Thread.Sleep(3000);
+                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
+                Thread.Sleep(3000);
+                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
+            }
         }
 
         private void 萬象軸_Click(object sender, EventArgs e)

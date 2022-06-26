@@ -17,13 +17,19 @@ namespace ControlUI
             //Creating DataTable
             using (var workbook = new XLWorkbook())
             {
+                string[] oldOne = new string[PointDataGrid.ColumnCount];
+                string[] newOne = new string[PointDataGrid.ColumnCount];
                 var wb = workbook.Worksheets.Add("點位");
                 //MessageBox.Show(PointDataGrid[6,0].Value.ToString());
-                for (int x = 1; x < PointDataGrid.Rows.Count; x++)
+                for (int x = 0; x < PointDataGrid.Rows.Count - 1; x++)
                 {
-                    for (int i = 1; i < PointDataGrid.Columns.Count; i++)
+                    for (int i = 0; i < PointDataGrid.Columns.Count; i++)
                     {
-                        wb.Cell(x, i).Value = PointDataGrid[i, x - 1].Value.ToString();
+                        if(oldOne == null)
+                        {
+                            oldOne[i] = PointDataGrid.Columns[i].ToString();
+                        }
+                        wb.Cell(x + 1, i + 1).Value = PointDataGrid[i, x].Value.ToString();
                     }
                 }
                 //Exporting to Excel

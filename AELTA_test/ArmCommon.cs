@@ -11,8 +11,9 @@ namespace ControlUI
 {
     partial class Form1
     {
+
         double[] NowPosition = null;
-        bool ArmMoving;
+        bool ArmMoving= false;
 
         #region --TM手臂動作--
 

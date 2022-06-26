@@ -84,31 +84,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Img_Btn = new System.Windows.Forms.Button();
-            this.img_Label = new System.Windows.Forms.Label();
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ActionBtn = new System.Windows.Forms.Button();
             this.exportExcel = new System.Windows.Forms.Button();
             this.reMove = new System.Windows.Forms.Button();
-            this.PointDataGrid1 = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.command1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CB_Customized1 = new System.Windows.Forms.ComboBox();
             this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
@@ -136,19 +118,29 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
-            this.NowPositionLb = new System.Windows.Forms.Label();
             this.BaisLB = new System.Windows.Forms.Label();
             this.聯軸器 = new System.Windows.Forms.Button();
             this.萬象軸 = new System.Windows.Forms.Button();
             this.固定座 = new System.Windows.Forms.Button();
             this.img_Position = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.NowPositionLb = new System.Windows.Forms.Label();
+            this.img_Label = new System.Windows.Forms.Label();
+            this.Arm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GripObject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -428,7 +420,7 @@
             this.XGE32_groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.XGE32_groupBox.Name = "XGE32_groupBox";
             this.XGE32_groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.XGE32_groupBox.Size = new System.Drawing.Size(339, 160);
+            this.XGE32_groupBox.Size = new System.Drawing.Size(321, 160);
             this.XGE32_groupBox.TabIndex = 110;
             this.XGE32_groupBox.TabStop = false;
             this.XGE32_groupBox.Text = "XEG-32夾爪控制";
@@ -455,7 +447,7 @@
             // 
             // XEG32_Close_Other
             // 
-            this.XEG32_Close_Other.Location = new System.Drawing.Point(170, 123);
+            this.XEG32_Close_Other.Location = new System.Drawing.Point(89, 127);
             this.XEG32_Close_Other.Name = "XEG32_Close_Other";
             this.XEG32_Close_Other.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Close_Other.TabIndex = 18;
@@ -465,7 +457,7 @@
             // 
             // XEG32_Close_bt
             // 
-            this.XEG32_Close_bt.Location = new System.Drawing.Point(170, 89);
+            this.XEG32_Close_bt.Location = new System.Drawing.Point(8, 123);
             this.XEG32_Close_bt.Name = "XEG32_Close_bt";
             this.XEG32_Close_bt.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Close_bt.TabIndex = 18;
@@ -495,7 +487,7 @@
             // 
             // XEG32_Enable_bt
             // 
-            this.XEG32_Enable_bt.Location = new System.Drawing.Point(254, 86);
+            this.XEG32_Enable_bt.Location = new System.Drawing.Point(170, 90);
             this.XEG32_Enable_bt.Name = "XEG32_Enable_bt";
             this.XEG32_Enable_bt.Size = new System.Drawing.Size(80, 34);
             this.XEG32_Enable_bt.TabIndex = 16;
@@ -584,7 +576,7 @@
             this.txtStatus.Location = new System.Drawing.Point(325, 17);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtStatus.Size = new System.Drawing.Size(357, 309);
+            this.txtStatus.Size = new System.Drawing.Size(338, 318);
             this.txtStatus.TabIndex = 111;
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
@@ -599,7 +591,7 @@
             this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Size = new System.Drawing.Size(342, 73);
+            this.groupBox5.Size = new System.Drawing.Size(179, 72);
             this.groupBox5.TabIndex = 110;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "AX12A";
@@ -697,20 +689,11 @@
             this.Img_Btn.UseVisualStyleBackColor = true;
             this.Img_Btn.Click += new System.EventHandler(this.Img_Btn_Click);
             // 
-            // img_Label
-            // 
-            this.img_Label.AutoSize = true;
-            this.img_Label.Location = new System.Drawing.Point(339, 474);
-            this.img_Label.Name = "img_Label";
-            this.img_Label.Size = new System.Drawing.Size(55, 12);
-            this.img_Label.TabIndex = 117;
-            this.img_Label.Text = "img_Label";
-            // 
             // socketmsg
             // 
             this.socketmsg.Location = new System.Drawing.Point(6, 15);
             this.socketmsg.Name = "socketmsg";
-            this.socketmsg.Size = new System.Drawing.Size(434, 93);
+            this.socketmsg.Size = new System.Drawing.Size(472, 93);
             this.socketmsg.TabIndex = 113;
             this.socketmsg.Text = "";
             // 
@@ -720,18 +703,17 @@
             this.groupBox2.Controls.Add(this.socketmsg);
             this.groupBox2.Controls.Add(this.exportExcel);
             this.groupBox2.Controls.Add(this.reMove);
-            this.groupBox2.Controls.Add(this.PointDataGrid1);
             this.groupBox2.Controls.Add(this.PointDataGrid);
-            this.groupBox2.Location = new System.Drawing.Point(688, 17);
+            this.groupBox2.Location = new System.Drawing.Point(669, 17);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(546, 617);
+            this.groupBox2.Size = new System.Drawing.Size(601, 617);
             this.groupBox2.TabIndex = 115;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
             // ActionBtn
             // 
-            this.ActionBtn.Location = new System.Drawing.Point(446, 45);
+            this.ActionBtn.Location = new System.Drawing.Point(484, 45);
             this.ActionBtn.Name = "ActionBtn";
             this.ActionBtn.Size = new System.Drawing.Size(75, 21);
             this.ActionBtn.TabIndex = 127;
@@ -741,7 +723,7 @@
             // 
             // exportExcel
             // 
-            this.exportExcel.Location = new System.Drawing.Point(446, 77);
+            this.exportExcel.Location = new System.Drawing.Point(484, 77);
             this.exportExcel.Name = "exportExcel";
             this.exportExcel.Size = new System.Drawing.Size(75, 23);
             this.exportExcel.TabIndex = 126;
@@ -751,7 +733,7 @@
             // 
             // reMove
             // 
-            this.reMove.Location = new System.Drawing.Point(446, 16);
+            this.reMove.Location = new System.Drawing.Point(484, 16);
             this.reMove.Name = "reMove";
             this.reMove.Size = new System.Drawing.Size(75, 23);
             this.reMove.TabIndex = 115;
@@ -759,77 +741,14 @@
             this.reMove.UseVisualStyleBackColor = true;
             this.reMove.Click += new System.EventHandler(this.armReMove);
             // 
-            // PointDataGrid1
-            // 
-            this.PointDataGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.PointDataGrid1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.command1,
-            this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6,
-            this.dataGridViewTextBoxColumn7});
-            this.PointDataGrid1.Location = new System.Drawing.Point(6, 349);
-            this.PointDataGrid1.Name = "PointDataGrid1";
-            this.PointDataGrid1.RowTemplate.Height = 24;
-            this.PointDataGrid1.Size = new System.Drawing.Size(515, 228);
-            this.PointDataGrid1.TabIndex = 125;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "number";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 58;
-            // 
-            // command1
-            // 
-            this.command1.HeaderText = "command";
-            this.command1.Name = "command1";
-            this.command1.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "x";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "y";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "z";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Rx";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.HeaderText = "Ry";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.Width = 58;
-            // 
-            // dataGridViewTextBoxColumn7
-            // 
-            this.dataGridViewTextBoxColumn7.HeaderText = "Rz";
-            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.Width = 58;
-            // 
             // PointDataGrid
             // 
+            this.PointDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.PointDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PointDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.number,
+            this.Arm,
+            this.Count,
+            this.GripObject,
             this.command,
             this.x,
             this.y,
@@ -840,56 +759,8 @@
             this.PointDataGrid.Location = new System.Drawing.Point(6, 114);
             this.PointDataGrid.Name = "PointDataGrid";
             this.PointDataGrid.RowTemplate.Height = 24;
-            this.PointDataGrid.Size = new System.Drawing.Size(515, 228);
+            this.PointDataGrid.Size = new System.Drawing.Size(589, 415);
             this.PointDataGrid.TabIndex = 125;
-            // 
-            // number
-            // 
-            this.number.HeaderText = "number";
-            this.number.Name = "number";
-            this.number.Width = 60;
-            // 
-            // command
-            // 
-            this.command.HeaderText = "command";
-            this.command.Name = "command";
-            this.command.Width = 57;
-            // 
-            // x
-            // 
-            this.x.HeaderText = "x";
-            this.x.Name = "x";
-            this.x.Width = 57;
-            // 
-            // y
-            // 
-            this.y.HeaderText = "y";
-            this.y.Name = "y";
-            this.y.Width = 57;
-            // 
-            // z
-            // 
-            this.z.HeaderText = "z";
-            this.z.Name = "z";
-            this.z.Width = 57;
-            // 
-            // Rx
-            // 
-            this.Rx.HeaderText = "Rx";
-            this.Rx.Name = "Rx";
-            this.Rx.Width = 57;
-            // 
-            // Ry
-            // 
-            this.Ry.HeaderText = "Ry";
-            this.Ry.Name = "Ry";
-            this.Ry.Width = 57;
-            // 
-            // Rz
-            // 
-            this.Rz.HeaderText = "Rz";
-            this.Rz.Name = "Rz";
-            this.Rz.Width = 57;
             // 
             // groupBox3
             // 
@@ -1100,7 +971,7 @@
             this.groupBox4.Location = new System.Drawing.Point(330, 350);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.groupBox4.Size = new System.Drawing.Size(357, 79);
+            this.groupBox4.Size = new System.Drawing.Size(324, 79);
             this.groupBox4.TabIndex = 111;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "TM_動作";
@@ -1169,15 +1040,6 @@
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.btn_TMtest_Click1);
             // 
-            // NowPositionLb
-            // 
-            this.NowPositionLb.AutoSize = true;
-            this.NowPositionLb.Location = new System.Drawing.Point(331, 490);
-            this.NowPositionLb.Name = "NowPositionLb";
-            this.NowPositionLb.Size = new System.Drawing.Size(77, 12);
-            this.NowPositionLb.TabIndex = 118;
-            this.NowPositionLb.Text = "NowPositionLb";
-            // 
             // BaisLB
             // 
             this.BaisLB.AutoSize = true;
@@ -1220,7 +1082,7 @@
             // img_Position
             // 
             this.img_Position.AutoSize = true;
-            this.img_Position.Location = new System.Drawing.Point(558, 464);
+            this.img_Position.Location = new System.Drawing.Point(440, 464);
             this.img_Position.Name = "img_Position";
             this.img_Position.Size = new System.Drawing.Size(96, 16);
             this.img_Position.TabIndex = 121;
@@ -1229,12 +1091,96 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(458, 479);
+            this.button1.Location = new System.Drawing.Point(437, 487);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 122;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // NowPositionLb
+            // 
+            this.NowPositionLb.AutoSize = true;
+            this.NowPositionLb.Location = new System.Drawing.Point(331, 490);
+            this.NowPositionLb.Name = "NowPositionLb";
+            this.NowPositionLb.Size = new System.Drawing.Size(77, 12);
+            this.NowPositionLb.TabIndex = 118;
+            this.NowPositionLb.Text = "NowPositionLb";
+            // 
+            // img_Label
+            // 
+            this.img_Label.AutoSize = true;
+            this.img_Label.Location = new System.Drawing.Point(339, 474);
+            this.img_Label.Name = "img_Label";
+            this.img_Label.Size = new System.Drawing.Size(55, 12);
+            this.img_Label.TabIndex = 117;
+            this.img_Label.Text = "img_Label";
+            // 
+            // Arm
+            // 
+            this.Arm.Frozen = true;
+            this.Arm.HeaderText = "Arm";
+            this.Arm.Name = "Arm";
+            this.Arm.Width = 31;
+            // 
+            // Count
+            // 
+            this.Count.Frozen = true;
+            this.Count.HeaderText = "Count";
+            this.Count.Name = "Count";
+            this.Count.Width = 40;
+            // 
+            // GripObject
+            // 
+            this.GripObject.Frozen = true;
+            this.GripObject.HeaderText = "GripObject";
+            this.GripObject.Name = "GripObject";
+            this.GripObject.Width = 60;
+            // 
+            // command
+            // 
+            this.command.Frozen = true;
+            this.command.HeaderText = "command";
+            this.command.Name = "command";
+            this.command.Width = 60;
+            // 
+            // x
+            // 
+            this.x.Frozen = true;
+            this.x.HeaderText = "x";
+            this.x.Name = "x";
+            this.x.Width = 55;
+            // 
+            // y
+            // 
+            this.y.HeaderText = "y";
+            this.y.Name = "y";
+            this.y.Width = 55;
+            // 
+            // z
+            // 
+            this.z.HeaderText = "z";
+            this.z.Name = "z";
+            this.z.Width = 55;
+            // 
+            // Rx
+            // 
+            this.Rx.HeaderText = "Rx";
+            this.Rx.Name = "Rx";
+            this.Rx.Width = 55;
+            // 
+            // Ry
+            // 
+            this.Ry.HeaderText = "Ry";
+            this.Ry.Name = "Ry";
+            this.Ry.Width = 55;
+            // 
+            // Rz
+            // 
+            this.Rz.HeaderText = "Rz";
+            this.Rz.Name = "Rz";
+            this.Rz.Width = 55;
             // 
             // Form1
             // 
@@ -1267,7 +1213,6 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1355,7 +1300,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.DataGridView PointDataGrid1;
         private System.Windows.Forms.TextBox TB_Port;
         private System.Windows.Forms.TextBox TB_IPAddress;
         private System.Windows.Forms.Label LB_ConnectionStatus;
@@ -1365,18 +1309,22 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button AX12A_Close;
         private System.Windows.Forms.Button AX12A_Open;
-        private System.Windows.Forms.Label AX12A_Status;
         private System.Windows.Forms.Button XEG32_Close_Other;
         private System.Windows.Forms.CheckBox ImageGrip_CheckBox;
         private System.Windows.Forms.Button Img_Btn;
-        private System.Windows.Forms.Label img_Label;
-        private System.Windows.Forms.Label NowPositionLb;
         private System.Windows.Forms.Label BaisLB;
         private System.Windows.Forms.Button 聯軸器;
         private System.Windows.Forms.Button 萬象軸;
         private System.Windows.Forms.Button 固定座;
         private System.Windows.Forms.CheckBox img_Position;
-        private System.Windows.Forms.DataGridViewTextBoxColumn number;
+        private System.Windows.Forms.CheckBox Image_checkBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label AX12A_Status;
+        private System.Windows.Forms.Label NowPositionLb;
+        private System.Windows.Forms.Label img_Label;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Arm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GripObject;
         private System.Windows.Forms.DataGridViewTextBoxColumn command;
         private System.Windows.Forms.DataGridViewTextBoxColumn x;
         private System.Windows.Forms.DataGridViewTextBoxColumn y;
@@ -1384,16 +1332,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
         private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn command1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-        private System.Windows.Forms.CheckBox Image_checkBox;
-        private System.Windows.Forms.Button button1;
     }
 }
 

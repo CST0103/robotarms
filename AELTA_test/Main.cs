@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Timers;
 //使用XEG-32夾爪 請加入此參考
 //
 using System.Runtime.InteropServices;
@@ -116,8 +117,8 @@ namespace ControlUI
             string Declare;
 
             Action<String> ModifyText = SockMsg;
-            Action<int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
-            Action<int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
+            Action<int, int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
+            Action<int, int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
             Action Image = ImageProcess;
 
             while(true)
@@ -197,7 +198,8 @@ namespace ControlUI
                                 refrencePosition = position;
 
                                 Invoke(Tolist,
-                                    Convert.ToInt32(data[1]),//position_name
+                                    Convert.ToInt32(data[0]),//Count
+                                    Convert.ToInt32(data[1]),//GripObject
                                     data[command_int],//command
                                     position[0],
                                     position[1],
@@ -210,7 +212,21 @@ namespace ControlUI
                                 break;
 
                             case "Image":
-                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                if (GripPosition == 10)
+                                {
+                                    Invoke(ToDataGrid, Count, GripPosition, "GripRotation", 0, 0, 0, 0, 0, 0, true);
+                                }
+                                else if (GripPosition == 11)
+                                {
+                                    Invoke(ToDataGrid, Count, GripPosition, "GripRotation", 0, 0, 0, 0, 0, 0, true);
+                                }
+                                
+                                else if (GripPosition > 20)
+                                {
+                                    Invoke(ToDataGrid, Count, (GripPosition % 10), "GripRotation", 0, 0, 0, 0, 0, 0, true);
+                                }
+                                else { Invoke(ToDataGrid, Count, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true); }
+
                                 if (Image_checkBox.Checked)
                                 {
                                     if (GripPosition == 10)
@@ -218,37 +234,37 @@ namespace ControlUI
                                         GripRotation(Convert.ToInt32(data[2]));
                                         break;
                                     }
-                                    if(GripPosition == 11)
-                                    { break; }
-                                    if(GripPosition > 20)
+                                    else if (GripPosition == 11)
+                                    {
+                                        Invoke(ToDataGrid, Count, GripPosition, "DownRotation", 0, 0, 0, 0, 0, 0, true);
+                                        break;
+                                    }
+                                    else if (GripPosition > 20)
                                     {
                                         int legs = GripPosition % 10;
                                         GripChairLegs(legs);
                                         break;
                                     }
 
-                                    //-------------------------------------------------------------------------------------------------------------------------------
-                                    do
+                                    try
                                     {
-                                        TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
-                                        Thread.Sleep(1000);
-                                    } while (
-                                    Math.Abs(NowPosition[0] - refrencePosition[0]) >= 1 ||
-                                    Math.Abs(NowPosition[1] - refrencePosition[1]) >= 1 ||
-                                    Math.Abs(NowPosition[2] - refrencePosition[2]) >= 1
-                                    );
-
-                                    Image.Invoke();
-
+                                        do
+                                        {
+                                        } while (!this.TCPClientObject.IsMoveOver);
+                                        this.TCPClientObject.IsMoveOver= false;
+                                        Image.Invoke();
+                                    }
+                                    catch (Exception ex)
+                                    { }
                                 }
                                 break;
                             case "GripOpen":
                                 SendOpenClose(XEG32, 3200, 80);
-                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                Invoke(ToDataGrid, Count, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                                 break;
                             case "GripClose":
                                 SendOpenClose(XEG32, 200, 80);
-                                Invoke(ToDataGrid, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
+                                Invoke(ToDataGrid, Count, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true);
                                 break;
                         }
                         Count++;
@@ -262,7 +278,7 @@ namespace ControlUI
         {
             int Count = 0;
             Action<String> ModifyText = SockMsg;
-            Action<int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
+            Action<int, int, string, double, double, double, double, double, double, bool> Tolist = DataToArm;
 
             string Declare;
             while (true)
@@ -317,7 +333,8 @@ namespace ControlUI
                         }
                         Invoke(Tolist,
                             Convert.ToInt32(data[0]),
-                            data[1],
+                            Convert.ToInt32(data[1]),
+                            data[2],
                             position[0],
                             position[1],
                             position[2],
@@ -424,12 +441,12 @@ namespace ControlUI
 
         }
 
-        private void DataToArm(int Conit, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private void DataToArm(int Conit, int GripObetct, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
-            Action<int, string, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
+            Action<int, int, string, double, double, double, double, double, double, bool> DataToGrid = WriteDataGrid;
             Action<string, string, string, string, string, string, bool> Toarm = armMove;
 
-            DataToGrid.Invoke(Conit, command, d1, d2, d3, d4, d5, d6, ArmFlag);
+            DataToGrid.Invoke(Conit, GripObetct, command, d1, d2, d3, d4, d5, d6, ArmFlag);
             Toarm.Invoke(d1.ToString(), d2.ToString(), d3.ToString(), d4.ToString(), d5.ToString(), d6.ToString(), ArmFlag);
         }
 
@@ -438,12 +455,12 @@ namespace ControlUI
 
         #region --點位表格--
 
-        private void WriteDataGrid(int count, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
+        private void WriteDataGrid(int count, int GripObject, string command, double d1, double d2, double d3, double d4, double d5, double d6, bool ArmFlag)
         {
             if (ArmFlag)
-            { this.PointDataGrid.Rows.Add(count, command, d1, d2, d3, d4, d5, d6); }
+            { this.PointDataGrid.Rows.Add("left", count, GripObject, command, d1, d2, d3, d4, d5, d6); }
             else
-            { this.PointDataGrid1.Rows.Add(count, command, d1, d2, d3, d4, d5, d6); }
+            { this.PointDataGrid.Rows.Add("right", count, GripObject, command, d1, d2, d3, d4, d5, d6); }
         }
 
         #endregion
@@ -494,23 +511,62 @@ namespace ControlUI
 
         private void ActionBtn_Click(object sender, EventArgs e)
         {
+            bool arm_Select = false;
+            Action Image = ImageProcess;
+            Func<bool> func = null;
+
             var workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
             var ws = workbook.Worksheet(1);
             int NumberOfLastRow = ws.LastRowUsed().RowNumber();
             List<string[]> data = new List<string[]>();
             var range = ws.RangeUsed();
-            for (int i = 1; i < range.RowCount() + 1; i++)
+
+            int ColumnCount = range.ColumnCount();
+            int RowCount = range.RowCount();
+            for (int i = 1; i < RowCount + 1; i++)
             {
-                string[] point = new string[6];
-                for (int j = 1; j < range.ColumnCount() + 1; j++)
+                string[] point = new string[range.ColumnCount()];
+                for (int j = 1; j < ColumnCount + 1; j++)
                 {
                     point[j - 1] = (string)ws.Cell(i, j).Value.ToString();
                 }
                 data.Add(point);
             }
+
             for (int k = 0; k < data.Count; k++)
             {
-                armMove(data[k][0], data[k][1], data[k][2], data[k][3], data[k][4], data[k][5], true);
+                if (data[k][0] == "left") { arm_Select = true; }
+                else { arm_Select = false; }
+                switch (data[k][3])
+                {
+                    case "position":
+                        armMove(data[k][ColumnCount - 6], data[k][ColumnCount - 5], data[k][ColumnCount - 4], data[k][ColumnCount - 3], data[k][ColumnCount - 2], data[k][ColumnCount - 1], arm_Select);
+                        TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                        if (arm_Select)
+                        {
+                            while (!this.TCPClientObject.IsMoveOver) { };
+                        }
+                        else
+                        { }
+                        break;
+                    case "Image":
+                        this.GripPosition = Convert.ToInt32(data[k][2]);
+                        Image.Invoke();
+                        break;
+                    case "GripOpen":
+                        XEG32_Open_bt.PerformClick();
+                        break;
+                    case "GripClose":
+                        XEG32_Close_Other.PerformClick();
+                        break;
+                    case "GripRotation":
+                        GripRotation(Convert.ToInt32(data[k][2]));
+                        break;
+                    case "DownRotation":
+                        GripRotation(Convert.ToInt32(data[k][2]));
+                        break;
+                }
+                this.TCPClientObject.IsMoveOver = false;
                 Thread.Sleep(500);
             }
         }
@@ -706,6 +762,11 @@ namespace ControlUI
             Point_array[2] = "150, "; 
             point = String.Concat (Point_array);
             TM_send(TM_Send_format(point));
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GripRotation(10);
         }
     }
 }

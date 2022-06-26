@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Sockets;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
 
@@ -22,6 +20,7 @@
         private object lock_WriteSyncData = new object();
         private Socket tcpSynCl = null;
 
+        public bool IsMoveOver = false;
         public event TCPConnectStatusResponse ConnectStatusResponse;
 
         public event TCPReceiveData ReceiveData;
@@ -122,14 +121,16 @@
                     {
                         if (start == null)
                         {
-                            start = delegate {
+                            start = delegate
+                            {
                                 this.RecvDataThread();
                             };
                         }
                         new Thread(start) { IsBackground = true }.Start();
                         if (start2 == null)
                         {
-                            start2 = delegate {
+                            start2 = delegate
+                            {
                                 this.ConnectStatusResponseThread();
                             };
                         }
@@ -403,7 +404,7 @@
             {
                 for (int i = 0; i < data.Length; i++)
                 {
-                    num = (byte) (num ^ data[i]);
+                    num = (byte)(num ^ data[i]);
                 }
             }
             return num;
@@ -484,9 +485,25 @@
                         string data = string.Empty;
                         Array.Copy(buffer, 0, destinationArray, 0, destinationArray.Length);
                         data = Encoding.UTF8.GetString(destinationArray).ToString();
+
+                        data = data.Trim();
+
+                        try
+                        {
+                            int index = data.IndexOf("$TMSTA");
+
+                            data = data.Substring(index, data.Length - index);
+                            string target = data.Split(',')[4];
+                            if (target == "true")
+                            {
+                                this.IsMoveOver = true;
+                            }
+                        }
+                        catch (Exception ex)
+                        { }
                         if (this.ReceiveData != null)
                         {
-                            this.ReceiveData(this, data);
+                            this.ReceiveData.Invoke(this, data);
                         }
                         SLogger.log("recv_data=" + data, "TCP_Client");
                     }
@@ -559,10 +576,10 @@
                 numArray[2] = interval;
                 for (int i = 0; i < numArray.Length; i++)
                 {
-                    optionInValue[(i * 4) + 3] = (byte) ((numArray[i] >> 0x18) & ((ulong) 0xffL));
-                    optionInValue[(i * 4) + 2] = (byte) ((numArray[i] >> 0x10) & ((ulong) 0xffL));
-                    optionInValue[(i * 4) + 1] = (byte) ((numArray[i] >> 8) & ((ulong) 0xffL));
-                    optionInValue[i * 4] = (byte) (numArray[i] & ((ulong) 0xffL));
+                    optionInValue[(i * 4) + 3] = (byte)((numArray[i] >> 0x18) & ((ulong)0xffL));
+                    optionInValue[(i * 4) + 2] = (byte)((numArray[i] >> 0x10) & ((ulong)0xffL));
+                    optionInValue[(i * 4) + 1] = (byte)((numArray[i] >> 8) & ((ulong)0xffL));
+                    optionInValue[i * 4] = (byte)(numArray[i] & ((ulong)0xffL));
                 }
                 byte[] bytes = BitConverter.GetBytes(0);
                 sock.IOControl(IOControlCode.KeepAliveValues, optionInValue, bytes);
