@@ -87,10 +87,23 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Excel = new System.Windows.Forms.CheckBox();
+            this.ExprotDataGrid = new System.Windows.Forms.Button();
             this.ActionBtn = new System.Windows.Forms.Button();
+            this.Clr_btn = new System.Windows.Forms.Button();
             this.exportExcel = new System.Windows.Forms.Button();
             this.reMove = new System.Windows.Forms.Button();
             this.PointDataGrid = new System.Windows.Forms.DataGridView();
+            this.Arm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GripObject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CB_Customized1 = new System.Windows.Forms.ComboBox();
             this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
@@ -126,16 +139,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.NowPositionLb = new System.Windows.Forms.Label();
             this.img_Label = new System.Windows.Forms.Label();
-            this.Arm = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GripObject = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.command = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.x = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.y = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Delete = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -693,14 +697,18 @@
             // 
             this.socketmsg.Location = new System.Drawing.Point(6, 15);
             this.socketmsg.Name = "socketmsg";
-            this.socketmsg.Size = new System.Drawing.Size(472, 93);
+            this.socketmsg.Size = new System.Drawing.Size(262, 93);
             this.socketmsg.TabIndex = 113;
             this.socketmsg.Text = "";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.Delete);
+            this.groupBox2.Controls.Add(this.Excel);
+            this.groupBox2.Controls.Add(this.ExprotDataGrid);
             this.groupBox2.Controls.Add(this.ActionBtn);
             this.groupBox2.Controls.Add(this.socketmsg);
+            this.groupBox2.Controls.Add(this.Clr_btn);
             this.groupBox2.Controls.Add(this.exportExcel);
             this.groupBox2.Controls.Add(this.reMove);
             this.groupBox2.Controls.Add(this.PointDataGrid);
@@ -711,19 +719,49 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
+            // Excel
+            // 
+            this.Excel.AutoSize = true;
+            this.Excel.Location = new System.Drawing.Point(545, 65);
+            this.Excel.Name = "Excel";
+            this.Excel.Size = new System.Drawing.Size(50, 16);
+            this.Excel.TabIndex = 72;
+            this.Excel.Text = "Excel";
+            this.Excel.UseVisualStyleBackColor = true;
+            // 
+            // ExprotDataGrid
+            // 
+            this.ExprotDataGrid.Location = new System.Drawing.Point(274, 71);
+            this.ExprotDataGrid.Name = "ExprotDataGrid";
+            this.ExprotDataGrid.Size = new System.Drawing.Size(120, 21);
+            this.ExprotDataGrid.TabIndex = 127;
+            this.ExprotDataGrid.Text = "FromExcelImportData";
+            this.ExprotDataGrid.UseVisualStyleBackColor = true;
+            this.ExprotDataGrid.Click += new System.EventHandler(this.ExprotDataGrid_Click);
+            // 
             // ActionBtn
             // 
-            this.ActionBtn.Location = new System.Drawing.Point(484, 45);
+            this.ActionBtn.Location = new System.Drawing.Point(520, 87);
             this.ActionBtn.Name = "ActionBtn";
             this.ActionBtn.Size = new System.Drawing.Size(75, 21);
             this.ActionBtn.TabIndex = 127;
-            this.ActionBtn.Text = "ActionButton";
+            this.ActionBtn.Text = "Action";
             this.ActionBtn.UseVisualStyleBackColor = true;
             this.ActionBtn.Click += new System.EventHandler(this.ActionBtn_Click);
             // 
+            // Clr_btn
+            // 
+            this.Clr_btn.Location = new System.Drawing.Point(87, 498);
+            this.Clr_btn.Name = "Clr_btn";
+            this.Clr_btn.Size = new System.Drawing.Size(75, 23);
+            this.Clr_btn.TabIndex = 126;
+            this.Clr_btn.Text = "Clear";
+            this.Clr_btn.UseVisualStyleBackColor = true;
+            this.Clr_btn.Click += new System.EventHandler(this.Clr_btn_Click);
+            // 
             // exportExcel
             // 
-            this.exportExcel.Location = new System.Drawing.Point(484, 77);
+            this.exportExcel.Location = new System.Drawing.Point(274, 42);
             this.exportExcel.Name = "exportExcel";
             this.exportExcel.Size = new System.Drawing.Size(75, 23);
             this.exportExcel.TabIndex = 126;
@@ -733,7 +771,7 @@
             // 
             // reMove
             // 
-            this.reMove.Location = new System.Drawing.Point(484, 16);
+            this.reMove.Location = new System.Drawing.Point(274, 13);
             this.reMove.Name = "reMove";
             this.reMove.Size = new System.Drawing.Size(75, 23);
             this.reMove.TabIndex = 115;
@@ -759,8 +797,73 @@
             this.PointDataGrid.Location = new System.Drawing.Point(6, 114);
             this.PointDataGrid.Name = "PointDataGrid";
             this.PointDataGrid.RowTemplate.Height = 24;
-            this.PointDataGrid.Size = new System.Drawing.Size(589, 415);
+            this.PointDataGrid.Size = new System.Drawing.Size(589, 379);
             this.PointDataGrid.TabIndex = 125;
+            // 
+            // Arm
+            // 
+            this.Arm.Frozen = true;
+            this.Arm.HeaderText = "Arm";
+            this.Arm.Name = "Arm";
+            this.Arm.Width = 31;
+            // 
+            // Count
+            // 
+            this.Count.Frozen = true;
+            this.Count.HeaderText = "Count";
+            this.Count.Name = "Count";
+            this.Count.Width = 40;
+            // 
+            // GripObject
+            // 
+            this.GripObject.Frozen = true;
+            this.GripObject.HeaderText = "GripObject";
+            this.GripObject.Name = "GripObject";
+            this.GripObject.Width = 60;
+            // 
+            // command
+            // 
+            this.command.Frozen = true;
+            this.command.HeaderText = "command";
+            this.command.Name = "command";
+            this.command.Width = 60;
+            // 
+            // x
+            // 
+            this.x.Frozen = true;
+            this.x.HeaderText = "x";
+            this.x.Name = "x";
+            this.x.Width = 55;
+            // 
+            // y
+            // 
+            this.y.HeaderText = "y";
+            this.y.Name = "y";
+            this.y.Width = 55;
+            // 
+            // z
+            // 
+            this.z.HeaderText = "z";
+            this.z.Name = "z";
+            this.z.Width = 55;
+            // 
+            // Rx
+            // 
+            this.Rx.HeaderText = "Rx";
+            this.Rx.Name = "Rx";
+            this.Rx.Width = 55;
+            // 
+            // Ry
+            // 
+            this.Ry.HeaderText = "Ry";
+            this.Ry.Name = "Ry";
+            this.Ry.Width = 55;
+            // 
+            // Rz
+            // 
+            this.Rz.HeaderText = "Rz";
+            this.Rz.Name = "Rz";
+            this.Rz.Width = 55;
             // 
             // groupBox3
             // 
@@ -1117,70 +1220,15 @@
             this.img_Label.TabIndex = 117;
             this.img_Label.Text = "img_Label";
             // 
-            // Arm
+            // Delete
             // 
-            this.Arm.Frozen = true;
-            this.Arm.HeaderText = "Arm";
-            this.Arm.Name = "Arm";
-            this.Arm.Width = 31;
-            // 
-            // Count
-            // 
-            this.Count.Frozen = true;
-            this.Count.HeaderText = "Count";
-            this.Count.Name = "Count";
-            this.Count.Width = 40;
-            // 
-            // GripObject
-            // 
-            this.GripObject.Frozen = true;
-            this.GripObject.HeaderText = "GripObject";
-            this.GripObject.Name = "GripObject";
-            this.GripObject.Width = 60;
-            // 
-            // command
-            // 
-            this.command.Frozen = true;
-            this.command.HeaderText = "command";
-            this.command.Name = "command";
-            this.command.Width = 60;
-            // 
-            // x
-            // 
-            this.x.Frozen = true;
-            this.x.HeaderText = "x";
-            this.x.Name = "x";
-            this.x.Width = 55;
-            // 
-            // y
-            // 
-            this.y.HeaderText = "y";
-            this.y.Name = "y";
-            this.y.Width = 55;
-            // 
-            // z
-            // 
-            this.z.HeaderText = "z";
-            this.z.Name = "z";
-            this.z.Width = 55;
-            // 
-            // Rx
-            // 
-            this.Rx.HeaderText = "Rx";
-            this.Rx.Name = "Rx";
-            this.Rx.Width = 55;
-            // 
-            // Ry
-            // 
-            this.Ry.HeaderText = "Ry";
-            this.Ry.Name = "Ry";
-            this.Ry.Width = 55;
-            // 
-            // Rz
-            // 
-            this.Rz.HeaderText = "Rz";
-            this.Rz.Name = "Rz";
-            this.Rz.Width = 55;
+            this.Delete.Location = new System.Drawing.Point(6, 498);
+            this.Delete.Name = "Delete";
+            this.Delete.Size = new System.Drawing.Size(75, 23);
+            this.Delete.TabIndex = 128;
+            this.Delete.Text = "delete";
+            this.Delete.UseVisualStyleBackColor = true;
+            this.Delete.Click += new System.EventHandler(this.Delete_Click);
             // 
             // Form1
             // 
@@ -1213,6 +1261,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1332,6 +1381,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Rx;
         private System.Windows.Forms.DataGridViewTextBoxColumn Ry;
         private System.Windows.Forms.DataGridViewTextBoxColumn Rz;
+        private System.Windows.Forms.Button Clr_btn;
+        private System.Windows.Forms.Button ExprotDataGrid;
+        private System.Windows.Forms.CheckBox Excel;
+        private System.Windows.Forms.Button Delete;
     }
 }
 

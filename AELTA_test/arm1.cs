@@ -153,10 +153,6 @@ namespace ControlUI
             else
             {
                 TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
-                Thread.Sleep(3000);
-                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
-                Thread.Sleep(3000);
-                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
             }
         }
 

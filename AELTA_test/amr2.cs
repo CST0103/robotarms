@@ -31,7 +31,9 @@ namespace ControlUI
                             {
                                 if (this.TCPClientObject1.Connect(0))
                                 {
-                                    TCPClientObject1.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData1);
+
+                                    TCPClientObject1.ReceiveData += new SocketClientObject.TCPReceiveData(this.GetNowPosition);
+                                    //TCPClientObject1.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData1);
                                 }
                             };
                         }
@@ -67,21 +69,22 @@ namespace ControlUI
 
         private void btn_Send1_Click(object sender, EventArgs e)
         {
-            string s = string.Empty;
-            if (this.CB_Listen1.Checked == true)
-            {
-                s = SocketClientObject.DataToPacket(CB_Customized1.SelectedItem.ToString(), this.TB_SendData1.Text);
-            }
-            else
-            {
-                s = this.TB_SendData1.Text;
-            }
-            this.TB_Command1.Text = s;
-            byte[] bytes = Encoding.UTF8.GetBytes(s);
-            if (this.TCPClientObject1 != null)
-            {
-                this.TCPClientObject1.WriteSyncData(bytes);
-            }
+            string cmd = TB_SendData1.Text;
+            TM_send1(cmd);
+//            if (this.CB_Listen1.Checked == true)
+//            {
+//                s = SocketClientObject.DataToPacket(CB_Customized1.SelectedItem.ToString(), this.TB_SendData1.Text);
+//            }
+//            else
+//            {
+//                s = this.TB_SendData1.Text;
+//            }
+//            this.TB_Command1.Text = s;
+//            byte[] bytes = Encoding.UTF8.GetBytes(s);
+//            if (this.TCPClientObject1 != null)
+//            {
+//                this.TCPClientObject1.WriteSyncData(bytes);
+//            }
         }
 
         private void btn_ClearRecvData1_Click(object sender, EventArgs e)
@@ -119,9 +122,10 @@ namespace ControlUI
                 this.CB_Customized1.Visible = false;
             }
         }
-        void TM_send1(string _string)
+        void TM_send1(string _string,bool flag = true)
         {
             string s = string.Empty;
+            if (flag) { _string += "\r\nQueueTag(1)"; }
             s = SocketClientObject.DataToPacket("$TMSCT", _string);
             //this.TB_Command.Text = s;
             byte[] bytes = Encoding.UTF8.GetBytes(s);

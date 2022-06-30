@@ -18,7 +18,7 @@ namespace ControlUI
         {
 
             Environment.SetEnvironmentVariable("OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS", "0");
-            Arm_cap = new VideoCapture(1);
+            Arm_cap = new VideoCapture(0);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
@@ -28,6 +28,7 @@ namespace ControlUI
         }
         public double[] ImageRecognition()
         {
+            int X_Center = 0, Y_Center = 0;
             // 480,640
             Image<Bgr, byte> img = Arm_cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
             img = img.SmoothGaussian(1);
@@ -44,14 +45,36 @@ namespace ControlUI
             CvInvoke.FindContours(threshold, contours, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
             for (int i = 0; i < contours.Size; i++)
             {
-                if (CvInvoke.ContourArea(contours[i]) > 5000)
+                if (CvInvoke.ContourArea(contours[i]) > 1000)
                 {
                     Rectangle BoundingBox = CvInvoke.BoundingRectangle(contours[i]);
-                    CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
                     Center = new Point(BoundingBox.X + BoundingBox.Width / 2, BoundingBox.Y + BoundingBox.Height / 2);
+                    if (X_Center == 0 && Y_Center == 0)
+                    {
+                        X_Center = Center.X;
+                        Y_Center = Center.Y;
+                        CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
 
-                    CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
-                    CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
+                        CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
+                        CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
+                    }
+                    if (
+                        Math.Sqrt((Math.Pow(Center.Y - CameraSize[1] / 2, 2) + Math.Pow(Center.X - CameraSize[0] / 2, 2))) <
+                        Math.Sqrt((Math.Pow(Y_Center - CameraSize[1] / 2, 2) + Math.Pow(X_Center - CameraSize[0] / 2, 2))))
+                    {
+                        CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
+
+                        CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
+                        CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
+                        X_Center = Center.X;
+                        Y_Center = Center.Y;
+                        CvInvoke.Line(img, Center, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+                    }
+                    else
+                    {
+                        Center.X = X_Center;
+                        Center.Y = Y_Center;
+                    }
                 }
             }
             CvInvoke.Imshow("ori", img);

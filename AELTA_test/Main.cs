@@ -218,7 +218,7 @@ namespace ControlUI
                                 }
                                 else if (GripPosition == 11)
                                 {
-                                    Invoke(ToDataGrid, Count, GripPosition, "GripRotation", 0, 0, 0, 0, 0, 0, true);
+                                    Invoke(ToDataGrid, Count, GripPosition, "DownRotation", 0, 0, 0, 0, 0, 0, true);
                                 }
                                 
                                 else if (GripPosition > 20)
@@ -487,19 +487,19 @@ namespace ControlUI
         {
             bool ArmFlag = true;
             int j = 1;
-
+            int RowCount = PointDataGrid.RowCount;
             Action<string> ModifyText = SockMsg;
             Action<String, String, String, String, String, String, bool> Toarm = armMove;
 
-            for (int i = 0; i < PointDataGrid.RowCount - 1; i++)
+            for (int i = 0; i < RowCount - 1; i++)
             {
 
-                String rd1 = Convert.ToString(PointDataGrid[j + 1, i].Value);
-                String rd2 = Convert.ToString(PointDataGrid[j + 2, i].Value);
-                String rd3 = Convert.ToString(PointDataGrid[j + 3, i].Value);
-                String rd4 = Convert.ToString(PointDataGrid[j + 4, i].Value);
-                String rd5 = Convert.ToString(PointDataGrid[j + 5, i].Value);
-                String rd6 = Convert.ToString(PointDataGrid[j + 6, i].Value);
+                String rd1 = Convert.ToString(PointDataGrid[RowCount -5, i].Value);
+                String rd2 = Convert.ToString(PointDataGrid[RowCount -4, i].Value);
+                String rd3 = Convert.ToString(PointDataGrid[RowCount -3, i].Value);
+                String rd4 = Convert.ToString(PointDataGrid[RowCount -2, i].Value);
+                String rd5 = Convert.ToString(PointDataGrid[RowCount -1, i].Value);
+                String rd6 = Convert.ToString(PointDataGrid[RowCount, i].Value);
 
                 Invoke(ModifyText, "ReMove" + rd1 + "," + rd2 + "," + rd3 + "," + rd4 + "," + rd5 + "," + rd6);
                 Invoke(Toarm, rd1, rd2, rd3, rd4, rd5, rd6, ArmFlag);
@@ -511,68 +511,143 @@ namespace ControlUI
 
         private void ActionBtn_Click(object sender, EventArgs e)
         {
+            if(Excel.Checked)
+            {
+                ActionMoveFromExcel(); 
+            }
+
+            else
+            {
+                if(PointDataGrid.RowCount <= 1)
+                {
+                    MessageBox.Show("請先點擊 Export 按鈕");
+                }
+
+                else
+                {
+                    Action Image = ImageProcess;
+                    bool arm_Select = false;
+                    int ColumnCount = PointDataGrid.Columns.Count;
+
+                    for (int i = 0; i < PointDataGrid.Rows.Count; i++)
+                    {
+                        PointDataGrid.Rows[i].DefaultCellStyle.BackColor = Color.Blue;
+                        if (Pointdata[i][0] == "left") 
+                        {
+                            arm_Select = true; 
+                        }
+
+                        else 
+                        {
+                            arm_Select = false; 
+                        }
+
+                        switch (Pointdata[i][3])
+                        {
+                            case "position":
+                                armMove(Pointdata[i][ColumnCount - 6], Pointdata[i][ColumnCount - 5], Pointdata[i][ColumnCount - 4], Pointdata[i][ColumnCount - 3], Pointdata[i][ColumnCount - 2], Pointdata[i][ColumnCount - 1], arm_Select);
+                                TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                                if (arm_Select)
+                                {
+                                    while (!this.TCPClientObject.IsMoveOver) { };
+                                }
+                                else
+                                {
+                                    while(!this.TCPClientObject1.IsMoveOver) { };
+                                }
+                                break;
+                            case "Image":
+                                this.GripPosition = Convert.ToInt32(Pointdata[i][2]);
+                                Image.Invoke();
+                                break;
+                            case "GripOpen":
+                                XEG32_Open_bt.PerformClick();
+                                break;
+                            case "GripClose":
+                                XEG32_Close_Other.PerformClick();
+                                break;
+                            case "GripRotation":
+                                GripRotation(Convert.ToInt32(Pointdata[i][2]));
+                                break;
+                            case "DownRotation":
+                                GripRotation(Convert.ToInt32(Pointdata[i][2]));
+                                break;
+                        }
+                        this.TCPClientObject.IsMoveOver = false;
+                        this.TCPClientObject1.IsMoveOver = false;
+                        Thread.Sleep(700);
+                        PointDataGrid.Rows[i].DefaultCellStyle.BackColor = Color.White;
+                    }
+                }
+            }
+
+        }
+
+        private void ActionMoveFromExcel()
+        {
             bool arm_Select = false;
             Action Image = ImageProcess;
-            Func<bool> func = null;
 
-            var workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
             var ws = workbook.Worksheet(1);
-            int NumberOfLastRow = ws.LastRowUsed().RowNumber();
-            List<string[]> data = new List<string[]>();
             var range = ws.RangeUsed();
 
             int ColumnCount = range.ColumnCount();
             int RowCount = range.RowCount();
-            for (int i = 1; i < RowCount + 1; i++)
+            if (Excel.Checked)
             {
-                string[] point = new string[range.ColumnCount()];
-                for (int j = 1; j < ColumnCount + 1; j++)
+                for (int k = 0; k < Pointdata.Count; k++)
                 {
-                    point[j - 1] = (string)ws.Cell(i, j).Value.ToString();
+                    if (Pointdata[k][0] == "left") { arm_Select = true; }
+                    else { arm_Select = false; }
+                    switch (Pointdata[k][3])
+                    {
+                        case "position":
+                            armMove(Pointdata[k][ColumnCount - 6], Pointdata[k][ColumnCount - 5], Pointdata[k][ColumnCount - 4], Pointdata[k][ColumnCount - 3], Pointdata[k][ColumnCount - 2], Pointdata[k][ColumnCount - 1], arm_Select);
+                            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                            if (arm_Select)
+                            {
+                                while (!this.TCPClientObject.IsMoveOver) { };
+                            }
+                            else
+                            { }
+                            break;
+                        case "Image":
+                            this.GripPosition = Convert.ToInt32(Pointdata[k][2]);
+                            Image.Invoke();
+                            break;
+                        case "GripOpen":
+                            XEG32_Open_bt.PerformClick();
+                            break;
+                        case "GripClose":
+                            XEG32_Close_Other.PerformClick();
+                            break;
+                        case "GripRotation":
+                            GripRotation(Convert.ToInt32(Pointdata[k][2]));
+                            break;
+                        case "DownRotation":
+                            GripRotation(Convert.ToInt32(Pointdata[k][2]));
+                            break;
+                    }
+                    this.TCPClientObject.IsMoveOver = false;
+                    Thread.Sleep(700);
                 }
-                data.Add(point);
-            }
-
-            for (int k = 0; k < data.Count; k++)
-            {
-                if (data[k][0] == "left") { arm_Select = true; }
-                else { arm_Select = false; }
-                switch (data[k][3])
-                {
-                    case "position":
-                        armMove(data[k][ColumnCount - 6], data[k][ColumnCount - 5], data[k][ColumnCount - 4], data[k][ColumnCount - 3], data[k][ColumnCount - 2], data[k][ColumnCount - 1], arm_Select);
-                        TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
-                        if (arm_Select)
-                        {
-                            while (!this.TCPClientObject.IsMoveOver) { };
-                        }
-                        else
-                        { }
-                        break;
-                    case "Image":
-                        this.GripPosition = Convert.ToInt32(data[k][2]);
-                        Image.Invoke();
-                        break;
-                    case "GripOpen":
-                        XEG32_Open_bt.PerformClick();
-                        break;
-                    case "GripClose":
-                        XEG32_Close_Other.PerformClick();
-                        break;
-                    case "GripRotation":
-                        GripRotation(Convert.ToInt32(data[k][2]));
-                        break;
-                    case "DownRotation":
-                        GripRotation(Convert.ToInt32(data[k][2]));
-                        break;
-                }
-                this.TCPClientObject.IsMoveOver = false;
-                Thread.Sleep(500);
             }
         }
+        private void Clr_btn_Click(object sender, EventArgs e)
+        {
+            PointDataGrid.Rows.Clear();
+        }
 
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            foreach(DataGridViewRow row in PointDataGrid.SelectedRows)
+            {
+                PointDataGrid.Rows.RemoveAt(row.Index);
+            }
+        }
         #endregion
 
+        #region Image
         private string TM_Send_format(string cmd, int speed = 100)
         {
             int allSpeed = (int)(speed * sp_pc);
@@ -610,7 +685,7 @@ namespace ControlUI
                 while (Math.Abs(ImageCenter_bais[0]) >= 5)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = -1;
+                    double bais = -0.5;
                     if (ImageCenter_bais[0] < 0) { bais = 1; }
                     Thread.Sleep(850);
                     TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
@@ -620,7 +695,7 @@ namespace ControlUI
 
                 while (Math.Abs(ImageCenter_bais[1]) >= 5)
                 {
-                    double bais = 1;
+                    double bais = 0.5;
                     ImageCenter_bais = ImageHandler.ImageRecognition();
                     if (ImageCenter_bais[1] < 0) { bais = -1; }
                     Thread.Sleep(850);
@@ -715,6 +790,8 @@ namespace ControlUI
 
             }
         }
+        #endregion
+
         private string double2Point(double[] position, int iterate = 0)
         {
             string result = null;
@@ -736,6 +813,7 @@ namespace ControlUI
                 SendOpenClose(XEG32, 1100, 80);
             else if (NowStatic == 11)
                 SendOpenClose(XEG32, 3200, 80);
+            Thread.Sleep(700);
             point = "540, -190, 150, 180, 0, 90";
             Thread.Sleep(1000);
             TM_send(TM_Send_format(point));
@@ -755,9 +833,10 @@ namespace ControlUI
             TM_send(TM_Send_format(point));
 
             while (!waitPoint(point)) { }
+            Thread.Sleep(700);
             SendOpenClose(XEG32, 600, 80);
 
-            Thread.Sleep(700);
+            Thread.Sleep(500);
 
             Point_array[2] = "150, "; 
             point = String.Concat (Point_array);
@@ -768,5 +847,6 @@ namespace ControlUI
         {
             GripRotation(10);
         }
+
     }
 }
