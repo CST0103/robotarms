@@ -87,6 +87,7 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Delete = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.CheckBox();
             this.ExprotDataGrid = new System.Windows.Forms.Button();
             this.ActionBtn = new System.Windows.Forms.Button();
@@ -139,7 +140,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.NowPositionLb = new System.Windows.Forms.Label();
             this.img_Label = new System.Windows.Forms.Label();
-            this.Delete = new System.Windows.Forms.Button();
+            this.StopMove = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -703,6 +704,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.StopMove);
             this.groupBox2.Controls.Add(this.Delete);
             this.groupBox2.Controls.Add(this.Excel);
             this.groupBox2.Controls.Add(this.ExprotDataGrid);
@@ -719,10 +721,20 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
+            // Delete
+            // 
+            this.Delete.Location = new System.Drawing.Point(6, 498);
+            this.Delete.Name = "Delete";
+            this.Delete.Size = new System.Drawing.Size(75, 23);
+            this.Delete.TabIndex = 128;
+            this.Delete.Text = "delete";
+            this.Delete.UseVisualStyleBackColor = true;
+            this.Delete.Click += new System.EventHandler(this.Delete_Click);
+            // 
             // Excel
             // 
             this.Excel.AutoSize = true;
-            this.Excel.Location = new System.Drawing.Point(545, 65);
+            this.Excel.Location = new System.Drawing.Point(545, 16);
             this.Excel.Name = "Excel";
             this.Excel.Size = new System.Drawing.Size(50, 16);
             this.Excel.TabIndex = 72;
@@ -741,7 +753,7 @@
             // 
             // ActionBtn
             // 
-            this.ActionBtn.Location = new System.Drawing.Point(520, 87);
+            this.ActionBtn.Location = new System.Drawing.Point(520, 42);
             this.ActionBtn.Name = "ActionBtn";
             this.ActionBtn.Size = new System.Drawing.Size(75, 21);
             this.ActionBtn.TabIndex = 127;
@@ -1220,15 +1232,15 @@
             this.img_Label.TabIndex = 117;
             this.img_Label.Text = "img_Label";
             // 
-            // Delete
+            // StopMove
             // 
-            this.Delete.Location = new System.Drawing.Point(6, 498);
-            this.Delete.Name = "Delete";
-            this.Delete.Size = new System.Drawing.Size(75, 23);
-            this.Delete.TabIndex = 128;
-            this.Delete.Text = "delete";
-            this.Delete.UseVisualStyleBackColor = true;
-            this.Delete.Click += new System.EventHandler(this.Delete_Click);
+            this.StopMove.Location = new System.Drawing.Point(520, 70);
+            this.StopMove.Name = "StopMove";
+            this.StopMove.Size = new System.Drawing.Size(75, 23);
+            this.StopMove.TabIndex = 129;
+            this.StopMove.Text = "StopMove";
+            this.StopMove.UseVisualStyleBackColor = true;
+            this.StopMove.Click += new System.EventHandler(this.StopMove_Click);
             // 
             // Form1
             // 
@@ -1385,6 +1397,7 @@
         private System.Windows.Forms.Button ExprotDataGrid;
         private System.Windows.Forms.CheckBox Excel;
         private System.Windows.Forms.Button Delete;
+        private System.Windows.Forms.Button StopMove;
     }
 }
 

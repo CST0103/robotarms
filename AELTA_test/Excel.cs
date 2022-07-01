@@ -61,6 +61,7 @@ namespace ControlUI
                 PointDataGrid.Rows.Add(point);
                 Pointdata.Add(point);
             }
+
         }
     }
 }
