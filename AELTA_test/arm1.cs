@@ -149,7 +149,7 @@ namespace ControlUI
         private void 聯軸器_Click(object sender, EventArgs e)
         {
             if (img_Position.Checked)
-                TM_send(TM_Send_format("231, -294, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("235, -294, 150, 180, 0, 90"));
             else
             {
                 TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
@@ -170,6 +170,13 @@ namespace ControlUI
                 TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
             else
                 TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
+        }
+        private void 墊高板_Click(object sender, EventArgs e)
+        {
+            if (img_Position.Checked)
+                TM_send(TM_Send_format("465, -88, 150, 180, 0, 90"));
+            else
+                TM_send(TM_Send_format("530, -95, 150, 180, 0, 90"));
         }
     }
 }

@@ -129,6 +129,7 @@
     <Compile Include="AX12A.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="enum.cs" />
     <Compile Include="Excel.cs">
       <SubType>Form</SubType>
     </Compile>

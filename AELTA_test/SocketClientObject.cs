@@ -21,6 +21,7 @@
         private Socket tcpSynCl = null;
 
         public bool IsMoveOver = false;
+        public bool ShowImfo = true;
         public event TCPConnectStatusResponse ConnectStatusResponse;
 
         public event TCPReceiveData ReceiveData;

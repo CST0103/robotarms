@@ -20,11 +20,6 @@ using ClosedXML.Excel;
 
 using dynamixel_sdk;
 
-public enum ImageRecogntionBais
-{
-    X = -65,
-    Y = -7
-}
 namespace ControlUI
 {
     public partial class Form1 : Form
@@ -210,7 +205,6 @@ namespace ControlUI
                                     position[4],
                                     position[5],
                                     true);
-                                ArmMoving = false;
                                 break;
 
                             case "Image":
@@ -252,8 +246,13 @@ namespace ControlUI
                                     {
                                         do
                                         {
-                                        } while (!this.TCPClientObject.IsMoveOver);
-                                        this.TCPClientObject.IsMoveOver= false;
+                                            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                                            Thread.Sleep(700);
+                                        } while (
+                                        Math.Abs(NowPosition[0] - refrencePosition[0]) >= 1 ||
+                                        Math.Abs(NowPosition[1] - refrencePosition[1]) >= 1 ||
+                                        Math.Abs(NowPosition[2] - refrencePosition[2]) >= 1
+                                        );
                                         Image.Invoke();
                                     }
                                     catch (Exception ex)
@@ -313,9 +312,15 @@ namespace ControlUI
                         switch (Convert.ToInt32(data[command_int - 1]))
                         {
                             case 0:
-                                if (position[5] == 0 && position[1] < -195) { position[1] = -195; }
-                                if (position[2] <= 100) { position[2] = 100; }
+                                if (position[5] == 0 && position[1] < -190) { 
+                                    position[1] = -190; 
+                                }
+                                
+                                if (position[2] <= 100) { 
+                                    position[2] = 100; 
+                                }
                                 break;
+
                             case 1:
                                 if (position[0] > 250 && position[1] < 198 && position[5] == 0)
                                 {
@@ -353,6 +358,7 @@ namespace ControlUI
                 }
             }
         }
+
         protected void SockMsg<T>(T teste)
         {
             socketmsg.Text += Environment.NewLine + teste.ToString();
@@ -521,6 +527,8 @@ namespace ControlUI
 
             else
             {
+                this.TCPClientObject.IsMoveOver = false;
+                this.TCPClientObject1.IsMoveOver = false;
                 if(action == null)
                 {
                     action = delegate
@@ -614,7 +622,7 @@ namespace ControlUI
                 bool arm_Select = false;
                 int ColumnCount = PointDataGrid.Columns.Count;
 
-                for (int i = 0; i < PointDataGrid.Rows.Count; i++)
+                for (int i = 0; i < PointDataGrid.Rows.Count - 1; i++)
                 {
                     if (StopFlag)
                     {
@@ -624,7 +632,7 @@ namespace ControlUI
 
                     Invoke(GridHight, i, true);
 
-                    if (Pointdata[i][0] == "left")
+                    if (PointDataGrid[0,i].Value.ToString() == "left")
                     {
                         arm_Select = true;
                     }
@@ -634,10 +642,17 @@ namespace ControlUI
                         arm_Select = false;
                     }
 
-                    switch (Pointdata[i][3])
+                    switch (PointDataGrid[3,i].Value.ToString())
                     {
                         case "position":
-                            Invoke(Toarm, Pointdata[i][ColumnCount - 6], Pointdata[i][ColumnCount - 5], Pointdata[i][ColumnCount - 4], Pointdata[i][ColumnCount - 3], Pointdata[i][ColumnCount - 2], Pointdata[i][ColumnCount - 1], arm_Select);
+                            Invoke(Toarm,
+                                PointDataGrid[ColumnCount - 6,i].Value.ToString(),
+                                PointDataGrid[ColumnCount - 5,i].Value.ToString(),
+                                PointDataGrid[ColumnCount - 4,i].Value.ToString(),
+                                PointDataGrid[ColumnCount - 3,i].Value.ToString(),
+                                PointDataGrid[ColumnCount - 2,i].Value.ToString(),
+                                PointDataGrid[ColumnCount - 1,i].Value.ToString(),
+                                arm_Select);
                             Invoke(SendCommand, "1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
                             if (arm_Select)
                             {
@@ -659,10 +674,10 @@ namespace ControlUI
                             Invoke(btn_click, XEG32_Close_Other);
                             break;
                         case "GripRotation":
-                            Invoke(GripRotate, Pointdata[i][2]);
+                            Invoke(GripRotate, 10);
                             break;
                         case "DownRotation":
-                            Invoke(GripRotate, Pointdata[i][2]);
+                            Invoke(GripRotate, 11);
                             break;
                     }
                     this.TCPClientObject.IsMoveOver = false;
@@ -721,34 +736,49 @@ namespace ControlUI
         {
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))",false);
 
-            Thread.Sleep(1000);
+            Action<Label, string> ChangeName = UpdateLocation;
+            Thread.Sleep(700);
             double[] ImageRecogntionPosition = NowPosition;
 
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] + (double)ImageRecogntionBais.X;
             ImageRecogntionPosition[1] = ImageRecogntionPosition[1] + (double)ImageRecogntionBais.Y;
 
             TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
-            Thread.Sleep(1000);
+            Thread.Sleep(700);
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
-            while (Math.Abs(ImageCenter_bais[0]) >= 10 || Math.Abs(ImageCenter_bais[1]) >= 10)
+            while (Math.Abs(ImageCenter_bais[0]) >= 2 || Math.Abs(ImageCenter_bais[1]) >= 2)
             {
-                while (Math.Abs(ImageCenter_bais[0]) >= 5)
+                while (Math.Abs(ImageCenter_bais[0]) >= 2)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = -0.5;
-                    if (ImageCenter_bais[0] < 0) { bais = 1; }
+                    double bais = ImageCenter_bais[0] * -0.1;
+                    if (Math.Abs(ImageCenter_bais[0]) <= 5)
+                    {
+                        bais = -0.1;
+                    }
+                    if (ImageCenter_bais[0] < 0)
+                    {
+                        bais = -bais;
+                    }
                     Thread.Sleep(850);
                     TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
                     //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
                 }
 
-                while (Math.Abs(ImageCenter_bais[1]) >= 5)
+                while (Math.Abs(ImageCenter_bais[1]) >= 2)
                 {
-                    double bais = 0.5;
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    if (ImageCenter_bais[1] < 0) { bais = -1; }
+                    double bais = -0.5;
+                    if (Math.Abs(ImageCenter_bais[1]) <= 5)
+                    {
+                        bais = -0.1;
+                    }
+                    if (ImageCenter_bais[1] > 0)
+                    {
+                        bais = -bais;
+                    }
                     Thread.Sleep(850);
                     TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
@@ -761,18 +791,32 @@ namespace ControlUI
             Thread.Sleep(1000);
 
             //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-            //ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+            ChangeName(BaisLB, ImageCenter_bais[2].ToString());
+            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
 
             Grip();
 
         }
+        private void UpdateLocation(Label lb,string imfo)
+        {
+            if (this.InvokeRequired)
+            {
+                Action<Label, string> act = delegate { UpdateLocation(lb, imfo); };
+                lb.Invoke(act, lb, imfo);
+            }
+            else
+            {
+                lb.Text = imfo.ToString();
+            }
+        }
         private void Grip()
         {
+            Action<Label, string> ChangeName = UpdateLocation;
             double[] ImageRecogntionPosition = NowPosition;
 
-            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X;
-            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y;
-            //ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
+            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X ;
+            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y ;
+            ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
             TM_send(TM_Send_format(point));
@@ -782,15 +826,16 @@ namespace ControlUI
                 switch (GripPosition)
                 {
                     case 1:
-                        ImageRecogntionPosition[2] = 65;
-                        break;
-
                     case 2:
                         ImageRecogntionPosition[2] = 65;
                         break;
 
                     case 3:
                         ImageRecogntionPosition[2] = 42;
+                        break;
+
+                    case 4:
+                        ImageRecogntionPosition[2] = 80;
                         break;
 
                     case 5:
@@ -801,12 +846,16 @@ namespace ControlUI
                         ImageRecogntionPosition[2] = 160;
                         break;
 
+                    case 12:
+                        ImageRecogntionPosition[2] = 95;
+                        break;
+
                 }
 
                 point = double2Point(ImageRecogntionPosition);
 
                 TM_send(TM_Send_format(point));
-                Thread.Sleep(4000);
+                Thread.Sleep(3000);
 
                 if (GripPosition == 1 ||GripPosition == 5)
                 {
@@ -819,6 +868,14 @@ namespace ControlUI
                 else if(GripPosition == 11)
                 {
                     SendOpenClose(XEG32, 1400, 80);
+                }
+                else if (GripPosition == 4)
+                {
+                    SendOpenClose(XEG32, 3200, 80);
+                }
+                else if(GripPosition == 12)
+                {
+                    SendOpenClose(XEG32, 600, 80);
                 }
                 else
                 {
@@ -899,5 +956,20 @@ namespace ControlUI
             GripRotation(10);
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            GripRotation(11);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            Action<Label, string> ChangeName = UpdateLocation;
+            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+            Thread.Sleep(1000);
+
+            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+        }
     }
 }

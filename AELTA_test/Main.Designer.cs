@@ -87,6 +87,7 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.StopMove = new System.Windows.Forms.Button();
             this.Delete = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.CheckBox();
             this.ExprotDataGrid = new System.Windows.Forms.Button();
@@ -140,7 +141,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.NowPositionLb = new System.Windows.Forms.Label();
             this.img_Label = new System.Windows.Forms.Label();
-            this.StopMove = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.墊高板 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -271,6 +274,7 @@
             this.TB_RecvData.Name = "TB_RecvData";
             this.TB_RecvData.Size = new System.Drawing.Size(292, 40);
             this.TB_RecvData.TabIndex = 69;
+            this.TB_RecvData.Text = "1,Move_Line(\"CPP\", 0, 0, -5, 0, 0, 0, 125, 200, 0, false)";
             // 
             // btn_ClearRecvData
             // 
@@ -686,7 +690,7 @@
             // 
             // Img_Btn
             // 
-            this.Img_Btn.Location = new System.Drawing.Point(333, 432);
+            this.Img_Btn.Location = new System.Drawing.Point(338, 486);
             this.Img_Btn.Name = "Img_Btn";
             this.Img_Btn.Size = new System.Drawing.Size(92, 23);
             this.Img_Btn.TabIndex = 72;
@@ -720,6 +724,16 @@
             this.groupBox2.TabIndex = 115;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
+            // 
+            // StopMove
+            // 
+            this.StopMove.Location = new System.Drawing.Point(520, 70);
+            this.StopMove.Name = "StopMove";
+            this.StopMove.Size = new System.Drawing.Size(75, 23);
+            this.StopMove.TabIndex = 129;
+            this.StopMove.Text = "StopMove";
+            this.StopMove.UseVisualStyleBackColor = true;
+            this.StopMove.Click += new System.EventHandler(this.StopMove_Click);
             // 
             // Delete
             // 
@@ -1158,7 +1172,7 @@
             // BaisLB
             // 
             this.BaisLB.AutoSize = true;
-            this.BaisLB.Location = new System.Drawing.Point(353, 511);
+            this.BaisLB.Location = new System.Drawing.Point(355, 567);
             this.BaisLB.Name = "BaisLB";
             this.BaisLB.Size = new System.Drawing.Size(25, 12);
             this.BaisLB.TabIndex = 119;
@@ -1166,7 +1180,7 @@
             // 
             // 聯軸器
             // 
-            this.聯軸器.Location = new System.Drawing.Point(440, 435);
+            this.聯軸器.Location = new System.Drawing.Point(430, 435);
             this.聯軸器.Name = "聯軸器";
             this.聯軸器.Size = new System.Drawing.Size(67, 23);
             this.聯軸器.TabIndex = 120;
@@ -1176,7 +1190,7 @@
             // 
             // 萬象軸
             // 
-            this.萬象軸.Location = new System.Drawing.Point(511, 435);
+            this.萬象軸.Location = new System.Drawing.Point(512, 435);
             this.萬象軸.Name = "萬象軸";
             this.萬象軸.Size = new System.Drawing.Size(67, 23);
             this.萬象軸.TabIndex = 120;
@@ -1197,7 +1211,7 @@
             // img_Position
             // 
             this.img_Position.AutoSize = true;
-            this.img_Position.Location = new System.Drawing.Point(440, 464);
+            this.img_Position.Location = new System.Drawing.Point(342, 464);
             this.img_Position.Name = "img_Position";
             this.img_Position.Size = new System.Drawing.Size(96, 16);
             this.img_Position.TabIndex = 121;
@@ -1210,14 +1224,14 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 122;
-            this.button1.Text = "button1";
+            this.button1.Text = "GripRotation";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // NowPositionLb
             // 
             this.NowPositionLb.AutoSize = true;
-            this.NowPositionLb.Location = new System.Drawing.Point(331, 490);
+            this.NowPositionLb.Location = new System.Drawing.Point(331, 552);
             this.NowPositionLb.Name = "NowPositionLb";
             this.NowPositionLb.Size = new System.Drawing.Size(77, 12);
             this.NowPositionLb.TabIndex = 118;
@@ -1226,27 +1240,50 @@
             // img_Label
             // 
             this.img_Label.AutoSize = true;
-            this.img_Label.Location = new System.Drawing.Point(339, 474);
+            this.img_Label.Location = new System.Drawing.Point(336, 534);
             this.img_Label.Name = "img_Label";
             this.img_Label.Size = new System.Drawing.Size(55, 12);
             this.img_Label.TabIndex = 117;
             this.img_Label.Text = "img_Label";
             // 
-            // StopMove
+            // button2
             // 
-            this.StopMove.Location = new System.Drawing.Point(520, 70);
-            this.StopMove.Name = "StopMove";
-            this.StopMove.Size = new System.Drawing.Size(75, 23);
-            this.StopMove.TabIndex = 129;
-            this.StopMove.Text = "StopMove";
-            this.StopMove.UseVisualStyleBackColor = true;
-            this.StopMove.Click += new System.EventHandler(this.StopMove_Click);
+            this.button2.Location = new System.Drawing.Point(518, 487);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 122;
+            this.button2.Text = "downRatation";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // 墊高板
+            // 
+            this.墊高板.Location = new System.Drawing.Point(341, 435);
+            this.墊高板.Name = "墊高板";
+            this.墊高板.Size = new System.Drawing.Size(75, 23);
+            this.墊高板.TabIndex = 123;
+            this.墊高板.Text = "墊高板位置";
+            this.墊高板.UseVisualStyleBackColor = true;
+            this.墊高板.Click += new System.EventHandler(this.墊高板_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(599, 487);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(60, 23);
+            this.button3.TabIndex = 124;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 644);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.墊高板);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.img_Position);
             this.Controls.Add(this.固定座);
@@ -1398,6 +1435,9 @@
         private System.Windows.Forms.CheckBox Excel;
         private System.Windows.Forms.Button Delete;
         private System.Windows.Forms.Button StopMove;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button 墊高板;
+        private System.Windows.Forms.Button button3;
     }
 }
 
