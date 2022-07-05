@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
         
         #region   --XEG32夾爪控制程式--

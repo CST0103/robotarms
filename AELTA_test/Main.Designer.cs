@@ -1,6 +1,6 @@
 ﻿namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -87,6 +87,7 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Grip_Position = new System.Windows.Forms.TextBox();
             this.StopMove = new System.Windows.Forms.Button();
             this.Delete = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.CheckBox();
@@ -144,6 +145,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.墊高板 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.PutDown = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
@@ -725,6 +727,14 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
+            // Grip_Position
+            // 
+            this.Grip_Position.Location = new System.Drawing.Point(635, 515);
+            this.Grip_Position.Name = "Grip_Position";
+            this.Grip_Position.Size = new System.Drawing.Size(28, 22);
+            this.Grip_Position.TabIndex = 125;
+            this.Grip_Position.Text = "0";
+            // 
             // StopMove
             // 
             this.StopMove.Location = new System.Drawing.Point(520, 70);
@@ -1276,11 +1286,23 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // Form1
+            // PutDown
+            // 
+            this.PutDown.AutoSize = true;
+            this.PutDown.Location = new System.Drawing.Point(587, 548);
+            this.PutDown.Name = "PutDown";
+            this.PutDown.Size = new System.Drawing.Size(67, 16);
+            this.PutDown.TabIndex = 126;
+            this.PutDown.Text = "PutDown";
+            this.PutDown.UseVisualStyleBackColor = true;
+            // 
+            // GripPosition_
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 644);
+            this.Controls.Add(this.PutDown);
+            this.Controls.Add(this.Grip_Position);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.墊高板);
             this.Controls.Add(this.button2);
@@ -1298,7 +1320,7 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Img_Btn);
-            this.Name = "Form1";
+            this.Name = "GripPosition_";
             this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
@@ -1438,6 +1460,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button 墊高板;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox Grip_Position;
+        private System.Windows.Forms.CheckBox PutDown;
     }
 }
 

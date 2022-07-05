@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
 
         double[] NowPosition = null;

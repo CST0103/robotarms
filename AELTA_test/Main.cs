@@ -22,7 +22,7 @@ using dynamixel_sdk;
 
 namespace ControlUI
 {
-    public partial class Form1 : Form
+    public partial class GripPosition_ : Form
     {
         #region 宣告
         //TM_1
@@ -53,12 +53,13 @@ namespace ControlUI
         private int port_num;
 
         private bool StopFlag = false;
+        private bool PutDownToFixedSeat = false; 
 
         //Image
         ImageProcess ImageHandler = new ImageProcess();
         #endregion
 
-        public Form1()
+        public GripPosition_()
         {
             InitializeComponent();
         }
@@ -155,25 +156,25 @@ namespace ControlUI
 
                                 switch (Convert.ToInt32(data[command_int - 1]))
                                 {
-                                    case 1:
+                                    case (int)EGripPostion.Coupling:
                                         if (position[2] < 75) { position[2] = 75; }
                                         break;
-                                    case 2:
-                                        if (position[2] < 85) { position[2] = 85; }
+                                    case (int)EGripPostion.raiseBoard:
+                                        if (position[2] < 92) { position[2] = 92; }
                                         break;
-                                    case 3:
+                                    case (int)EGripPostion.Vientiane:
                                         if (position[2] < 82) { position[2] = 82; }
                                         break;
 
-                                    case 10:
+                                    case (int)EGripPostion.RotationBoard: 
                                         if (position[2] < 82) { position[2] = 82; }
                                         break;
 
-                                    case 5:
+                                    case (int)EGripPostion.Coupling_back:
                                         if (position[2] < 170) { position[2] = 170; }
                                         break;
 
-                                    case 11:
+                                    case (int)EGripPostion.chair_legs:
                                         if(position[2] < 82) { position[2] = 82; }
                                         break;
                                 }
@@ -520,22 +521,29 @@ namespace ControlUI
         private void ActionBtn_Click(object sender, EventArgs e)
         {
             ThreadStart action = null;
-            if(Excel.Checked)
+            if (Excel.Checked)
             {
-                ActionMoveFromExcel(); 
+                ActionMoveFromExcel();
             }
 
             else
             {
-                this.TCPClientObject.IsMoveOver = false;
-                this.TCPClientObject1.IsMoveOver = false;
-                if(action == null)
+                try
                 {
-                    action = delegate
+                    this.TCPClientObject.IsMoveOver = false;
+                    this.TCPClientObject1.IsMoveOver = false;
+
+                    if (action == null)
                     {
-                        this.ActionMoveFromGrid();
-                    };
-                    new Thread(action) { IsBackground =true }.Start( );
+                        action = delegate
+                        {
+                            this.ActionMoveFromGrid();
+                        };
+                        new Thread(action) { IsBackground = true }.Start();
+                    }
+                }
+                catch{
+                    MessageBox.Show("請先確認雙手臂連線");
                 }
 
             }
@@ -752,36 +760,38 @@ namespace ControlUI
                 while (Math.Abs(ImageCenter_bais[0]) >= 2)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = ImageCenter_bais[0] * -0.1;
+                    double bais = -0.75;
                     if (Math.Abs(ImageCenter_bais[0]) <= 5)
                     {
-                        bais = -0.1;
+                        bais = -0.25;
                     }
                     if (ImageCenter_bais[0] < 0)
                     {
                         bais = -bais;
                     }
-                    Thread.Sleep(850);
+                    Thread.Sleep(500);
                     TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
+                    ImageCenter_bais = ImageHandler.ImageRecognition();
                     //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
                 }
 
                 while (Math.Abs(ImageCenter_bais[1]) >= 2)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = -0.5;
+                    double bais = .75;
                     if (Math.Abs(ImageCenter_bais[1]) <= 5)
                     {
-                        bais = -0.1;
+                        bais = 0.25;
                     }
-                    if (ImageCenter_bais[1] > 0)
+                    if (ImageCenter_bais[1] < 0)
                     {
                         bais = -bais;
                     }
-                    Thread.Sleep(850);
+                    Thread.Sleep(500);
                     TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
+                    ImageCenter_bais = ImageHandler.ImageRecognition();
                     // ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
                 }
                 ImageCenter_bais = ImageHandler.ImageRecognition();
@@ -791,8 +801,7 @@ namespace ControlUI
             Thread.Sleep(1000);
 
             //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-            ChangeName(BaisLB, ImageCenter_bais[2].ToString());
-            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
 
             Grip();
 
@@ -813,9 +822,32 @@ namespace ControlUI
         {
             Action<Label, string> ChangeName = UpdateLocation;
             double[] ImageRecogntionPosition = NowPosition;
-
-            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X ;
-            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y ;
+            double baisX_ = 0, baisY_ = 0;
+            GripPosition = Convert.ToInt32(Grip_Position.Text);
+           if (GripPosition == 4)
+            {
+                //if (PutDownToFixedSeat)
+                if(PutDown.Checked)
+                {
+                    baisX_ = (0.05 * (NowPosition[2] - 150) + 3.2882) * -1;
+                    baisY_ = (0.0721 * (NowPosition[2] - 150) - 6.2268) * -1;
+                    PutDownToFixedSeat = true;
+                    PutDown.Checked = true;
+                }
+                else
+                {
+                    baisX_ = (0.0524 * (NowPosition[2] - 150) - 1.9255) * -1;
+                    baisY_ = (0.0609 * (NowPosition[2] - 150) - 2.2832) * -1;
+                }
+            }
+            else if(GripPosition == 12)
+            {
+                //baisX_ = 0.0538 * (NowPosition[2] - 150) + 1.6693;
+                baisX_ = 5;
+            }
+            ChangeName(BaisLB, "x: " +  baisX_.ToString() + ",y: " + baisY_.ToString());
+            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X + baisX_;
+            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] - (double)ImageRecogntionBais.Y + baisY_;
             ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
@@ -825,17 +857,29 @@ namespace ControlUI
             {
                 switch (GripPosition)
                 {
-                    case 1:
-                    case 2:
+                    case (int)EGripPostion.Coupling:
+                    case (int)EGripPostion.raiseBoard:
                         ImageRecogntionPosition[2] = 65;
                         break;
 
-                    case 3:
+                    case (int)EGripPostion.Vientiane:
                         ImageRecogntionPosition[2] = 42;
                         break;
 
-                    case 4:
-                        ImageRecogntionPosition[2] = 80;
+                    case (int)EGripPostion.FixedSeat:
+                        ImageRecogntionPosition[2] = 105;
+                        point = double2Point(ImageRecogntionPosition);
+
+                        TM_send(TM_Send_format(point));
+                        Thread.Sleep(3000);
+                        if (PutDownToFixedSeat)
+                        {
+                            ImageRecogntionPosition[2] = 75;
+                        }
+                        else
+                        {
+                            ImageRecogntionPosition[2] = 92;
+                        }
                         break;
 
                     case 5:
@@ -969,7 +1013,7 @@ namespace ControlUI
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
             Thread.Sleep(1000);
 
-            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00")));
+            ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
         }
     }
 }

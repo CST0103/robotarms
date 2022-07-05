@@ -8,6 +8,7 @@ using Emgu.Util;
 using Emgu.CV.Util;
 using Emgu.CV.Structure;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace ControlUI
 {
@@ -23,13 +24,16 @@ namespace ControlUI
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
             Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Exposure, -5);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 720);
+            //Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
+            //Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 720);
             Arm_cap.FlipVertical = true;
 
         }
         public double[] ImageRecognition()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             int X_Center = 0, Y_Center = 0;
             // 480,640
             Image<Bgr, byte> img = Arm_cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
@@ -43,7 +47,7 @@ namespace ControlUI
 
 
             Image<Gray, byte>[] channels = img_hsv.Split();
-            Image<Gray, byte> threshold = img_hsv.InRange(new Hsv(0, 0, 0), new Hsv(360, 255, 50));
+            Image<Gray, byte> threshold = img_hsv.InRange(new Hsv(0, 0, 0), new Hsv(180, 255, 46));
             
             Point Center = new Point(0, 0);
 
@@ -80,7 +84,6 @@ namespace ControlUI
                         CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
 
                         CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
-                        CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
                         X_Center = Center.X;
                         Y_Center = Center.Y;
 
@@ -94,12 +97,14 @@ namespace ControlUI
                 }
             }
             CvInvoke.Line(img, Center, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
-            CvInvoke.PutText(img, Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
+            CvInvoke.PutText(img, X_Center.ToString() + " " + Y_Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
 
             CvInvoke.Imshow("ori", img);
             CvInvoke.Imshow("Test", threshold);
             CvInvoke.WaitKey(1);
-            double[] vs = new double[3] { (Center.Y - CameraSize[1] / 2), (Center.X - CameraSize[0] / 2), Area};
+            stopwatch.Stop();
+            double time = stopwatch.ElapsedMilliseconds;
+            double[] vs = new double[4] { (Center.Y - CameraSize[1] / 2), (Center.X - CameraSize[0] / 2), Area, time};
             return vs;
 
         }

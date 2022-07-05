@@ -7,7 +7,7 @@ using dynamixel_sdk;
 
 namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
 
         // Control table address

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Threading;
 namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
         #region --TM1--
         private void btn_Connect_Click(object sender, EventArgs e)

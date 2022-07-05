@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace ControlUI
 {
-    partial class Form1
+    partial class GripPosition_
     {
         XLWorkbook workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
         List<string[]> Pointdata = new List<string[]>();
