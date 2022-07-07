@@ -19,6 +19,7 @@ using System.Net.Sockets;
 using ClosedXML.Excel;
 
 using dynamixel_sdk;
+using System.Diagnostics;
 
 namespace ControlUI
 {
@@ -209,11 +210,11 @@ namespace ControlUI
                                 break;
 
                             case "Image":
-                                if (GripPosition == 10)
+                                if (GripPosition == 10 && Convert.ToInt32(data[2]) != 11)
                                 {
                                     Invoke(ToDataGrid, Count, GripPosition, "GripRotation", 0, 0, 0, 0, 0, 0, true);
                                 }
-                                else if (GripPosition == 11)
+                                else if (GripPosition == 10 && Convert.ToInt32(data[2]) == 11)
                                 {
                                     Invoke(ToDataGrid, Count, GripPosition, "DownRotation", 0, 0, 0, 0, 0, 0, true);
                                 }
@@ -667,15 +668,29 @@ namespace ControlUI
                             Invoke(SendCommand, "1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
                             if (arm_Select)
                             {
-                                while (!this.TCPClientObject.IsMoveOver) { };
+                                if (TCPClientObject.IsConnected)
+                                {
+                                    while (!this.TCPClientObject.IsMoveOver) { };
+                                }
                             }
                             else
                             {
-                                while (!this.TCPClientObject1.IsMoveOver) { };
+                                if (TCPClientObject1.IsConnected)
+                                {
+                                    Stopwatch t = new Stopwatch();
+                                    while (!this.TCPClientObject1.IsMoveOver)
+                                    {
+                                        t.Start();
+                                        if (t.ElapsedMilliseconds > 10000)
+                                        {
+                                            break;
+                                        }
+                                    };
+                                }
                             }
                             break;
                         case "Image":
-                            this.GripPosition = Convert.ToInt32(Pointdata[i][2]);
+                            this.GripPosition = Convert.ToInt32(PointDataGrid[2, i].Value);
                             Image.Invoke();
                             break;
                         case "GripOpen":
