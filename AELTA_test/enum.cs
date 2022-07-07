@@ -9,7 +9,7 @@ namespace ControlUI
     public enum ImageRecogntionBais
     {
         X = -60,
-        Y = -6
+        Y = -8
     }
     public enum EGripPostion
     {

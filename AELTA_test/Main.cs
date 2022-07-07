@@ -521,6 +521,7 @@ namespace ControlUI
         private void ActionBtn_Click(object sender, EventArgs e)
         {
             ThreadStart action = null;
+            PutDownToFixedSeat = false;
             if (Excel.Checked)
             {
                 ActionMoveFromExcel();
@@ -688,9 +689,9 @@ namespace ControlUI
                             Invoke(GripRotate, 11);
                             break;
                     }
+                    Thread.Sleep(800);
                     this.TCPClientObject.IsMoveOver = false;
                     this.TCPClientObject1.IsMoveOver = false;
-                    Thread.Sleep(700);
                     Invoke(GridHight, i, false);
                 }
 
@@ -760,7 +761,7 @@ namespace ControlUI
                 while (Math.Abs(ImageCenter_bais[0]) >= 2)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = -0.75;
+                    double bais = -0.5;
                     if (Math.Abs(ImageCenter_bais[0]) <= 5)
                     {
                         bais = -0.25;
@@ -779,7 +780,7 @@ namespace ControlUI
                 while (Math.Abs(ImageCenter_bais[1]) >= 2)
                 {
                     ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = .75;
+                    double bais = .5;
                     if (Math.Abs(ImageCenter_bais[1]) <= 5)
                     {
                         bais = 0.25;
@@ -805,7 +806,7 @@ namespace ControlUI
 
             Grip();
 
-        }
+       }
         private void UpdateLocation(Label lb,string imfo)
         {
             if (this.InvokeRequired)
@@ -823,21 +824,18 @@ namespace ControlUI
             Action<Label, string> ChangeName = UpdateLocation;
             double[] ImageRecogntionPosition = NowPosition;
             double baisX_ = 0, baisY_ = 0;
-            GripPosition = Convert.ToInt32(Grip_Position.Text);
-           if (GripPosition == 4)
+            //GripPosition = Convert.ToInt32(Grip_Position.Text);
+            if (GripPosition == 4)
             {
-                //if (PutDownToFixedSeat)
-                if(PutDown.Checked)
+                if (!PutDownToFixedSeat)
                 {
-                    baisX_ = (0.05 * (NowPosition[2] - 150) + 3.2882) * -1;
-                    baisY_ = (0.0721 * (NowPosition[2] - 150) - 6.2268) * -1;
-                    PutDownToFixedSeat = true;
-                    PutDown.Checked = true;
+                    baisX_ = (0.0593 * (NowPosition[2] - 150) + 4.0134) * -1;
+                    baisY_ = (-0.0601 * (NowPosition[2] - 150) - 2.0824) * -1;
                 }
                 else
                 {
-                    baisX_ = (0.0524 * (NowPosition[2] - 150) - 1.9255) * -1;
-                    baisY_ = (0.0609 * (NowPosition[2] - 150) - 2.2832) * -1;
+                    baisX_ = -(0.0521 * (NowPosition[2] - 150) - 1.8327);
+                    baisY_ = -(-0.0638 * (NowPosition[2] - 150) + 1.0707);
                 }
             }
             else if(GripPosition == 12)
@@ -872,13 +870,14 @@ namespace ControlUI
 
                         TM_send(TM_Send_format(point));
                         Thread.Sleep(3000);
-                        if (PutDownToFixedSeat)
+                        if (!PutDownToFixedSeat)
                         {
+                            PutDownToFixedSeat = true;
                             ImageRecogntionPosition[2] = 75;
                         }
                         else
                         {
-                            ImageRecogntionPosition[2] = 92;
+                            ImageRecogntionPosition[2] = 87;
                         }
                         break;
 
