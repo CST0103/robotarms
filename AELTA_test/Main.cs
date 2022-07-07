@@ -742,67 +742,44 @@ namespace ControlUI
                 double[] vs = ImageHandler.ImageRecognition();
             }
         }
-        
+
         private void ImageProcess()
         {
-            TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))",false);
-
             Action<Label, string> ChangeName = UpdateLocation;
-            Thread.Sleep(500);
-            double[] ImageRecogntionPosition = NowPosition;
 
-            ImageRecogntionPosition[0] = ImageRecogntionPosition[0] + (double)ImageRecogntionBais.X;
-            ImageRecogntionPosition[1] = ImageRecogntionPosition[1] + (double)ImageRecogntionBais.Y;
-
-            TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
-            Thread.Sleep(700);
+            TM_send($"1,Move_Line(\"CPP\",{(int)ImageRecogntionBais.X } , {(int)ImageRecogntionBais.Y}, 0, 0, 0, 0, 125, 200, 0, false)");
+            this.TCPClientObject.IsMoveOver = false;
+            while (!this.TCPClientObject.IsMoveOver) { }
+            this.TCPClientObject.IsMoveOver = false;
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
             while (Math.Abs(ImageCenter_bais[0]) >= 2 || Math.Abs(ImageCenter_bais[1]) >= 2)
             {
-                while (Math.Abs(ImageCenter_bais[0]) >= 2)
-                {
-                    ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = -0.5;
-                    if (Math.Abs(ImageCenter_bais[0]) <= 5)
-                    {
-                        bais = -0.25;
-                    }
-                    if (ImageCenter_bais[0] < 0)
-                    {
-                        bais = -bais;
-                    }
-                    Thread.Sleep(500);
-                    TM_send($"1,Move_Line(\"CPP\",{bais} , 0, 0, 0, 0, 0, 125, 200, 0, false)", false);
+                double bais_X = -0.35, bais_Y = 0.35;
+                if (Math.Abs(ImageCenter_bais[0]) <= 5) { bais_X = -0.1; }
+                if (Math.Abs(ImageCenter_bais[1]) <= 5) { bais_Y = 0.1; }
 
-                    ImageCenter_bais = ImageHandler.ImageRecognition();
-                    //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-                }
 
-                while (Math.Abs(ImageCenter_bais[1]) >= 2)
-                {
-                    ImageCenter_bais = ImageHandler.ImageRecognition();
-                    double bais = .5;
-                    if (Math.Abs(ImageCenter_bais[1]) <= 5)
-                    {
-                        bais = 0.25;
-                    }
-                    if (ImageCenter_bais[1] < 0)
-                    {
-                        bais = -bais;
-                    }
-                    Thread.Sleep(500);
-                    TM_send($"1,Move_Line(\"CPP\", 0, {bais}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+                if (ImageCenter_bais[1] < 0) { bais_Y = -bais_Y; }
+                if (ImageCenter_bais[0] < 0) { bais_X = -bais_X; }
 
-                    ImageCenter_bais = ImageHandler.ImageRecognition();
-                    // ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-                }
+                if (Math.Abs(ImageCenter_bais[0]) <= 1) { bais_X = 0; }
+                if (Math.Abs(ImageCenter_bais[1]) <= 1) { bais_Y = 0; }
+
+                TM_send($"1,Move_Line(\"CPP\",{bais_X} , {bais_Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+
+                Thread.Sleep(450);
+                ImageCenter_bais = ImageHandler.ImageRecognition();
+                //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
+            
+
                 ImageCenter_bais = ImageHandler.ImageRecognition();
 
             }
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
             Thread.Sleep(1000);
 
+            TM_send($"1,Move_Line(\"CPP\",{-(int)ImageRecogntionBais.X } , {-(int)ImageRecogntionBais.Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
             //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
 
