@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace ControlUI
 {
     partial class GripPosition_
     {
-        XLWorkbook workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\DataGridViewExport.xlsx");
+        XLWorkbook workbook = new XLWorkbook(@"E:\碩論\MasterCode\ControlUI\動作資料庫\DataGridViewExport.xlsx");
         List<string[]> Pointdata = new List<string[]>();
         private void exportExcel_Click(object sender, EventArgs e)
         {
@@ -35,7 +36,7 @@ namespace ControlUI
                     }
                 }
                 //Exporting to Excel
-                string folderPath = @"E:\碩論\MasterCode\ControlUI\";
+                string folderPath = @"E:\碩論\MasterCode\ControlUI\動作資料庫\";
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
@@ -45,7 +46,25 @@ namespace ControlUI
         }
         private void ExprotDataGrid_Click(object sender, EventArgs e)
         {
-            var ws = workbook.Worksheet(1);
+            PointDataGrid.Rows.Clear();
+            XLWorkbook workbook_ = new XLWorkbook();
+
+            OpenFileDialog ExcelName = new OpenFileDialog();
+            ExcelName.Filter = "Excel|(*.xls;*.xlsx;*.xlsm)";
+            ExcelName.InitialDirectory = @"E:\碩論\MasterCode\ControlUI\動作資料庫";
+
+            if (ExcelName.ShowDialog() == DialogResult.OK)
+            {
+                workbook_ = new XLWorkbook(ExcelName.FileName);
+            }
+            else
+
+            {
+                workbook_ = workbook;
+            }
+            if (workbook_ == null)
+            { workbook_ = workbook; }
+            var ws = workbook_.Worksheet(1);
             int NumberOfLastRow = ws.LastRowUsed().RowNumber();
             var range = ws.RangeUsed();
 

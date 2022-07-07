@@ -130,7 +130,7 @@ namespace ControlUI
 
             Invoke(ModifyText, Declare);
 
-            double[] refrencePosition = new double[] { };
+                double[] refrencePosition = new double[] { };
                 while (_connect_flag)
                 {
                     try
@@ -651,6 +651,8 @@ namespace ControlUI
                         arm_Select = false;
                     }
 
+                    this.TCPClientObject.IsMoveOver = false;
+
                     switch (PointDataGrid[3,i].Value.ToString())
                     {
                         case "position":
@@ -689,7 +691,7 @@ namespace ControlUI
                             Invoke(GripRotate, 11);
                             break;
                     }
-                    Thread.Sleep(800);
+                    Thread.Sleep(600);
                     this.TCPClientObject.IsMoveOver = false;
                     this.TCPClientObject1.IsMoveOver = false;
                     Invoke(GridHight, i, false);
@@ -746,7 +748,7 @@ namespace ControlUI
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))",false);
 
             Action<Label, string> ChangeName = UpdateLocation;
-            Thread.Sleep(700);
+            Thread.Sleep(500);
             double[] ImageRecogntionPosition = NowPosition;
 
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] + (double)ImageRecogntionBais.X;
@@ -1014,5 +1016,6 @@ namespace ControlUI
 
             ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
         }
+
     }
 }

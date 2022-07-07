@@ -87,7 +87,6 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.Grip_Position = new System.Windows.Forms.TextBox();
             this.StopMove = new System.Windows.Forms.Button();
             this.Delete = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.CheckBox();
@@ -107,6 +106,7 @@
             this.Rx = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ry = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Rz = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Grip_Position = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CB_Customized1 = new System.Windows.Forms.ComboBox();
             this.btn_ClearRecvData1 = new System.Windows.Forms.Button();
@@ -727,14 +727,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
-            // Grip_Position
-            // 
-            this.Grip_Position.Location = new System.Drawing.Point(635, 515);
-            this.Grip_Position.Name = "Grip_Position";
-            this.Grip_Position.Size = new System.Drawing.Size(28, 22);
-            this.Grip_Position.TabIndex = 125;
-            this.Grip_Position.Text = "0";
-            // 
             // StopMove
             // 
             this.StopMove.Location = new System.Drawing.Point(520, 70);
@@ -900,6 +892,14 @@
             this.Rz.HeaderText = "Rz";
             this.Rz.Name = "Rz";
             this.Rz.Width = 55;
+            // 
+            // Grip_Position
+            // 
+            this.Grip_Position.Location = new System.Drawing.Point(635, 515);
+            this.Grip_Position.Name = "Grip_Position";
+            this.Grip_Position.Size = new System.Drawing.Size(28, 22);
+            this.Grip_Position.TabIndex = 125;
+            this.Grip_Position.Text = "0";
             // 
             // groupBox3
             // 
