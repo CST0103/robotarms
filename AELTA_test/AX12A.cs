@@ -50,16 +50,17 @@ namespace ControlUI
         private void AX12A_Open_Click(object sender, EventArgs e)
         {
             dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, Goal_Position_Open);
-            VaildPresentPosition(Goal_Position_Open);
+            //VaildPresentPosition(Goal_Position_Open);
         }
 
         private void AX12A_Close_Click(object sender, EventArgs e)
         {
             dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, Goal_Position_Close);
-            VaildPresentPosition(Goal_Position_Close);
+            //VaildPresentPosition(Goal_Position_Close);
         }
         public void VaildPresentPosition(int Position)
         {
+            dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, (ushort)Position);
         }
     }
 }

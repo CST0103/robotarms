@@ -49,13 +49,13 @@ namespace ControlUI
         private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
         private delegate void AddReceiveDataDelegate(string _receivedata, TextBox _textbox);
 
-        private AutoResetEvent autoResetEvent = new AutoResetEvent(false);
         private int GripPosition = 0;
         private int port_num;
 
         private bool StopFlag = false;
-        private bool PutDownToFixedSeat = false; 
+        private bool PutDownToFixedSeat = false;
 
+        ThreadStart action = null;
         //Image
         ImageProcess ImageHandler = new ImageProcess();
         #endregion
@@ -120,6 +120,8 @@ namespace ControlUI
             Action<int, int, string, double, double, double, double, double, double, bool> ToDataGrid = WriteDataGrid;
             Action Image = ImageProcess;
 
+            Action<int> CameraVision = VaildPresentPosition;
+
             while(true)
             {
             bool _open_flag = FirstListener.Start();
@@ -154,6 +156,10 @@ namespace ControlUI
                                     position[i] = Convert.ToDouble(data[command_int + 1 + i]);
                                 }
                                 position = CoordinateConversion(position, true);
+                                if (position[1] > -300)
+                                { Invoke(CameraVision, 640); }
+                                else
+                                { Invoke(CameraVision, 384); }
 
                                 switch (Convert.ToInt32(data[command_int - 1]))
                                 {
@@ -164,6 +170,9 @@ namespace ControlUI
                                         if (position[2] < 92) { position[2] = 92; }
                                         break;
                                     case (int)EGripPostion.Vientiane:
+                                        if (position[2] < 82) { position[2] = 82; }
+                                        break;
+                                    case 11:
                                         if (position[2] < 82) { position[2] = 82; }
                                         break;
 
@@ -221,7 +230,7 @@ namespace ControlUI
                                 
                                 else if (GripPosition > 20)
                                 {
-                                    Invoke(ToDataGrid, Count, (GripPosition % 10), "GripRotation", 0, 0, 0, 0, 0, 0, true);
+                                    Invoke(ToDataGrid, Count, GripPosition, "Image", 0, 0, 0, 0, 0, 0, true);
                                 }
                                 else { Invoke(ToDataGrid, Count, Convert.ToInt32(data[1]), data[command_int], 0, 0, 0, 0, 0, 0, true); }
 
@@ -237,12 +246,12 @@ namespace ControlUI
                                         Invoke(ToDataGrid, Count, GripPosition, "DownRotation", 0, 0, 0, 0, 0, 0, true);
                                         break;
                                     }
-                                    else if (GripPosition > 20)
-                                    {
-                                        int legs = GripPosition % 10;
-                                        GripChairLegs(legs);
-                                        break;
-                                    }
+//                                    else if (GripPosition > 20)
+//                                    {
+//                                        int legs = GripPosition % 10;
+//                                        GripChairLegs(legs);
+//                                        break;
+//                                    }
 
                                     try
                                     {
@@ -484,12 +493,17 @@ namespace ControlUI
             var item = (d1: dataint[0], speed: string.Format("{0:000}", speed * sp_abs));
 
             //Line(CAP
-            string test_string = @"1,PTP(""CPP""" + "," + d1 + "," + d2 + "," + d3 + "," + d4 + "," + d5 + "," + d6 + "," + $"{item.speed} ,200,0,false)";
-            TB_SendData.Text = test_string;
+            string test_string = @"1,Line(""CPP""" + "," + d1 + "," + d2 + "," + d3 + "," + d4 + "," + d5 + "," + d6 + "," + $"{item.speed} ,200,0,false)";
             if (ArmFlag)
+            {
                 TM_send(test_string);
+                TB_SendData.Text = test_string;
+            }
             else
+            {
                 TM_send1(test_string);
+                TB_SendData1.Text = test_string;
+            }
 
         }
 
@@ -628,11 +642,17 @@ namespace ControlUI
 
                 Action<int> GripRotate = GripRotation;
                 Action<int, bool> GridHight = HighLight;
+                Action<int> SelectRow_ = SeletRow;
 
                 bool arm_Select = false;
                 int ColumnCount = PointDataGrid.Columns.Count;
+                int NowSelected = 0;
+                if (PointDataGrid.CurrentCell != null)
+                { 
+                    NowSelected = PointDataGrid.CurrentCell.RowIndex;
+                }
 
-                for (int i = 0; i < PointDataGrid.Rows.Count - 1; i++)
+                for (int i = NowSelected; i < PointDataGrid.Rows.Count - 1; i++)
                 {
                     if (StopFlag)
                     {
@@ -653,6 +673,7 @@ namespace ControlUI
                     }
 
                     this.TCPClientObject.IsMoveOver = false;
+                    Invoke(SelectRow_, i);
 
                     switch (PointDataGrid[3,i].Value.ToString())
                     {
@@ -666,6 +687,8 @@ namespace ControlUI
                                 PointDataGrid[ColumnCount - 1,i].Value.ToString(),
                                 arm_Select);
                             Invoke(SendCommand, "1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                            this.TCPClientObject.IsMoveOver = false;
+                            this.TCPClientObject1.IsMoveOver = false;
                             if (arm_Select)
                             {
                                 if (TCPClientObject.IsConnected)
@@ -706,12 +729,20 @@ namespace ControlUI
                             Invoke(GripRotate, 11);
                             break;
                     }
-                    Thread.Sleep(600);
+                    Thread.Sleep(350);
                     this.TCPClientObject.IsMoveOver = false;
                     this.TCPClientObject1.IsMoveOver = false;
                     Invoke(GridHight, i, false);
                 }
-
+            }
+        }
+        private void SeletRow(int i)
+        {
+            //每頁15筆資料
+            if (i > 8)
+            {
+                if (!((i - 8) < 0))
+                { PointDataGrid.FirstDisplayedScrollingRowIndex = i - 8; }
             }
         }
         private void HighLight(int Index, bool HighOrNot)
@@ -743,7 +774,7 @@ namespace ControlUI
         private string TM_Send_format(string cmd, int speed = 100)
         {
             int allSpeed = (int)(speed * sp_pc);
-            return @"1,PTP(""CPP"", " + cmd + "," + string.Format("{0:000}", allSpeed) + ",200,0,false)";
+            return @"1,Line(""CPP"", " + cmd + "," + string.Format("{0:000}", allSpeed) + ",200,0,false)";
         }
 
         private void Img_Btn_Click(object sender, EventArgs e)
@@ -766,35 +797,34 @@ namespace ControlUI
             this.TCPClientObject.IsMoveOver = false;
             while (!this.TCPClientObject.IsMoveOver) { }
             this.TCPClientObject.IsMoveOver = false;
+            Thread.Sleep(500);
 
             double[] ImageCenter_bais = ImageHandler.ImageRecognition();
-            while (Math.Abs(ImageCenter_bais[0]) >= 2 || Math.Abs(ImageCenter_bais[1]) >= 2)
+            while (Math.Abs(ImageCenter_bais[0]) > 1 || Math.Abs(ImageCenter_bais[1]) > 1)
             {
-                double bais_X = -0.35, bais_Y = 0.35;
-                if (Math.Abs(ImageCenter_bais[0]) <= 5) { bais_X = -0.1; }
-                if (Math.Abs(ImageCenter_bais[1]) <= 5) { bais_Y = 0.1; }
+                double bais_X = -0.4, bais_Y = 0.4;
+                if (Math.Abs(ImageCenter_bais[0]) <= 3) { bais_X = -0.125; }
+                if (Math.Abs(ImageCenter_bais[1]) <= 3) { bais_Y = 0.125; }
 
 
                 if (ImageCenter_bais[1] < 0) { bais_Y = -bais_Y; }
                 if (ImageCenter_bais[0] < 0) { bais_X = -bais_X; }
 
-                if (Math.Abs(ImageCenter_bais[0]) <= 1) { bais_X = 0; }
-                if (Math.Abs(ImageCenter_bais[1]) <= 1) { bais_Y = 0; }
+                if (Math.Abs(ImageCenter_bais[0]) <= 0) { bais_X = 0; }
+                if (Math.Abs(ImageCenter_bais[1]) <= 0) { bais_Y = 0; }
 
                 TM_send($"1,Move_Line(\"CPP\",{bais_X} , {bais_Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
 
-                Thread.Sleep(450);
+                Thread.Sleep(550);
                 ImageCenter_bais = ImageHandler.ImageRecognition();
                 //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
-            
-
-                ImageCenter_bais = ImageHandler.ImageRecognition();
 
             }
+
             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
             Thread.Sleep(1000);
 
-            TM_send($"1,Move_Line(\"CPP\",{-(int)ImageRecogntionBais.X } , {-(int)ImageRecogntionBais.Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+            //TM_send($"1,Move_Line(\"CPP\",{-(int)ImageRecogntionBais.X } , {-(int)ImageRecogntionBais.Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
             //ChangeName(BaisLB, "Image_Bais: " + ImageCenter_bais[0].ToString("#0.00") + ", " + ImageCenter_bais[1].ToString("#0.00"));
             ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
 
@@ -823,19 +853,20 @@ namespace ControlUI
             {
                 if (!PutDownToFixedSeat)
                 {
-                    baisX_ = (0.0593 * (NowPosition[2] - 150) + 4.0134) * -1;
-                    baisY_ = (-0.0601 * (NowPosition[2] - 150) - 2.0824) * -1;
+                    baisX_ = (0.0593 * (NowPosition[2] - 150) + 4.0134) * -1 + 0.75;
+                    baisY_ = (-0.0601 * (NowPosition[2] - 150) - 2.0824) * -1 - 1;
                 }
                 else
                 {
                     baisX_ = -(0.0521 * (NowPosition[2] - 150) - 1.8327);
-                    baisY_ = -(-0.0638 * (NowPosition[2] - 150) + 1.0707);
+                    baisY_ = -(-0.0638 * (NowPosition[2] - 150) + 1.0707) + .15;
                 }
             }
-            else if(GripPosition == 12)
+            else if(GripPosition > 100)
             {
                 //baisX_ = 0.0538 * (NowPosition[2] - 150) + 1.6693;
-                baisX_ = 5;
+                baisX_ = -(0.0424 * (NowPosition[2]-170) - 6.2634);
+                baisY_ = -(-0.0588 * (NowPosition[2]-170) + 3.0847);
             }
             ChangeName(BaisLB, "x: " +  baisX_.ToString() + ",y: " + baisY_.ToString());
             ImageRecogntionPosition[0] = ImageRecogntionPosition[0] - (double)ImageRecogntionBais.X + baisX_;
@@ -843,7 +874,7 @@ namespace ControlUI
             ChangeName(img_Label, String.Format("GoalPosition: {0}, {1}", ImageRecogntionPosition[0].ToString("#0.00"), ImageRecogntionPosition[1].ToString("#0.00")));
 
             string point = double2Point(ImageRecogntionPosition);
-            TM_send(TM_Send_format(point));
+            TM_send(TM_Send_format(point),false);
 
             if (ImageGrip_CheckBox.Checked & GripPosition != 0)
             {
@@ -862,8 +893,8 @@ namespace ControlUI
                         ImageRecogntionPosition[2] = 105;
                         point = double2Point(ImageRecogntionPosition);
 
-                        TM_send(TM_Send_format(point));
-                        Thread.Sleep(3000);
+                        TM_send(TM_Send_format(point),false);
+                        Thread.Sleep(1000);
                         if (!PutDownToFixedSeat)
                         {
                             PutDownToFixedSeat = true;
@@ -882,16 +913,14 @@ namespace ControlUI
                     case 11:
                         ImageRecogntionPosition[2] = 160;
                         break;
-
-                    case 12:
-                        ImageRecogntionPosition[2] = 95;
-                        break;
-
                 }
-
+                if(GripPosition > 100)
+                {
+                    ImageRecogntionPosition[2] = 95;
+                }
                 point = double2Point(ImageRecogntionPosition);
 
-                TM_send(TM_Send_format(point));
+                TM_send(TM_Send_format(point),false);
                 Thread.Sleep(3000);
 
                 if (GripPosition == 1 ||GripPosition == 5)
@@ -910,15 +939,21 @@ namespace ControlUI
                 {
                     SendOpenClose(XEG32, 3200, 80);
                 }
-                else if(GripPosition == 12)
+                else if ((GripPosition) > 10)
                 {
-                    SendOpenClose(XEG32, 600, 80);
+                    Thread.Sleep(500);
+                    SendOpenClose(XEG32, 400, 80);
+                }
+                else if(GripPosition == 3)
+                {
+                    Thread.Sleep(500);
+                    SendOpenClose(XEG32, 400, 80);
                 }
                 else
                 {
                     SendOpenClose(XEG32, 400, 80);
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(750);
 
                 if(GripPosition <= 10)
                 {
@@ -929,7 +964,7 @@ namespace ControlUI
                     ImageRecogntionPosition[2] = 200;
                 }
 
-                TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)));
+                TM_send(TM_Send_format(double2Point(ImageRecogntionPosition)),false);
                 Thread.Sleep(1000);
 
 
@@ -958,9 +993,9 @@ namespace ControlUI
                 SendOpenClose(XEG32, 1100, 80);
             else if (NowStatic == 11)
                 SendOpenClose(XEG32, 3200, 80);
-            Thread.Sleep(700);
+            Thread.Sleep(500);
             point = "540, -190, 150, 180, 0, 90";
-            Thread.Sleep(1000);
+            Thread.Sleep(700);
             TM_send(TM_Send_format(point));
         }
         private void GripChairLegs(int legs)
@@ -1009,5 +1044,54 @@ namespace ControlUI
             ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
         }
 
+        private void Do_Btn_Click(object sender, EventArgs e)
+        {
+            string command = null;
+            bool arm;
+            int Count = PointDataGrid.CurrentCell.RowIndex;
+            if (Count > 0)
+            {
+                for (int i = PointDataGrid.Columns.Count - 6; i < PointDataGrid.Columns.Count; i++)
+                {
+                    command += PointDataGrid[i,Count].Value.ToString() + " ,";
+                }
+            }
+            if(PointDataGrid[0,Count].Value.ToString() == "left")
+            {
+                arm = true;
+            }
+            else
+            {
+                arm = false;
+            }
+            switch(PointDataGrid[3,Count].Value.ToString())
+            {
+                case "position":
+                    if (arm)
+                    {
+                        TM_send(TM_Send_format(command.Remove(command.Length - 1)));
+                    }
+                    else
+                    {
+                        TM_send1(TM_Send_format(command.Remove(command.Length - 1)));
+                    }
+                    break;
+
+                case "Image":
+                    GripPosition = Convert.ToInt32(PointDataGrid[2,Count].Value);
+                    ImageProcess();
+                    break;
+
+                case "GripOpen":
+                    XEG32_Close_Other.PerformClick();
+                    break;
+
+                case "GripClose":
+                    XEG32_Close_bt.PerformClick();
+                    break;
+            }
+        }
+
+       
     }
 }

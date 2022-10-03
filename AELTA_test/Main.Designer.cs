@@ -87,6 +87,7 @@
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Do_Btn = new System.Windows.Forms.Button();
             this.StopMove = new System.Windows.Forms.Button();
             this.Delete = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.CheckBox();
@@ -427,7 +428,7 @@
             this.XGE32_groupBox.Controls.Add(this.XEG32_Vel_text);
             this.XGE32_groupBox.Controls.Add(this.XEG32_PosStk_text);
             this.XGE32_groupBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.XGE32_groupBox.Location = new System.Drawing.Point(8, 82);
+            this.XGE32_groupBox.Location = new System.Drawing.Point(8, 162);
             this.XGE32_groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.XGE32_groupBox.Name = "XGE32_groupBox";
             this.XGE32_groupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -571,19 +572,19 @@
             // XEG32
             // 
             this.XEG32.BaudRate = 115200;
-            this.XEG32.PortName = "COM5";
+            this.XEG32.PortName = "COM4";
             // 
             // txtStatus
             // 
-            this.txtStatus.Controls.Add(this.groupBox5);
-            this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.label6);
+            this.txtStatus.Controls.Add(this.XGE32_groupBox);
             this.txtStatus.Controls.Add(this.label5);
             this.txtStatus.Controls.Add(this.TB_sp_abs);
             this.txtStatus.Controls.Add(this.TB_sp_pc);
             this.txtStatus.Controls.Add(this.label4);
             this.txtStatus.Controls.Add(this.label3);
             this.txtStatus.Controls.Add(this.btn_TMtest);
+            this.txtStatus.Controls.Add(this.groupBox4);
             this.txtStatus.Location = new System.Drawing.Point(325, 17);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -598,11 +599,11 @@
             this.groupBox5.Controls.Add(this.AX12A_Open);
             this.groupBox5.Controls.Add(this.AX12A_Status);
             this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox5.Location = new System.Drawing.Point(8, 246);
+            this.groupBox5.Location = new System.Drawing.Point(287, 540);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Size = new System.Drawing.Size(179, 72);
+            this.groupBox5.Size = new System.Drawing.Size(315, 72);
             this.groupBox5.TabIndex = 110;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "AX12A";
@@ -692,7 +693,7 @@
             // 
             // Img_Btn
             // 
-            this.Img_Btn.Location = new System.Drawing.Point(338, 486);
+            this.Img_Btn.Location = new System.Drawing.Point(330, 400);
             this.Img_Btn.Name = "Img_Btn";
             this.Img_Btn.Size = new System.Drawing.Size(92, 23);
             this.Img_Btn.TabIndex = 72;
@@ -710,6 +711,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox5);
+            this.groupBox2.Controls.Add(this.Do_Btn);
             this.groupBox2.Controls.Add(this.StopMove);
             this.groupBox2.Controls.Add(this.Delete);
             this.groupBox2.Controls.Add(this.Excel);
@@ -727,6 +730,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "顯示介面";
             // 
+            // Do_Btn
+            // 
+            this.Do_Btn.Location = new System.Drawing.Point(6, 499);
+            this.Do_Btn.Name = "Do_Btn";
+            this.Do_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Do_Btn.TabIndex = 130;
+            this.Do_Btn.Text = "Do";
+            this.Do_Btn.UseVisualStyleBackColor = true;
+            this.Do_Btn.Click += new System.EventHandler(this.Do_Btn_Click);
+            // 
             // StopMove
             // 
             this.StopMove.Location = new System.Drawing.Point(520, 70);
@@ -739,7 +752,7 @@
             // 
             // Delete
             // 
-            this.Delete.Location = new System.Drawing.Point(6, 498);
+            this.Delete.Location = new System.Drawing.Point(87, 499);
             this.Delete.Name = "Delete";
             this.Delete.Size = new System.Drawing.Size(75, 23);
             this.Delete.TabIndex = 128;
@@ -779,7 +792,7 @@
             // 
             // Clr_btn
             // 
-            this.Clr_btn.Location = new System.Drawing.Point(87, 498);
+            this.Clr_btn.Location = new System.Drawing.Point(168, 499);
             this.Clr_btn.Name = "Clr_btn";
             this.Clr_btn.Size = new System.Drawing.Size(75, 23);
             this.Clr_btn.TabIndex = 126;
@@ -895,7 +908,7 @@
             // 
             // Grip_Position
             // 
-            this.Grip_Position.Location = new System.Drawing.Point(635, 515);
+            this.Grip_Position.Location = new System.Drawing.Point(627, 429);
             this.Grip_Position.Name = "Grip_Position";
             this.Grip_Position.Size = new System.Drawing.Size(28, 22);
             this.Grip_Position.TabIndex = 125;
@@ -1107,7 +1120,7 @@
             this.groupBox4.Controls.Add(this.label17);
             this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.button9);
-            this.groupBox4.Location = new System.Drawing.Point(330, 350);
+            this.groupBox4.Location = new System.Drawing.Point(6, 81);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.groupBox4.Size = new System.Drawing.Size(324, 79);
@@ -1182,7 +1195,7 @@
             // BaisLB
             // 
             this.BaisLB.AutoSize = true;
-            this.BaisLB.Location = new System.Drawing.Point(355, 567);
+            this.BaisLB.Location = new System.Drawing.Point(347, 481);
             this.BaisLB.Name = "BaisLB";
             this.BaisLB.Size = new System.Drawing.Size(25, 12);
             this.BaisLB.TabIndex = 119;
@@ -1190,7 +1203,7 @@
             // 
             // 聯軸器
             // 
-            this.聯軸器.Location = new System.Drawing.Point(430, 435);
+            this.聯軸器.Location = new System.Drawing.Point(422, 349);
             this.聯軸器.Name = "聯軸器";
             this.聯軸器.Size = new System.Drawing.Size(67, 23);
             this.聯軸器.TabIndex = 120;
@@ -1200,7 +1213,7 @@
             // 
             // 萬象軸
             // 
-            this.萬象軸.Location = new System.Drawing.Point(512, 435);
+            this.萬象軸.Location = new System.Drawing.Point(504, 349);
             this.萬象軸.Name = "萬象軸";
             this.萬象軸.Size = new System.Drawing.Size(67, 23);
             this.萬象軸.TabIndex = 120;
@@ -1210,7 +1223,7 @@
             // 
             // 固定座
             // 
-            this.固定座.Location = new System.Drawing.Point(587, 435);
+            this.固定座.Location = new System.Drawing.Point(579, 349);
             this.固定座.Name = "固定座";
             this.固定座.Size = new System.Drawing.Size(67, 23);
             this.固定座.TabIndex = 120;
@@ -1221,7 +1234,7 @@
             // img_Position
             // 
             this.img_Position.AutoSize = true;
-            this.img_Position.Location = new System.Drawing.Point(342, 464);
+            this.img_Position.Location = new System.Drawing.Point(334, 378);
             this.img_Position.Name = "img_Position";
             this.img_Position.Size = new System.Drawing.Size(96, 16);
             this.img_Position.TabIndex = 121;
@@ -1230,7 +1243,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(437, 487);
+            this.button1.Location = new System.Drawing.Point(429, 401);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 122;
@@ -1241,7 +1254,7 @@
             // NowPositionLb
             // 
             this.NowPositionLb.AutoSize = true;
-            this.NowPositionLb.Location = new System.Drawing.Point(331, 552);
+            this.NowPositionLb.Location = new System.Drawing.Point(323, 466);
             this.NowPositionLb.Name = "NowPositionLb";
             this.NowPositionLb.Size = new System.Drawing.Size(77, 12);
             this.NowPositionLb.TabIndex = 118;
@@ -1250,7 +1263,7 @@
             // img_Label
             // 
             this.img_Label.AutoSize = true;
-            this.img_Label.Location = new System.Drawing.Point(336, 534);
+            this.img_Label.Location = new System.Drawing.Point(328, 448);
             this.img_Label.Name = "img_Label";
             this.img_Label.Size = new System.Drawing.Size(55, 12);
             this.img_Label.TabIndex = 117;
@@ -1258,7 +1271,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(518, 487);
+            this.button2.Location = new System.Drawing.Point(510, 401);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 122;
@@ -1268,7 +1281,7 @@
             // 
             // 墊高板
             // 
-            this.墊高板.Location = new System.Drawing.Point(341, 435);
+            this.墊高板.Location = new System.Drawing.Point(333, 349);
             this.墊高板.Name = "墊高板";
             this.墊高板.Size = new System.Drawing.Size(75, 23);
             this.墊高板.TabIndex = 123;
@@ -1278,7 +1291,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(599, 487);
+            this.button3.Location = new System.Drawing.Point(591, 401);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(60, 23);
             this.button3.TabIndex = 124;
@@ -1289,7 +1302,7 @@
             // PutDown
             // 
             this.PutDown.AutoSize = true;
-            this.PutDown.Location = new System.Drawing.Point(587, 548);
+            this.PutDown.Location = new System.Drawing.Point(579, 462);
             this.PutDown.Name = "PutDown";
             this.PutDown.Size = new System.Drawing.Size(67, 16);
             this.PutDown.TabIndex = 126;
@@ -1315,7 +1328,6 @@
             this.Controls.Add(this.NowPositionLb);
             this.Controls.Add(this.img_Label);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -1462,6 +1474,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox Grip_Position;
         private System.Windows.Forms.CheckBox PutDown;
+        private System.Windows.Forms.Button Do_Btn;
     }
 }
 

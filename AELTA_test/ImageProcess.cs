@@ -53,7 +53,7 @@ namespace ControlUI
 
             threshold = threshold.Erode(3);
             threshold = threshold.Dilate(3);
-
+           
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
 
             CvInvoke.FindContours(threshold, contours, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
