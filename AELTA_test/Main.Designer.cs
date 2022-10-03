@@ -73,16 +73,24 @@
             this.XEG32_PosStk_text = new System.Windows.Forms.TextBox();
             this.XEG32 = new System.IO.Ports.SerialPort(this.components);
             this.txtStatus = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.AX12A_Close = new System.Windows.Forms.Button();
-            this.AX12A_Open = new System.Windows.Forms.Button();
-            this.AX12A_Status = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.TB_sp_abs = new System.Windows.Forms.TextBox();
             this.TB_sp_pc = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.TB_sp_abs1 = new System.Windows.Forms.TextBox();
+            this.TB_sp_pc1 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.AX12A_Close = new System.Windows.Forms.Button();
+            this.AX12A_Open = new System.Windows.Forms.Button();
+            this.AX12A_Status = new System.Windows.Forms.Label();
             this.Img_Btn = new System.Windows.Forms.Button();
             this.socketmsg = new System.Windows.Forms.RichTextBox();
             this.timer_rec = new System.Windows.Forms.Timer(this.components);
@@ -127,14 +135,6 @@
             this.lab_Status1 = new System.Windows.Forms.Label();
             this.lab_Port1 = new System.Windows.Forms.Label();
             this.lab_IP1 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.TB_sp_abs1 = new System.Windows.Forms.TextBox();
-            this.TB_sp_pc1 = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.button9 = new System.Windows.Forms.Button();
             this.BaisLB = new System.Windows.Forms.Label();
             this.聯軸器 = new System.Windows.Forms.Button();
             this.萬象軸 = new System.Windows.Forms.Button();
@@ -150,11 +150,11 @@
             this.groupBox1.SuspendLayout();
             this.XGE32_groupBox.SuspendLayout();
             this.txtStatus.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -593,50 +593,6 @@
             this.txtStatus.TabStop = false;
             this.txtStatus.Text = "TM_動作";
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.AX12A_Close);
-            this.groupBox5.Controls.Add(this.AX12A_Open);
-            this.groupBox5.Controls.Add(this.AX12A_Status);
-            this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox5.Location = new System.Drawing.Point(287, 540);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox5.Size = new System.Drawing.Size(315, 72);
-            this.groupBox5.TabIndex = 110;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "AX12A";
-            // 
-            // AX12A_Close
-            // 
-            this.AX12A_Close.Location = new System.Drawing.Point(-2, 20);
-            this.AX12A_Close.Name = "AX12A_Close";
-            this.AX12A_Close.Size = new System.Drawing.Size(75, 28);
-            this.AX12A_Close.TabIndex = 18;
-            this.AX12A_Close.Text = "關夾爪";
-            this.AX12A_Close.UseVisualStyleBackColor = true;
-            this.AX12A_Close.Click += new System.EventHandler(this.AX12A_Close_Click);
-            // 
-            // AX12A_Open
-            // 
-            this.AX12A_Open.Location = new System.Drawing.Point(79, 20);
-            this.AX12A_Open.Name = "AX12A_Open";
-            this.AX12A_Open.Size = new System.Drawing.Size(75, 28);
-            this.AX12A_Open.TabIndex = 18;
-            this.AX12A_Open.Text = "開夾爪";
-            this.AX12A_Open.UseVisualStyleBackColor = true;
-            this.AX12A_Open.Click += new System.EventHandler(this.AX12A_Open_Click);
-            // 
-            // AX12A_Status
-            // 
-            this.AX12A_Status.AutoSize = true;
-            this.AX12A_Status.Location = new System.Drawing.Point(3, 51);
-            this.AX12A_Status.Name = "AX12A_Status";
-            this.AX12A_Status.Size = new System.Drawing.Size(44, 12);
-            this.AX12A_Status.TabIndex = 14;
-            this.AX12A_Status.Text = "0~3200 ";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -690,6 +646,131 @@
             this.label3.Size = new System.Drawing.Size(68, 12);
             this.label3.TabIndex = 75;
             this.label3.Text = "百分比速度:";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label15);
+            this.groupBox4.Controls.Add(this.label16);
+            this.groupBox4.Controls.Add(this.TB_sp_abs1);
+            this.groupBox4.Controls.Add(this.TB_sp_pc1);
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.label18);
+            this.groupBox4.Controls.Add(this.button9);
+            this.groupBox4.Location = new System.Drawing.Point(6, 81);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.groupBox4.Size = new System.Drawing.Size(324, 79);
+            this.groupBox4.TabIndex = 111;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "TM_動作";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(141, 48);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(41, 12);
+            this.label15.TabIndex = 80;
+            this.label15.Text = "0.1~1.0";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(141, 24);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 12);
+            this.label16.TabIndex = 79;
+            this.label16.Text = "0.1~1.0";
+            // 
+            // TB_sp_abs1
+            // 
+            this.TB_sp_abs1.Location = new System.Drawing.Point(80, 44);
+            this.TB_sp_abs1.Name = "TB_sp_abs1";
+            this.TB_sp_abs1.Size = new System.Drawing.Size(55, 22);
+            this.TB_sp_abs1.TabIndex = 78;
+            this.TB_sp_abs1.Text = "1.0";
+            this.TB_sp_abs1.TextChanged += new System.EventHandler(this.TB_sp_abs_TextChanged);
+            // 
+            // TB_sp_pc1
+            // 
+            this.TB_sp_pc1.Location = new System.Drawing.Point(80, 21);
+            this.TB_sp_pc1.Name = "TB_sp_pc1";
+            this.TB_sp_pc1.Size = new System.Drawing.Size(55, 22);
+            this.TB_sp_pc1.TabIndex = 77;
+            this.TB_sp_pc1.Text = "1.0";
+            this.TB_sp_pc1.TextChanged += new System.EventHandler(this.TB_sp_pc_TextChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 47);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 12);
+            this.label17.TabIndex = 76;
+            this.label17.Text = "絕對速度:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 24);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(68, 12);
+            this.label18.TabIndex = 75;
+            this.label18.Text = "百分比速度:";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(188, 19);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 72;
+            this.button9.Text = "TM歸位";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.btn_TMtest_Click1);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.AX12A_Close);
+            this.groupBox5.Controls.Add(this.AX12A_Open);
+            this.groupBox5.Controls.Add(this.AX12A_Status);
+            this.groupBox5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.groupBox5.Location = new System.Drawing.Point(143, 534);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox5.Size = new System.Drawing.Size(315, 72);
+            this.groupBox5.TabIndex = 110;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "AX12A";
+            // 
+            // AX12A_Close
+            // 
+            this.AX12A_Close.Location = new System.Drawing.Point(-2, 20);
+            this.AX12A_Close.Name = "AX12A_Close";
+            this.AX12A_Close.Size = new System.Drawing.Size(75, 28);
+            this.AX12A_Close.TabIndex = 18;
+            this.AX12A_Close.Text = "關夾爪";
+            this.AX12A_Close.UseVisualStyleBackColor = true;
+            this.AX12A_Close.Click += new System.EventHandler(this.AX12A_Close_Click);
+            // 
+            // AX12A_Open
+            // 
+            this.AX12A_Open.Location = new System.Drawing.Point(79, 20);
+            this.AX12A_Open.Name = "AX12A_Open";
+            this.AX12A_Open.Size = new System.Drawing.Size(75, 28);
+            this.AX12A_Open.TabIndex = 18;
+            this.AX12A_Open.Text = "開夾爪";
+            this.AX12A_Open.UseVisualStyleBackColor = true;
+            this.AX12A_Open.Click += new System.EventHandler(this.AX12A_Open_Click);
+            // 
+            // AX12A_Status
+            // 
+            this.AX12A_Status.AutoSize = true;
+            this.AX12A_Status.Location = new System.Drawing.Point(3, 51);
+            this.AX12A_Status.Name = "AX12A_Status";
+            this.AX12A_Status.Size = new System.Drawing.Size(44, 12);
+            this.AX12A_Status.TabIndex = 14;
+            this.AX12A_Status.Text = "0~3200 ";
             // 
             // Img_Btn
             // 
@@ -1111,87 +1192,6 @@
             this.lab_IP1.TabIndex = 26;
             this.lab_IP1.Text = "IP Address";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label15);
-            this.groupBox4.Controls.Add(this.label16);
-            this.groupBox4.Controls.Add(this.TB_sp_abs1);
-            this.groupBox4.Controls.Add(this.TB_sp_pc1);
-            this.groupBox4.Controls.Add(this.label17);
-            this.groupBox4.Controls.Add(this.label18);
-            this.groupBox4.Controls.Add(this.button9);
-            this.groupBox4.Location = new System.Drawing.Point(6, 81);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.groupBox4.Size = new System.Drawing.Size(324, 79);
-            this.groupBox4.TabIndex = 111;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "TM_動作";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(141, 48);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(41, 12);
-            this.label15.TabIndex = 80;
-            this.label15.Text = "0.1~1.0";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(141, 24);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(41, 12);
-            this.label16.TabIndex = 79;
-            this.label16.Text = "0.1~1.0";
-            // 
-            // TB_sp_abs1
-            // 
-            this.TB_sp_abs1.Location = new System.Drawing.Point(80, 44);
-            this.TB_sp_abs1.Name = "TB_sp_abs1";
-            this.TB_sp_abs1.Size = new System.Drawing.Size(55, 22);
-            this.TB_sp_abs1.TabIndex = 78;
-            this.TB_sp_abs1.Text = "1.0";
-            this.TB_sp_abs1.TextChanged += new System.EventHandler(this.TB_sp_abs_TextChanged);
-            // 
-            // TB_sp_pc1
-            // 
-            this.TB_sp_pc1.Location = new System.Drawing.Point(80, 21);
-            this.TB_sp_pc1.Name = "TB_sp_pc1";
-            this.TB_sp_pc1.Size = new System.Drawing.Size(55, 22);
-            this.TB_sp_pc1.TabIndex = 77;
-            this.TB_sp_pc1.Text = "1.0";
-            this.TB_sp_pc1.TextChanged += new System.EventHandler(this.TB_sp_pc_TextChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 47);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(56, 12);
-            this.label17.TabIndex = 76;
-            this.label17.Text = "絕對速度:";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 24);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(68, 12);
-            this.label18.TabIndex = 75;
-            this.label18.Text = "百分比速度:";
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(188, 19);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
-            this.button9.TabIndex = 72;
-            this.button9.Text = "TM歸位";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.btn_TMtest_Click1);
-            // 
             // BaisLB
             // 
             this.BaisLB.AutoSize = true;
@@ -1341,6 +1341,8 @@
             this.XGE32_groupBox.PerformLayout();
             this.txtStatus.ResumeLayout(false);
             this.txtStatus.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1348,8 +1350,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.PointDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
