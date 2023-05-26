@@ -836,8 +836,8 @@ namespace ControlUI
             TM_send($"1,Move_Line(\"CPP\",{(int)ImageRecogntionBais.X } , {(int)ImageRecogntionBais.Y}, 0, 0, 0, 0, 125, 200, 0, false)");
 
             /* 直到手臂到達定位 */
-            this.TCPClientObject.IsMoveOver = false;
-            while (!this.TCPClientObject.IsMoveOver) { }
+            //this.TCPClientObject.IsMoveOver = false;
+            //while (!this.TCPClientObject.IsMoveOver) { }
             this.TCPClientObject.IsMoveOver = false;
             Thread.Sleep(500);
 
@@ -1161,16 +1161,24 @@ namespace ControlUI
                     Thread.Sleep(10000);
 
                     //讓手臂移動圓上
-                    point = "276, -269.5, 125, 180, 0, 90";
+                    point = "276, -269.5, 200, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
+
+
+                    ImageProcess((int)Eshape.Circle);
+
+
+
+
+
                     point = "276, -269.5, 83, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
                     this.TCPClientObject.IsMoveOver = false;
                     while (!this.TCPClientObject.IsMoveOver) { }
                     Thread.Sleep(1000);
-
+                    
                     //夾起圓柱
                     point = "276, -269.5, 300, 180, 0, 90";
                     TM_send(TM_Send_format(point));
