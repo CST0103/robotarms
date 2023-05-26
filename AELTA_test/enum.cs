@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ControlUI
 {
+    // Enum 是一個別名，用名字代表數字
     public enum ImageRecogntionBais
     {
         X = -60,
@@ -22,5 +23,12 @@ namespace ControlUI
         RotationBoard = 10,
         chair_body = 11,
         chair_legs = 12
+    }
+    public enum Eshape
+    {
+        Rectangle = 400,
+        Circle = 200,
+        Square = 300
+
     }
 }

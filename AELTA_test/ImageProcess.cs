@@ -9,104 +9,468 @@ using Emgu.CV.Util;
 using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Emgu.CV.CvEnum;
+using System.Windows.Forms;
+using Intel.RealSense;
+using Format = Intel.RealSense.Format;
+                                     
 
 namespace ControlUI
 {
+    
     public class ImageProcess
     {
-        private VideoCapture Arm_cap;
+       
         public ImageProcess()
         {
+            var cfg = new Config();
 
-            Environment.SetEnvironmentVariable("OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS", "0");
-            Arm_cap = new VideoCapture(0);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Autofocus, 0);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Focus, 40);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.AutoExposure, 0);
-            Arm_cap.Set(Emgu.CV.CvEnum.CapProp.Exposure, -5);
-            //Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
-            //Arm_cap.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 720);
-            Arm_cap.FlipVertical = true;
-
-        }
-        public double[] ImageRecognition()
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            int X_Center = 0, Y_Center = 0;
-            // 480,640
-            Image<Bgr, byte> img = Arm_cap.QueryFrame().ToImage<Bgr, byte>().Flip(Emgu.CV.CvEnum.FlipType.Vertical);
-
-            img = img.SmoothGaussian(1);
-            //img = img.SmoothBilateral(8, 8, 8);
-
-            int[] CameraSize = new int[] { Arm_cap.Width, Arm_cap.Height };
-            Image<Hsv, byte> img_hsv = new Image<Hsv, byte>(img.Width, img.Height);
-            CvInvoke.CvtColor(img, img_hsv, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
-
-
-            Image<Gray, byte>[] channels = img_hsv.Split();
-            Image<Gray, byte> threshold = img_hsv.InRange(new Hsv(0, 0, 0), new Hsv(180, 255, 46));
-            
-            Point Center = new Point(0, 0);
-
-            threshold = threshold.Erode(3);
-            threshold = threshold.Dilate(3);
-           
-            VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
-
-            CvInvoke.FindContours(threshold, contours, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
-
-            double Area = 0;
-            for (int i = 0; i < contours.Size; i++)
+            using (var ctx = new Context())
             {
-                if (CvInvoke.ContourArea(contours[i]) > 1000)
-                {
-                    Rectangle BoundingBox = CvInvoke.BoundingRectangle(contours[i]);
-                    Center = new Point(BoundingBox.X + BoundingBox.Width / 2, BoundingBox.Y + BoundingBox.Height / 2);
-                    double dist_Center_Old = Math.Sqrt((Math.Pow(Center.Y - CameraSize[1] / 2, 2) + Math.Pow(Center.X - CameraSize[0] / 2, 2)));
-                    double dist_Center_New = Math.Sqrt((Math.Pow(Y_Center - CameraSize[1] / 2, 2) + Math.Pow(X_Center - CameraSize[0] / 2, 2)));
+                var devices = ctx.QueryDevices();
+                var dev = devices[0];
 
-                    if (X_Center == 0 && Y_Center == 0)
-                    {
-                        Area = CvInvoke.ContourArea(contours[i]);
-                        X_Center = Center.X;
-                        Y_Center = Center.Y;
-                        CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
+                Console.WriteLine("\nUsing device 0, an {0}", dev.Info[CameraInfo.Name]);
+                Console.WriteLine("  Serial number: {0}", dev.Info[CameraInfo.SerialNumber]);
+                Console.WriteLine("  Firmware version: {0}", dev.Info[CameraInfo.FirmwareVersion]);
 
-                        CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
-                    }
-                    if (
-                        Math.Sqrt((Math.Pow(Center.Y - CameraSize[1] / 2, 2) + Math.Pow(Center.X - CameraSize[0] / 2, 2))) <
-                        Math.Sqrt((Math.Pow(Y_Center - CameraSize[1] / 2, 2) + Math.Pow(X_Center - CameraSize[0] / 2, 2))))
-                    {
-                        CvInvoke.Rectangle(img, BoundingBox, new MCvScalar(0));
+                var sensors = dev.QuerySensors();
+                var depthSensor = sensors[0];
+                var colorSensor = sensors[1];
 
-                        CvInvoke.Circle(img, Center, 2, new MCvScalar(255, 255), 5);
-                        X_Center = Center.X;
-                        Y_Center = Center.Y;
+                var depthProfile = depthSensor.StreamProfiles.Where(p => p.Stream == Intel.RealSense.Stream.Depth).OrderBy(p => p.Framerate).Select(p => p.As<VideoStreamProfile>()).First();
 
-                        Area = CvInvoke.ContourArea(contours[i]);
-                    }
-                    else
-                    {
-                        Center.X = X_Center;
-                        Center.Y = Y_Center;
-                    }
-                }
+                var colorProfile = colorSensor.StreamProfiles.Where(p => p.Stream == Intel.RealSense.Stream.Color).OrderBy(p => p.Framerate).Select(p => p.As<VideoStreamProfile>()).First();
+
+                //設置相機的寬高,深度,幀數
+                cfg.EnableStream(Intel.RealSense.Stream.Depth, 640, 480, Format.Z16, 30);
+                cfg.EnableStream(Intel.RealSense.Stream.Color, 640, 480, Format.Bgr8, 30);
             }
-            CvInvoke.Line(img, Center, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
-            CvInvoke.PutText(img, X_Center.ToString() + " " + Y_Center.ToString(), new Point(50, 50), Emgu.CV.CvEnum.FontFace.HersheyScriptSimplex, 2, new MCvScalar(0, 0, 0));
+            
 
-            CvInvoke.Imshow("ori", img);
-            CvInvoke.Imshow("Test", threshold);
-            CvInvoke.WaitKey(1);
-            stopwatch.Stop();
-            double time = stopwatch.ElapsedMilliseconds;
-            double[] vs = new double[4] { (Center.Y - CameraSize[1] / 2), (Center.X - CameraSize[0] / 2), Area, time};
-            return vs;
+
 
         }
+        public double[] ImageRecognition(int shape)
+        {
+           
+
+            var cfg = new Config();
+
+            using (var ctx = new Context())
+            {
+                var devices = ctx.QueryDevices();
+                var dev = devices[0];
+
+                Console.WriteLine("\nUsing device 0, an {0}", dev.Info[CameraInfo.Name]);
+                Console.WriteLine("  Serial number: {0}", dev.Info[CameraInfo.SerialNumber]);
+                Console.WriteLine("  Firmware version: {0}", dev.Info[CameraInfo.FirmwareVersion]);
+
+                var sensors = dev.QuerySensors();
+                var depthSensor = sensors[0];
+                var colorSensor = sensors[1];
+
+                var depthProfile = depthSensor.StreamProfiles.Where(p => p.Stream == Intel.RealSense.Stream.Depth).OrderBy(p => p.Framerate).Select(p => p.As<VideoStreamProfile>()).First();
+
+                var colorProfile = colorSensor.StreamProfiles.Where(p => p.Stream == Intel.RealSense.Stream.Color).OrderBy(p => p.Framerate).Select(p => p.As<VideoStreamProfile>()).First();
+
+                //設置相機的寬高,深度,幀數
+                cfg.EnableStream(Intel.RealSense.Stream.Depth, 640, 480, Format.Z16, 30);
+                cfg.EnableStream(Intel.RealSense.Stream.Color, 640, 480, Format.Bgr8, 30);
+            }
+
+            // 480,640
+            var pipe = new Pipeline();
+            //啟動相機並應用配置
+            pipe.Start(cfg);
+            Colorizer color_map = new Colorizer();
+            Image<Bgr, byte> imageDep;
+            Image<Bgr, byte> imagecol;
+            using (var frames = pipe.WaitForFrames())
+            {
+                Align align = new Align(Intel.RealSense.Stream.Color).DisposeWith(frames);
+                Intel.RealSense.Frame aligned = align.Process(frames).DisposeWith(frames);
+                FrameSet alignedframeset = aligned.As<FrameSet>().DisposeWith(frames);
+
+                var colorFrame = alignedframeset.ColorFrame.DisposeWith(alignedframeset);
+                var depthFrame = alignedframeset.DepthFrame.DisposeWith(alignedframeset);
+
+                var colorizedDepth = color_map.Process<VideoFrame>(depthFrame).DisposeWith(alignedframeset);
+
+                //獲取幀數並轉為bitmap
+                System.Drawing.Bitmap DepthImg = new System.Drawing.Bitmap(colorFrame.Width, colorFrame.Height, colorFrame.Stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb, colorizedDepth.Data);
+
+                System.Drawing.Bitmap ColorImg = new System.Drawing.Bitmap(colorFrame.Width, colorFrame.Height, colorFrame.Stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb, frames.ColorFrame.Data);
+
+                //將圖像顯示至picturebox
+
+                imageDep = DepthImg.ToImage<Bgr, byte>();
+                imagecol = ColorImg.ToImage<Bgr, byte>();
+
+                ColorImg.Save("color.jpg");
+                DepthImg.Save("depth.jpg");
+
+            }
+            int[] CameraSize = new int[] { 640, 480 };
+            Point reccenter = new Point(0, 0);
+            Point circenter = new Point(0, 0);
+            Point squcenter = new Point(0, 0);
+            Point screen = new Point(320, 240);
+            double Areacir = 0;
+            double Arearec = 0;
+            double Areasqu = 0;
+            Mat src = imagecol.Mat;
+
+
+
+            double[] result = null;
+
+            switch (shape)
+            {
+                case (int)Eshape.Circle:
+                    //////////////////////////////圓形//////////////////////////////////////////////////
+                    Mat HSVcircle = new Mat();
+                    Mat H2B = new Mat();
+                    Mat gray = new Mat();
+
+                    var cirImg = src.ToImage<Bgr, byte>();
+
+
+                    CvInvoke.CvtColor(cirImg, HSVcircle, ColorConversion.Bgr2Hsv);
+
+
+                    //Yellow color
+
+
+                    ScalarArray cirlow = new ScalarArray(new MCvScalar(17, 120, 100));
+                    ScalarArray cirhigh = new ScalarArray(new MCvScalar(25, 255, 255));
+                    Mat maskcir = new Mat();
+
+                    CvInvoke.InRange(HSVcircle, cirlow, cirhigh, maskcir);
+
+
+
+
+                    Mat Graycir = new Mat();
+                    Mat Cannycir = new Mat();
+                    Mat Thretholdcir = new Mat();
+
+                    var cirmaskimg = maskcir.ToImage<Bgr, byte>();
+
+
+
+                    CvInvoke.CvtColor(cirmaskimg, Graycir, ColorConversion.Bgr2Gray);
+                    CvInvoke.Threshold(Graycir, Thretholdcir, 200, 255, ThresholdType.Binary);
+                    CvInvoke.Canny(Graycir, Cannycir, 60, 200, 3, false);
+
+                    var Circle = CvInvoke.HoughCircles(Graycir, HoughModes.Gradient, 1, 300, 100, 10, 50, 100);
+                    int X_Centercir = 0, Y_Centercir = 0;
+                    VectorOfVectorOfPoint contourscir = new VectorOfVectorOfPoint();
+
+                    CvInvoke.FindContours(Graycir, contourscir, null, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
+
+                    //畫圓
+
+                    for (int i = 0; i < Circle.Length; i++)
+                    {
+
+                        int x = (int)Circle[i].Center.X;
+                        int y = (int)Circle[i].Center.Y;
+                        int a = (int)Circle[i].Radius;
+                        circenter = new Point(x, y);
+                        CvInvoke.Circle(cirmaskimg, circenter, a, new MCvScalar(255, 0, 255), 2, LineType.Filled);
+                        CvInvoke.Circle(cirmaskimg, circenter, 2, new MCvScalar(0, 0, 255), 2, LineType.Filled);
+                        if (i < Circle.Length)
+                        {
+                            Rectangle BoundingBox = CvInvoke.BoundingRectangle(contourscir[i]);
+
+                            double dist_Center_Old = Math.Sqrt((Math.Pow(circenter.Y - CameraSize[1] / 2, 2) + Math.Pow(circenter.X - CameraSize[0] / 2, 2)));
+                            double dist_Center_New = Math.Sqrt((Math.Pow(Y_Centercir - CameraSize[1] / 2, 2) + Math.Pow(X_Centercir - CameraSize[0] / 2, 2)));
+
+                            if (X_Centercir == 0 && Y_Centercir == 0)
+                            {
+                                Areacir = CvInvoke.ContourArea(contourscir[i]);
+                                X_Centercir = circenter.X;
+                                Y_Centercir = circenter.Y;
+                                CvInvoke.Rectangle(cirmaskimg, BoundingBox, new MCvScalar(0));
+                                CvInvoke.Circle(cirmaskimg, circenter, 2, new MCvScalar(255, 255), 5);
+                                CvInvoke.Line(cirmaskimg, circenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                            }
+                            if (
+                                Math.Sqrt((Math.Pow(circenter.Y - CameraSize[1] / 2, 2) + Math.Pow(circenter.X - CameraSize[0] / 2, 2))) <
+                                Math.Sqrt((Math.Pow(Y_Centercir - CameraSize[1] / 2, 2) + Math.Pow(X_Centercir - CameraSize[0] / 2, 2))))
+                            {
+                                CvInvoke.Rectangle(cirmaskimg, BoundingBox, new MCvScalar(0));
+
+                                CvInvoke.Circle(cirmaskimg, circenter, 2, new MCvScalar(255, 255), 5);
+                                X_Centercir = circenter.X;
+                                Y_Centercir = circenter.Y;
+
+                                Areacir = CvInvoke.ContourArea(contourscir[i]);
+                                CvInvoke.Line(cirmaskimg, circenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                            }
+                            else
+                            {
+                                circenter.X = X_Centercir;
+                                circenter.Y = Y_Centercir;
+                                CvInvoke.Line(cirmaskimg, circenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                            }
+                        }
+                    }
+                    result = new double[3] { (circenter.Y - CameraSize[1] / 2), (circenter.X - CameraSize[0] / 2), Areacir };
+                    CvInvoke.Circle(cirmaskimg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
+                    CvInvoke.Imshow("cir", cirmaskimg);
+                    return result;
+
+                case (int)Eshape.Rectangle:
+                    ///////////////////////HSV長方形//////////////////////////////////
+                    
+                    Mat HSVrec = new Mat();
+
+                    var recImg = src.ToImage<Bgr, byte>();
+
+                    CvInvoke.CvtColor(recImg, HSVrec, ColorConversion.Bgr2Hsv);
+
+                    //RED color
+
+
+
+                    ScalarArray low = new ScalarArray(new MCvScalar(170, 120, 100));
+                    ScalarArray high = new ScalarArray(new MCvScalar(180, 255, 255));
+                    ScalarArray low1 = new ScalarArray(new MCvScalar(0, 120, 100));
+                    ScalarArray high1 = new ScalarArray(new MCvScalar(10, 255, 255));
+
+
+
+                    // 建立兩個遮罩，分別對應兩個紅色區間
+                    Mat mask1 = new Mat();
+                    Mat mask2 = new Mat();
+
+                    // 進行遮罩操作，將紅色區域設為白色(255)，其他區域設為黑色(0)
+                    CvInvoke.InRange(HSVrec, low, high, mask1);
+                    CvInvoke.InRange(HSVrec, low1, high1, mask2);
+
+                    // 將兩個遮罩合併
+                    Mat maskrec = new Mat();
+                    CvInvoke.BitwiseOr(mask1, mask2, maskrec);
+
+
+                    Mat Grayrec = new Mat();
+                    Mat Cannyrec = new Mat();
+                    Mat Thretholdrec = new Mat();
+
+                    var recmaskImg = maskrec.ToImage<Bgr, byte>().Erode(1).Dilate(1);
+
+                    CvInvoke.CvtColor(recmaskImg, Grayrec, ColorConversion.Bgr2Gray);
+                    CvInvoke.Threshold(Grayrec, Thretholdrec, 200, 255, ThresholdType.Binary);
+                    CvInvoke.Canny(Grayrec, Cannyrec, 60, 200, 3, false);
+                    using (VectorOfVectorOfPoint contoursrec = new VectorOfVectorOfPoint())
+                    {
+                        CvInvoke.FindContours(Cannyrec, contoursrec, null, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
+                        int X_Centerrec = 0, Y_Centerrec = 0;
+                        int countrec = contoursrec.Size;
+                        for (int i = 0; i < countrec; i++)
+                        {
+
+                            using (VectorOfPoint contourrec = contoursrec[i])
+                            {
+                                // MinAreaRect 是此版本找尋最小面積矩形的方法。
+                                RotatedRect BoundingBox = CvInvoke.MinAreaRect(contourrec);
+                                //if (BoundingBox.Size.Width <)
+                                CvInvoke.Polylines(recmaskImg, Array.ConvertAll(BoundingBox.GetVertices(), Point.Round), true, new Bgr(System.Drawing.Color.DeepPink).MCvScalar, 3);
+                            }
+                        }
+                        List<Rectangle> rectanglesrec = new List<Rectangle>();
+                        for (int i = 0; i < contoursrec.Size; i++)
+                        {
+                            using (VectorOfPoint contourrec = contoursrec[i])
+                            using (VectorOfPoint approxContourrec = new VectorOfPoint())
+                            {
+                                // 使用多邊形逼近函式檢測矩形輪廓
+                                CvInvoke.ApproxPolyDP(contourrec, approxContourrec, CvInvoke.ArcLength(contourrec, true) * 0.05, true);
+                                if (CvInvoke.ContourArea(approxContourrec, false) > 1000) // 設定矩形面積閾值
+                                {
+                                    // 擷取矩形輪廓的外框矩形
+                                    Rectangle rect = CvInvoke.BoundingRectangle(approxContourrec);
+                                    rectanglesrec.Add(rect);
+                                    reccenter = new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+                                    CvInvoke.Circle(recmaskImg, reccenter, 3, new Bgr(System.Drawing.Color.Red).MCvScalar, -1);
+                                    double dist_Center_Old = Math.Sqrt((Math.Pow(reccenter.Y - CameraSize[1] / 2, 2) + Math.Pow(reccenter.X - CameraSize[0] / 2, 2)));
+                                    double dist_Center_New = Math.Sqrt((Math.Pow(Y_Centerrec - CameraSize[1] / 2, 2) + Math.Pow(X_Centerrec - CameraSize[0] / 2, 2)));
+
+                                    if (X_Centerrec == 0 && Y_Centerrec == 0)
+                                    {
+                                        Arearec = CvInvoke.ContourArea(contoursrec[i]);
+                                        X_Centerrec = reccenter.X;
+                                        Y_Centerrec = reccenter.Y;
+                                        CvInvoke.Line(recmaskImg, reccenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+                                    }
+                                    if (
+                                        Math.Sqrt((Math.Pow(reccenter.Y - CameraSize[1] / 2, 2) + Math.Pow(reccenter.X - CameraSize[0] / 2, 2))) <
+                                        Math.Sqrt((Math.Pow(Y_Centerrec - CameraSize[1] / 2, 2) + Math.Pow(X_Centerrec - CameraSize[0] / 2, 2))))
+                                    {
+                                        RotatedRect BoundingBox = CvInvoke.MinAreaRect(contourrec);
+                                        CvInvoke.Polylines(recmaskImg, Array.ConvertAll(BoundingBox.GetVertices(), Point.Round), true, new Bgr(System.Drawing.Color.DeepPink).MCvScalar, 3);
+
+                                        CvInvoke.Circle(recmaskImg, reccenter, 3, new Bgr(System.Drawing.Color.Red).MCvScalar, -1);
+                                        X_Centerrec = reccenter.X;
+                                        Y_Centerrec = reccenter.Y;
+
+                                        Arearec = CvInvoke.ContourArea(contoursrec[i]);
+                                        CvInvoke.Line(recmaskImg, reccenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                                    }
+                                    else
+                                    {
+                                        reccenter.X = X_Centerrec;
+                                        reccenter.Y = Y_Centerrec;
+                                        CvInvoke.Line(recmaskImg, reccenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    result = new double[3] { (reccenter.Y - CameraSize[1] / 2), (reccenter.X - CameraSize[0] / 2), Arearec };
+                    CvInvoke.Circle(recmaskImg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
+                    CvInvoke.Imshow("rec", recmaskImg);
+                    return result;
+
+                case (int)Eshape.Square:
+                    //////////////////////////正方形///////////////////////////
+
+
+                    Mat HSVsqu = new Mat();
+
+                    var squImg = src.ToImage<Bgr, byte>().Erode(2).Dilate(2);
+
+                    CvInvoke.CvtColor(squImg, HSVsqu, ColorConversion.Bgr2Hsv);
+
+                    //green color
+                    //ScalarArray lowsqu = new ScalarArray(new MCvScalar(50, 80, 45));
+                    //ScalarArray highsqu = new ScalarArray(new MCvScalar(80, 255, 255));
+                    //Mat masksqu = new Mat();
+
+                    //CvInvoke.InRange(HSVsqu, lowsqu, highsqu, masksqu);
+
+                    //red color
+                    ScalarArray lowsqu = new ScalarArray(new MCvScalar(170, 120, 100));
+                    ScalarArray highsqu = new ScalarArray(new MCvScalar(180, 255, 255));
+                    ScalarArray low1squ = new ScalarArray(new MCvScalar(0, 120, 100));
+                    ScalarArray high1squ = new ScalarArray(new MCvScalar(10, 255, 255));
+
+                    // 建立兩個遮罩，分別對應兩個紅色區間
+                    Mat mask1squ = new Mat();
+                    Mat mask2squ = new Mat();
+
+                    // 進行遮罩操作，將紅色區域設為白色(255)，其他區域設為黑色(0)
+                    CvInvoke.InRange(HSVsqu, lowsqu, highsqu, mask1squ);
+                    CvInvoke.InRange(HSVsqu, low1squ, high1squ, mask2squ);
+
+                    // 將兩個遮罩合併
+                    Mat masksqu = new Mat();
+                    CvInvoke.BitwiseOr(mask1squ, mask2squ, masksqu);
+
+
+                    Mat Graysqu = new Mat();
+                    Mat Cannysqu = new Mat();
+                    Mat Thretholdsqu = new Mat();
+
+                    var squmaskImg = masksqu.ToImage<Bgr, byte>();
+
+                    CvInvoke.CvtColor(squmaskImg, Graysqu, ColorConversion.Bgr2Gray);
+                    CvInvoke.Threshold(Graysqu, Thretholdsqu, 200, 255, ThresholdType.Binary);
+                    CvInvoke.Canny(Graysqu, Cannysqu, 60, 200, 3, false);
+                    using (VectorOfVectorOfPoint contourssqu = new VectorOfVectorOfPoint())
+                    {
+                        CvInvoke.FindContours(Cannysqu, contourssqu, null, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
+                        int X_Centersqu = 0, Y_Centersqu = 0;
+                        int countsqu = contourssqu.Size;
+                        for (int i = 0; i < countsqu; i++)
+                        {
+                            using (VectorOfPoint contoursqu = contourssqu[i])
+                            {
+                                // MinAreaRect 是此版本找尋最小面積矩形的方法。
+                                RotatedRect BoundingBox = CvInvoke.MinAreaRect(contoursqu);
+                                //if (BoundingBox.Size.Width <)
+                                CvInvoke.Polylines(squmaskImg, Array.ConvertAll(BoundingBox.GetVertices(), Point.Round), true, new Bgr(System.Drawing.Color.DeepPink).MCvScalar, 3);
+                            }
+                        }
+                        List<Rectangle> square = new List<Rectangle>();
+                        for (int i = 0; i < contourssqu.Size; i++)
+                        {
+                            using (VectorOfPoint contoursqu = contourssqu[i])
+                            using (VectorOfPoint approxContoursqu = new VectorOfPoint())
+                            {
+                                // 使用多邊形逼近函式檢測矩形輪廓
+                                CvInvoke.ApproxPolyDP(contoursqu, approxContoursqu, CvInvoke.ArcLength(contoursqu, true) * 0.05, true);
+                                if (CvInvoke.ContourArea(approxContoursqu, false) > 5000) // 設定矩形面積閾值
+                                {
+                                    // 擷取矩形輪廓的外框矩形
+                                    Rectangle squ = CvInvoke.BoundingRectangle(approxContoursqu);
+                                    square.Add(squ);
+                                    squcenter = new Point(squ.X + squ.Width / 2, squ.Y + squ.Height / 2);
+                                    CvInvoke.Circle(squmaskImg, squcenter, 3, new Bgr(System.Drawing.Color.Red).MCvScalar, -1);
+                                    double dist_Center_Old = Math.Sqrt((Math.Pow(squcenter.Y - CameraSize[1] / 2, 2) + Math.Pow(squcenter.X - CameraSize[0] / 2, 2)));
+                                    double dist_Center_New = Math.Sqrt((Math.Pow(Y_Centersqu - CameraSize[1] / 2, 2) + Math.Pow(X_Centersqu - CameraSize[0] / 2, 2)));
+
+                                    if (X_Centersqu == 0 && Y_Centersqu == 0)
+                                    {
+                                        Areasqu = CvInvoke.ContourArea(contourssqu[i]);
+                                        X_Centersqu = squcenter.X;
+                                        Y_Centersqu = squcenter.Y;
+                                        CvInvoke.Line(squmaskImg, squcenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+                                    }
+                                    if (
+                                        Math.Sqrt((Math.Pow(squcenter.Y - CameraSize[1] / 2, 2) + Math.Pow(squcenter.X - CameraSize[0] / 2, 2))) <
+                                        Math.Sqrt((Math.Pow(Y_Centersqu - CameraSize[1] / 2, 2) + Math.Pow(X_Centersqu - CameraSize[0] / 2, 2))))
+                                    {
+                                        RotatedRect BoundingBox = CvInvoke.MinAreaRect(contoursqu);
+                                        CvInvoke.Polylines(squmaskImg, Array.ConvertAll(BoundingBox.GetVertices(), Point.Round), true, new Bgr(System.Drawing.Color.DeepPink).MCvScalar, 3);
+
+                                        CvInvoke.Circle(squmaskImg, squcenter, 3, new Bgr(System.Drawing.Color.Red).MCvScalar, -1);
+                                        X_Centersqu = squcenter.X;
+                                        Y_Centersqu = squcenter.Y;
+
+                                        Areasqu = CvInvoke.ContourArea(contourssqu[i]);
+                                        CvInvoke.Line(squmaskImg, squcenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                                    }
+                                    else
+                                    {
+                                        squcenter.X = X_Centersqu;
+                                        squcenter.Y = Y_Centersqu;
+                                        CvInvoke.Line(squmaskImg, squcenter, new Point(CameraSize[0] / 2, CameraSize[1] / 2), new MCvScalar(0, 0, 255), 2);
+
+                                    }
+                                }
+                            }
+                        }
+
+
+
+                    }
+                    result = new double[3] { (squcenter.Y - CameraSize[1] / 2), (squcenter.X - CameraSize[0] / 2), Areasqu };
+                    CvInvoke.Circle(squmaskImg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
+                    CvInvoke.Imshow("squ", squmaskImg);
+
+                    return result;
+            }
+
+
+            CvInvoke.Imshow("src", src);
+
+            return result;  
+            
+
+
+        }
+
+        
     }
 }

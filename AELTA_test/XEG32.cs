@@ -57,7 +57,7 @@ namespace ControlUI
         }
         private void XEG32_Close_Other_Click(object sender, EventArgs e)
         {
-            XEG32_PosStk_text.Text = "200";//夾爪張開 0 mm
+            XEG32_PosStk_text.Text = "0";//夾爪張開 0 mm
             XEG32_Vel_text.Text = "80";//速度 50 mm/s
             SendOpenClose(XEG32);
         }

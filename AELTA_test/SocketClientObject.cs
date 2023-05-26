@@ -470,6 +470,7 @@
 
         private bool RecvDataFromServer()
         {
+            // 當有訊號回傳時，會執行這個 Func
             if (this.tcpSynCl != null)
             {
                 try
@@ -489,6 +490,7 @@
 
                         data = data.Trim();
 
+                        // 如果接收到的是 回傳 ehco，則改變 「isMoveOver 變數」
                         try
                         {
                             int index = data.IndexOf("$TMSTA");

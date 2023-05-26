@@ -463,7 +463,7 @@
             this.XEG32_Close_Other.Name = "XEG32_Close_Other";
             this.XEG32_Close_Other.Size = new System.Drawing.Size(75, 28);
             this.XEG32_Close_Other.TabIndex = 18;
-            this.XEG32_Close_Other.Text = "關夾爪_200";
+            this.XEG32_Close_Other.Text = "關夾爪_0";
             this.XEG32_Close_Other.UseVisualStyleBackColor = true;
             this.XEG32_Close_Other.Click += new System.EventHandler(this.XEG32_Close_Other_Click);
             // 
@@ -1207,9 +1207,9 @@
             this.聯軸器.Name = "聯軸器";
             this.聯軸器.Size = new System.Drawing.Size(67, 23);
             this.聯軸器.TabIndex = 120;
-            this.聯軸器.Text = "聯軸器";
+            this.聯軸器.Text = "圓";
             this.聯軸器.UseVisualStyleBackColor = true;
-            this.聯軸器.Click += new System.EventHandler(this.聯軸器_Click);
+            this.聯軸器.Click += new System.EventHandler(this.圓_Click);
             // 
             // 萬象軸
             // 
@@ -1217,9 +1217,9 @@
             this.萬象軸.Name = "萬象軸";
             this.萬象軸.Size = new System.Drawing.Size(67, 23);
             this.萬象軸.TabIndex = 120;
-            this.萬象軸.Text = "萬象軸";
+            this.萬象軸.Text = "正方";
             this.萬象軸.UseVisualStyleBackColor = true;
-            this.萬象軸.Click += new System.EventHandler(this.萬象軸_Click);
+            this.萬象軸.Click += new System.EventHandler(this.正方_Click);
             // 
             // 固定座
             // 
@@ -1227,9 +1227,9 @@
             this.固定座.Name = "固定座";
             this.固定座.Size = new System.Drawing.Size(67, 23);
             this.固定座.TabIndex = 120;
-            this.固定座.Text = "固定座";
+            this.固定座.Text = "長方";
             this.固定座.UseVisualStyleBackColor = true;
-            this.固定座.Click += new System.EventHandler(this.固定座_Click);
+            this.固定座.Click += new System.EventHandler(this.長方_Click);
             // 
             // img_Position
             // 

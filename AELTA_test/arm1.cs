@@ -31,6 +31,11 @@ namespace ControlUI
                             {
                                 if (this.TCPClientObject.Connect(0))
                                 {
+                                    /*
+                                     * 在這裡追加了委派：
+                                     * 我讓他執行 GetNowPosition
+                                     * 執行 ShowReceiveData 會卡住
+                                    */
                                     TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.GetNowPosition);
                                     //TCPClientObject.ReceiveData += new SocketClientObject.TCPReceiveData(this.showReceiveData);
                                 }
@@ -107,6 +112,7 @@ namespace ControlUI
         }
         public void GetNowPosition(object sender, string recv_data)
         {
+            // 他會去
             try
             { GetNowPosition(recv_data); }
             catch (Exception ex) { }
@@ -136,7 +142,10 @@ namespace ControlUI
         public void TM_send(string _string, bool flag = true)
         {
             string s = string.Empty;
+
+            // 會讓機械手臂 執行完畢後  ehco 一個訊號 -> true,false.
             if (flag) { _string += "\r\nQueueTag(1)"; }
+
             s = SocketClientObject.DataToPacket("$TMSCT", _string);
             //this.TB_Command.Text = s;
             byte[] bytes = Encoding.UTF8.GetBytes(s);
@@ -146,30 +155,30 @@ namespace ControlUI
             }
         }
         #endregion
-        private void 聯軸器_Click(object sender, EventArgs e)
+        private void 圓_Click(object sender, EventArgs e)
         {
             if (img_Position.Checked)
-                TM_send(TM_Send_format("235, -294, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("276, -268, 150, 180, 0, 90"));
             else
             {
-                TM_send(TM_Send_format("300, -287, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("276, -268, 150, 180, 0, 90"));
             }
         }
 
-        private void 萬象軸_Click(object sender, EventArgs e)
+        private void 正方_Click(object sender, EventArgs e)
         {
             if (img_Position.Checked)
-                TM_send(TM_Send_format("327, -327, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("276, -268, 150, 180, 0, 90"));
             else
-                TM_send(TM_Send_format("395, -320, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("209, -268, 150, 180, 0, 90"));
         }
 
-        private void 固定座_Click(object sender, EventArgs e)
+        private void 長方_Click(object sender, EventArgs e)
         {
             if (img_Position.Checked)
-                TM_send(TM_Send_format("462, -301, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("276, -268, 150, 180, 0, 90"));
             else
-                TM_send(TM_Send_format("535, -291, 150, 180, 0, 90"));
+                TM_send(TM_Send_format("337.5, -268, 150, 180, 0, 90"));
         }
         private void 墊高板_Click(object sender, EventArgs e)
         {
