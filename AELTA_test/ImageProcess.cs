@@ -120,9 +120,8 @@ namespace ControlUI
             double Areacir = 0;
             double Arearec = 0;
             double Areasqu = 0;
+            //Mat src = new Mat(@"color.jpg", ImreadModes.AnyColor);
             Mat src = imagecol.Mat;
-
-
 
             double[] result = null;
 
@@ -223,7 +222,7 @@ namespace ControlUI
                     }
                     result = new double[3] { (circenter.Y - CameraSize[1] / 2), (circenter.X - CameraSize[0] / 2), Areacir };
                     CvInvoke.Circle(cirmaskimg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
-                    CvInvoke.Imshow("cir", cirmaskimg);
+                    //CvInvoke.Imshow("cir", cirmaskimg);
                     return result;
 
                 case (int)Eshape.Rectangle:
@@ -338,50 +337,47 @@ namespace ControlUI
                     }
                     result = new double[3] { (reccenter.Y - CameraSize[1] / 2), (reccenter.X - CameraSize[0] / 2), Arearec };
                     CvInvoke.Circle(recmaskImg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
-                    CvInvoke.Imshow("rec", recmaskImg);
+                    //CvInvoke.Imshow("rec", recmaskImg);
                     return result;
 
                 case (int)Eshape.Square:
                     //////////////////////////正方形///////////////////////////
 
-
                     Mat HSVsqu = new Mat();
 
-                    var squImg = src.ToImage<Bgr, byte>().Erode(2).Dilate(2);
+                    var squImg = src.ToImage<Bgr, byte>();
 
                     CvInvoke.CvtColor(squImg, HSVsqu, ColorConversion.Bgr2Hsv);
 
-                    //green color
-                    //ScalarArray lowsqu = new ScalarArray(new MCvScalar(50, 80, 45));
-                    //ScalarArray highsqu = new ScalarArray(new MCvScalar(80, 255, 255));
-                    //Mat masksqu = new Mat();
+                    //RED color
 
-                    //CvInvoke.InRange(HSVsqu, lowsqu, highsqu, masksqu);
 
-                    //red color
-                    ScalarArray lowsqu = new ScalarArray(new MCvScalar(170, 120, 100));
-                    ScalarArray highsqu = new ScalarArray(new MCvScalar(180, 255, 255));
-                    ScalarArray low1squ = new ScalarArray(new MCvScalar(0, 120, 100));
-                    ScalarArray high1squ = new ScalarArray(new MCvScalar(10, 255, 255));
+
+                    ScalarArray lows = new ScalarArray(new MCvScalar(170, 120, 100));
+                    ScalarArray highs = new ScalarArray(new MCvScalar(180, 255, 255));
+                    ScalarArray low1s = new ScalarArray(new MCvScalar(0, 120, 100));
+                    ScalarArray high1s = new ScalarArray(new MCvScalar(10, 255, 255));
+
+
 
                     // 建立兩個遮罩，分別對應兩個紅色區間
-                    Mat mask1squ = new Mat();
-                    Mat mask2squ = new Mat();
+                    Mat mask1s = new Mat();
+                    Mat mask2s = new Mat();
 
                     // 進行遮罩操作，將紅色區域設為白色(255)，其他區域設為黑色(0)
-                    CvInvoke.InRange(HSVsqu, lowsqu, highsqu, mask1squ);
-                    CvInvoke.InRange(HSVsqu, low1squ, high1squ, mask2squ);
+                    CvInvoke.InRange(HSVsqu, lows, highs, mask1s);
+                    CvInvoke.InRange(HSVsqu, low1s, high1s, mask2s);
 
                     // 將兩個遮罩合併
                     Mat masksqu = new Mat();
-                    CvInvoke.BitwiseOr(mask1squ, mask2squ, masksqu);
+                    CvInvoke.BitwiseOr(mask1s, mask2s, masksqu);
 
 
                     Mat Graysqu = new Mat();
                     Mat Cannysqu = new Mat();
                     Mat Thretholdsqu = new Mat();
 
-                    var squmaskImg = masksqu.ToImage<Bgr, byte>();
+                    var squmaskImg = masksqu.ToImage<Bgr, byte>().Erode(1).Dilate(1);
 
                     CvInvoke.CvtColor(squmaskImg, Graysqu, ColorConversion.Bgr2Gray);
                     CvInvoke.Threshold(Graysqu, Thretholdsqu, 200, 255, ThresholdType.Binary);
@@ -393,6 +389,7 @@ namespace ControlUI
                         int countsqu = contourssqu.Size;
                         for (int i = 0; i < countsqu; i++)
                         {
+
                             using (VectorOfPoint contoursqu = contourssqu[i])
                             {
                                 // MinAreaRect 是此版本找尋最小面積矩形的方法。
@@ -401,7 +398,7 @@ namespace ControlUI
                                 CvInvoke.Polylines(squmaskImg, Array.ConvertAll(BoundingBox.GetVertices(), Point.Round), true, new Bgr(System.Drawing.Color.DeepPink).MCvScalar, 3);
                             }
                         }
-                        List<Rectangle> square = new List<Rectangle>();
+                        List<Rectangle> rectanglessqu = new List<Rectangle>();
                         for (int i = 0; i < contourssqu.Size; i++)
                         {
                             using (VectorOfPoint contoursqu = contourssqu[i])
@@ -409,12 +406,12 @@ namespace ControlUI
                             {
                                 // 使用多邊形逼近函式檢測矩形輪廓
                                 CvInvoke.ApproxPolyDP(contoursqu, approxContoursqu, CvInvoke.ArcLength(contoursqu, true) * 0.05, true);
-                                if (CvInvoke.ContourArea(approxContoursqu, false) > 5000) // 設定矩形面積閾值
+                                if (CvInvoke.ContourArea(approxContoursqu, false) > 1000) // 設定矩形面積閾值
                                 {
                                     // 擷取矩形輪廓的外框矩形
-                                    Rectangle squ = CvInvoke.BoundingRectangle(approxContoursqu);
-                                    square.Add(squ);
-                                    squcenter = new Point(squ.X + squ.Width / 2, squ.Y + squ.Height / 2);
+                                    Rectangle rectsqu = CvInvoke.BoundingRectangle(approxContoursqu);
+                                    rectanglessqu.Add(rectsqu);
+                                    squcenter = new Point(rectsqu.X + rectsqu.Width / 2, rectsqu.Y + rectsqu.Height / 2);
                                     CvInvoke.Circle(squmaskImg, squcenter, 3, new Bgr(System.Drawing.Color.Red).MCvScalar, -1);
                                     double dist_Center_Old = Math.Sqrt((Math.Pow(squcenter.Y - CameraSize[1] / 2, 2) + Math.Pow(squcenter.X - CameraSize[0] / 2, 2)));
                                     double dist_Center_New = Math.Sqrt((Math.Pow(Y_Centersqu - CameraSize[1] / 2, 2) + Math.Pow(X_Centersqu - CameraSize[0] / 2, 2)));
@@ -450,16 +447,18 @@ namespace ControlUI
                                     }
                                 }
                             }
+
                         }
-
-
-
                     }
+
                     result = new double[3] { (squcenter.Y - CameraSize[1] / 2), (squcenter.X - CameraSize[0] / 2), Areasqu };
                     CvInvoke.Circle(squmaskImg, screen, 3, new Bgr(System.Drawing.Color.GreenYellow).MCvScalar, -1);
-                    CvInvoke.Imshow("squ", squmaskImg);
+                    //CvInvoke.Imshow("squ", squmaskImg);
 
                     return result;
+
+                    
+
             }
 
 

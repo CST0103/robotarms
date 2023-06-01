@@ -30,6 +30,7 @@ using Emgu.CV.Util;
 using Intel.RealSense;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using Emgu.CV.XFeatures2D;
 
 namespace ControlUI
 {
@@ -276,8 +277,8 @@ namespace ControlUI
                                     //                                        break;
                                     //                                    }
 
-                                    try
-                                    {
+                                    //try
+                                    //{
                                         do
                                         {
                                             TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
@@ -301,9 +302,9 @@ namespace ControlUI
                                                 break;
 
                                         }
-                                    }
-                                    catch (Exception ex)
-                                    { }
+                                    //}
+                                    //catch (Exception ex)
+                                    //{ }
                                 }
                                 break;
                             case "GripOpen":
@@ -1149,7 +1150,7 @@ namespace ControlUI
             // 使用 switch 分辨形狀
             switch (shape)
             {
-
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 case (int)Eshape.Circle:
                     //讓手臂移動第一次
                     //修改 point 的位置
@@ -1161,50 +1162,94 @@ namespace ControlUI
                     Thread.Sleep(10000);
 
                     //讓手臂移動圓上
-                    point = "276, -269.5, 200, 180, 0, 90";
+                    point = "226, -260.5, 200, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
 
+                    
+                    Action<Label, string> ChangeName = UpdateLocation;
 
-                    ImageProcess((int)Eshape.Circle);
+                   
+                    this.TCPClientObject.IsMoveOver = false;
+                    Thread.Sleep(500);
+
+                    /* Get Image Info */
+                    double[] ImageCenter_bais = ImageHandler.ImageRecognition(shape);
+
+                    /* until the object into the image center */
+                    while (Math.Abs(ImageCenter_bais[0]) > 1 || Math.Abs(ImageCenter_bais[1]) > 1)
+                    {
+                        double bais_X = -0.4, bais_Y = -0.4;
+                        if (Math.Abs(ImageCenter_bais[0]) <= 3) { bais_X = -0.125; }
+                        if (Math.Abs(ImageCenter_bais[1]) <= 3) { bais_Y = -0.125; }
 
 
+                        if (ImageCenter_bais[1] < 0) { bais_Y = -bais_Y; }
+                        if (ImageCenter_bais[0] < 0) { bais_X = -bais_X; }
 
+                        if (Math.Abs(ImageCenter_bais[0]) <= 0) { bais_X = 0; }
+                        if (Math.Abs(ImageCenter_bais[1]) <= 0) { bais_Y = 0; }
+
+                        /* 吋動手臂 */
+                        TM_send($"1,Move_Line(\"CPP\",{bais_X} , {bais_Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+
+                        Thread.Sleep(550);
+
+                        /* Get Image Info Again */
+                        ImageCenter_bais = ImageHandler.ImageRecognition(shape);
+
+                    }
+
+                    TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
+                    Thread.Sleep(1000);
+
+                    ChangeName(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
+
+                    TM_send($"1,Move_Line(\"CPP\", 60.94, -10, -110, 0, 0, 0, 125, 200, 0, false)", false);
+                    Thread.Sleep(2000);
 
 
                     point = "276, -269.5, 83, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
-                    this.TCPClientObject.IsMoveOver = false;
-                    while (!this.TCPClientObject.IsMoveOver) { }
-                    Thread.Sleep(1000);
-                    
+                    //this.TCPClientObject.IsMoveOver = false;
+                    //while (!this.TCPClientObject.IsMoveOver) { }
+                    //Thread.Sleep(1000);
+
+                    SendOpenClose(XEG32, 650, 80);
+                    Thread.Sleep(2000);
+
                     //夾起圓柱
                     point = "276, -269.5, 300, 180, 0, 90";
                     TM_send(TM_Send_format(point));
-                    Thread.Sleep(10000);
+                    Thread.Sleep(4000);
                     
                     //移動至放下區
                     point = "350, 33.5, 380, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(10000);
                     //到達圓柱正上方
-                    point = "431, 34.5, 175, 180, 0, 90";
+                    point = "430.5, 35.5, 180, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
-                    point = "431, 34.5, 170, 180, 0, 90";
+                    
+                    Thread.Sleep(2000);
+                    point = "430.5, 35.5, 175, 180, 0, 90";
+                    TM_send(TM_Send_format(point));
+                    Thread.Sleep(2000);
+                    point = "430.5, 35.5, 170, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
                     //慢慢放下
-                    point = "431, 34.5, 165, 180, 0, 90";
+                    point = "430.5, 35.5, 165, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
-                    point = "431, 34.5, 160, 180, 0, 90";
+                    point = "430.5, 35.5, 160, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
-                    point = "431, 34.5, 155, 180, 0, 90";
+                    point = "430.5, 35.5, 155, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
@@ -1216,28 +1261,71 @@ namespace ControlUI
 
 
                 case (int)Eshape.Rectangle:
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     point = "170, -268, 465, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(10000);
 
                     //讓手臂移動長方上
-                    point = "340, -268, 125, 180, 0, 90";
+                    point = "280, -260, 200, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
-                    point = "340, -268, 83, 180, 0, 90";
-                    TM_send(TM_Send_format(point));
-                    Thread.Sleep(1000);
+                    
+                    Action<Label, string> ChangeNamer = UpdateLocation;
+
+
                     this.TCPClientObject.IsMoveOver = false;
-                    while (!this.TCPClientObject.IsMoveOver) { }
+                    Thread.Sleep(500);
+
+                    /* Get Image Info */
+                    double[] ImageCenter_baisr = ImageHandler.ImageRecognition(shape);
+
+                    /* until the object into the image center */
+                    while (Math.Abs(ImageCenter_baisr[0]) > 1 || Math.Abs(ImageCenter_baisr[1]) > 1)
+                    {
+                        double bais_X = -0.4, bais_Y = -0.4;
+                        if (Math.Abs(ImageCenter_baisr[0]) <= 3) { bais_X = -0.125; }
+                        if (Math.Abs(ImageCenter_baisr[1]) <= 3) { bais_Y = -0.125; }
+
+
+                        if (ImageCenter_baisr[1] < 0) { bais_Y = -bais_Y; }
+                        if (ImageCenter_baisr[0] < 0) { bais_X = -bais_X; }
+
+                        if (Math.Abs(ImageCenter_baisr[0]) <= 0) { bais_X = 0; }
+                        if (Math.Abs(ImageCenter_baisr[1]) <= 0) { bais_Y = 0; }
+
+                        /* 吋動手臂 */
+                        TM_send($"1,Move_Line(\"CPP\",{bais_X} , {bais_Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+
+                        Thread.Sleep(550);
+
+                        /* Get Image Info Again */
+                        ImageCenter_baisr = ImageHandler.ImageRecognition(shape);
+
+                    }
+
+                    TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
                     Thread.Sleep(1000);
+
+                    ChangeNamer(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
+
+                    TM_send($"1,Move_Line(\"CPP\", 60.94, -10, -110, 0, 0, 0, 125, 200, 0, false)", false);
+                    Thread.Sleep(2000);
+
+                    point = "340, -269.5, 83, 180, 0, 90";
+                    TM_send(TM_Send_format(point));
+                    Thread.Sleep(1000);
+                    //this.TCPClientObject.IsMoveOver = false;
+                    //while (!this.TCPClientObject.IsMoveOver) { }
+                    //Thread.Sleep(1000);
 
                     SendOpenClose(XEG32, 2600, 80);
                     Thread.Sleep(2000);
 
                     //夾起長方
-                    point = "340, -268, 300, 180, 0, 90";
+                    point = "340, -269.5, 300, 180, 0, 90";
                     TM_send(TM_Send_format(point));
-                    Thread.Sleep(10000);
+                    Thread.Sleep(4000);
 
                     //移動至放下區
                     point = "350, 33.5, 380, 180, 0, 90";
@@ -1245,21 +1333,22 @@ namespace ControlUI
                     Thread.Sleep(10000);
 
                     //到達長方正上方
-                    point = "370.5, 35.5, 175, 180, 0, 90";
+                    
+                    point = "369.5, 35.5, 180, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
-                    point = "370.5, 35.5, 170, 180, 0, 90";
+                    point = "369.5, 35.5, 170, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
-                    point = "370.5, 35.5, 165, 180, 0, 90";
+                    point = "369.5, 35.5, 165, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
                     //慢慢放下
-                    point = "370.5, 35.5, 160, 180, 0, 90";
+                    point = "369.5, 35.5, 160, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
-                    point = "370.5, 35.5, 155, 180, 0, 90";
+                    point = "369.5, 35.5, 155, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
@@ -1270,54 +1359,97 @@ namespace ControlUI
 
 
                 case (int)Eshape.Square:
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     point = "170, -268, 465, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(10000);
 
                     //讓手臂移動正方上
-                    point = "209, -269.5, 125, 180, 0, 90";
+                    point = "155, -260, 200, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(1000);
-                    point = "209, -269.5, 83, 180, 0, 90";
-                    TM_send(TM_Send_format(point));
-                    Thread.Sleep(1000);
+
+                    Action<Label, string> ChangeNames = UpdateLocation;
+
+
                     this.TCPClientObject.IsMoveOver = false;
-                    while (!this.TCPClientObject.IsMoveOver) { }
+                    Thread.Sleep(500);
+
+                    /* Get Image Info */
+                    double[] ImageCenter_baiss = ImageHandler.ImageRecognition(shape);
+
+                    /* until the object into the image center */
+                    while (Math.Abs(ImageCenter_baiss[0]) > 1 || Math.Abs(ImageCenter_baiss[1]) > 1)
+                    {
+                        double bais_X = -0.4, bais_Y = -0.4;
+                        if (Math.Abs(ImageCenter_baiss[0]) <= 3) { bais_X = -0.125; }
+                        if (Math.Abs(ImageCenter_baiss[1]) <= 3) { bais_Y = -0.125; }
+
+
+                        if (ImageCenter_baiss[1] < 0) { bais_Y = -bais_Y; }
+                        if (ImageCenter_baiss[0] < 0) { bais_X = -bais_X; }
+
+                        if (Math.Abs(ImageCenter_baiss[0]) <= 0) { bais_X = 0; }
+                        if (Math.Abs(ImageCenter_baiss[1]) <= 0) { bais_Y = 0; }
+
+                        /* 吋動手臂 */
+                        TM_send($"1,Move_Line(\"CPP\",{bais_X} , {bais_Y}, 0, 0, 0, 0, 125, 200, 0, false)", false);
+
+                        Thread.Sleep(550);
+
+                        /* Get Image Info Again */
+                        ImageCenter_baiss = ImageHandler.ImageRecognition(shape);
+
+                    }
+
+                    TM_send("1,ListenSend(90,GetString(Robot[0].CoordRobot))", false);
                     Thread.Sleep(1000);
+
+                    ChangeNames(NowPositionLb, String.Format("Arm_NowPosition: {0}, {1} {2}", NowPosition[0].ToString("#0.00"), NowPosition[1].ToString("#0.00"), NowPosition[2].ToString("#0.00")));
+
+                    TM_send($"1,Move_Line(\"CPP\", 58.76, -10.32, -110, 0, 0, 0, 125, 200, 0, false)", false);
+                    Thread.Sleep(2000);
+
+                    point = "209, -270, 83, 180, 0, 90";
+                    TM_send(TM_Send_format(point));
+                    Thread.Sleep(1000);
+                    //this.TCPClientObject.IsMoveOver = false;
+                    //while (!this.TCPClientObject.IsMoveOver) { }
+                    //Thread.Sleep(1000);
 
                     SendOpenClose(XEG32, 700, 80);
                     Thread.Sleep(2000);
 
-                    point = "209, -269.5, 125, 180, 0, 90";
-                    TM_send(TM_Send_format(point));
-                    Thread.Sleep(1000);
-                    
+                   
 
                     //夾起長方
-                    point= "276, -269.5, 300, 180, 0, 90";
+                    point= "209, -270, 300, 180, 0, 90";
                     TM_send(TM_Send_format(point));
-                    Thread.Sleep(10000);
+                    Thread.Sleep(4000);
 
                     //移動至放下區
                     point = "350, 33.5, 380, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(10000);
                     //到達正方正上方
-                    point = "498, 35.5, 175, 180, 0, 90";
+                    point = "497.5, 35.5, 180, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
-                    point = "498, 35.5, 170, 180, 0, 90";
+                    point = "497.5, 35.5, 175, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
-                    point = "498, 35.5, 165, 180, 0, 90";
+                    point = "497.5, 35.5, 170, 180, 0, 90";
+                    TM_send(TM_Send_format(point));
+                    Thread.Sleep(2000);
+                    point = "497.5, 35.5, 165, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
                     //慢慢放下
-                    point = "498, 35.5, 160, 180, 0, 90";
+                    point = "497.5, 35.5, 160, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
-                    point = "498, 35.5, 155, 180, 0, 90";
+                    point = "497.5, 35.5, 155, 180, 0, 90";
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(2000);
 
