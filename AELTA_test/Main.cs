@@ -1327,6 +1327,7 @@ namespace ControlUI
                     TM_send(TM_Send_format(point));
                     Thread.Sleep(4000);
 
+
                     //移動至放下區
                     point = "350, 33.5, 380, 180, 0, 90";
                     TM_send(TM_Send_format(point));
